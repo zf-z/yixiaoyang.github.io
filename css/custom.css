@@ -168,6 +168,9 @@ ul, ol {
 	transform:rotate(360deg) scale(1.2);
 }
 
+.tags_div{
+	margin-bottom: 20px;
+}
 .tags_span{
   font-size: 12px;
   font-weight: bold;
