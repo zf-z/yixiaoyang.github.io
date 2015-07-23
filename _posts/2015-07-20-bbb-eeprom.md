@@ -41,8 +41,6 @@ The BeagleBone is equipped with a single 32Kbit(4KB) 24LC32AT-I/OT EEPROM to all
 |RSVD                 |6            | FF FF FF FF FF FF|
 |Available            |4018         | FF FF FF FF FF FF|
 
-eeprom design as below:  
-![bbb-eeprom-revA5](./img/bbb-eeprom-revA5.png)
 
 从BBW读出来数据如下：  
 

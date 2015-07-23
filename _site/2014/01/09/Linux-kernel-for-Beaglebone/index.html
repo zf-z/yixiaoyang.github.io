@@ -9,17 +9,17 @@
   <title>[Beaglebone] Linux kernel for Beaglebone</title>
   <meta name="description" content="Introduction">
 
-  <link rel="stylesheet" href="http://yixiaoyang.github.io/css/main.css">
-  <link rel="canonical" href="http://yixiaoyang.github.io/2014/01/09/Linux-kernel-for-Beaglebone/">
-  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="http://yixiaoyang.github.io/feed.xml" />
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/01/09/Linux-kernel-for-Beaglebone/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/_syntax-highlighting.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://yixiaoyang.github.io/js/index.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
@@ -32,7 +32,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="http://yixiaoyang.github.io/">Leon's Blog</a>
+    <a class="site-title" href="/">Leon's Blog</a>
     <nav class="site-nav">
       <a href="#" class="menu-icon">
         <svg viewBox="0 0 18 15">
@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe.html">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/message.html">留言板</a>
+          <a class="page-link" href="/message.html">留言板</a>
           
         
       </div>
@@ -75,6 +75,22 @@
     <p class="post-meta">2014-01-09 • leon</p>
   </header>
 
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">Beaglebone</span>
+	
+	  <span class="tags_span">C</span>
+	
+	  <span class="tags_span">Linux</span>
+	
+	  <span class="tags_span">嵌入式</span>
+	
+  
+ </div>
+ 
+
   <article class="post-content">
     <h3 id="introduction">Introduction</h3>
 
@@ -82,13 +98,13 @@
 
 <p>The original beaglebone was shipped with a 3.2 kernel with a lot of patches and custom interfaces from Texas Instruments’s (TI) own kernel trees. Since this was based on a TI supported kernel, hardware compatibility was generally good and the capes worked. They were developed against it after all! </p>
 
-<h4 id="linux-3-2-or-linux-3-8">Linux 3.2 or linux 3.8</h4>
+<h4 id="linux-3.2-or-linux-3.8">Linux 3.2 or linux 3.8</h4>
 
 <blockquote>
 <p>之前在制作uboot时使用的linux 3.8内核由于device tree支持的问题，导致打印starting kernel启动内核失败。Linus Torvalds在2011年3月17日的ARM Linux邮件列表宣称“this whole ARM thing is a f*cking pain in the ass”，引发ARM Linux社区的地震，随后ARM社区进行了一系列的重大修正。在过去的ARM Linux中，arch/arm/plat-xxx和arch/arm/mach-xxx中充斥着大量的垃圾代码，相当多数的代码只是在描述板级细节，而 这些板级细节对于内核来讲，不过是垃圾，如板上的platform设备、resource、<code>i2c_board_info</code>、<code>spi_board_info</code> 以及各种硬件的<code>platform_data</code>。读者有兴趣可以统计下常见的s3c2410、s3c6410等板级目录，代码量在数万行。社区必须改变这种局面，于是PowerPC等其他体系架构下已经使用的Flattened Device Tree（FDT）进入ARM社区的视野。Device Tree是一种描述硬件的数据结构，它起源于 OpenFirmware (OF)。在Linux 2.6中，ARM架构的板极硬件细节过多地被硬编码在arch/arm/plat-xxx和arch/arm/mach-xxx，采用Device Tree后，许多硬件的细节可以直接透过它传递给Linux，而不再需要在kernel中进行大量的冗余编码。</p>
 </blockquote>
 
-<h4 id="q-amp-a">Q&amp;A</h4>
+<h4 id="q&amp;a">Q&amp;A</h4>
 
 <p><strong>(1)ERROR:unrecognized/unsupported machine ID (r1 = 0x00000e05).</strong>  </p>
 
@@ -144,7 +160,7 @@ udhcpd: Disabled. Edit /etc/default/udhcpd to enable it.
  * 
 </pre>
 
-<h3 id="linux-3-8-from-elinux-org">linux 3.8 from elinux.org</h3>
+<h3 id="linux-3.8-from-elinux.org">linux 3.8 from elinux.org</h3>
 
 <p>The modern BeagleBone kernels are Maintained by Koen Kooi and are available on the 3.8 branch at <a href="https://github.com/beagleboard/kernel/tree/3.8">https://github.com/beagleboard/kernel/tree/3.8</a> . This repo contains a set of patches and a script which downloads a mainline kernel and then patches it appropriately. Exact steps for building it are in the README. </p>
 
@@ -209,7 +225,7 @@ udhcpd: Disabled. Edit /etc/default/udhcpd to enable it.
           
           
           <span class="point"> · </span>
-          <span><a href="http://yixiaoyang.github.io/feed.xml">RSS</a></span>
+          <span><a href="/feed.xml">RSS</a></span>
           <span class="point"> · </span>
           <span>Embedded System, Linux, Python & Ruby</span>
           <span class="point"> · </span>

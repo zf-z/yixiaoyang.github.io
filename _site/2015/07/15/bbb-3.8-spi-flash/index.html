@@ -9,17 +9,17 @@
   <title>[Beaglebone] Linux 3.8添加SPi Flash及文件系统支持</title>
   <meta name="description" content="Spi Flash芯片">
 
-  <link rel="stylesheet" href="http://yixiaoyang.github.io/css/main.css">
-  <link rel="canonical" href="http://yixiaoyang.github.io/2015/07/15/bbb-3.8-spi-flash/">
-  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="http://yixiaoyang.github.io/feed.xml" />
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/07/15/bbb-3.8-spi-flash/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/_syntax-highlighting.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://yixiaoyang.github.io/js/index.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
@@ -32,7 +32,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="http://yixiaoyang.github.io/">Leon's Blog</a>
+    <a class="site-title" href="/">Leon's Blog</a>
     <nav class="site-nav">
       <a href="#" class="menu-icon">
         <svg viewBox="0 0 18 15">
@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe.html">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/message.html">留言板</a>
+          <a class="page-link" href="/message.html">留言板</a>
           
         
       </div>
@@ -74,6 +74,22 @@
     <h1 class="post-title">[Beaglebone] Linux 3.8添加SPi Flash及文件系统支持</h1>
     <p class="post-meta">2015-07-15 • leon</p>
   </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">Beaglebone</span>
+	
+	  <span class="tags_span">C</span>
+	
+	  <span class="tags_span">Linux</span>
+	
+	  <span class="tags_span">嵌入式</span>
+	
+  
+ </div>
+ 
 
   <article class="post-content">
     <h4 id="spi-flash芯片">Spi Flash芯片</h4>
@@ -209,7 +225,7 @@ Symbol: MTD_M25P80 [=y]
 };
 </pre>
 
-<h4 id="buildroot-amp-busybox-amp-kernel加入mtd支持">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
+<h4 id="buildroot-&amp;-busybox-&amp;-kernel加入mtd支持">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
 
 <p>首先加入mtd基本工具和flash<em>erase的支持，叫交叉编译出flash</em>erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。</p>
 
@@ -297,7 +313,7 @@ flash0.0x1000_0x10000.img
 16+0 records in
 16+0 records out
 <span class="c"># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/</span>
-<span class="o">[</span>  362.309070<span class="o">]</span> jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, <span class="m">0</span> of xdatum <span class="o">(</span><span class="m">0</span> unchecked, <span class="m">0</span> orphan<span class="o">)</span> and <span class="m">0</span> of xref <span class="o">(</span><span class="m">0</span> dead, <span class="m">0</span> orphan<span class="o">)</span> found.
+<span class="o">[</span>  362.309070<span class="o">]</span> jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, 0 of xdatum <span class="o">(</span>0 unchecked, 0 orphan<span class="o">)</span> and 0 of xref <span class="o">(</span>0 dead, 0 orphan<span class="o">)</span> found.
 <span class="c"># </span>
 </code></pre></div>
 <p>至此，flash设备成功挂载到用户空间的文件系统中去了。</p>
@@ -355,7 +371,7 @@ flash0.0x1000_0x10000.img
           
           
           <span class="point"> · </span>
-          <span><a href="http://yixiaoyang.github.io/feed.xml">RSS</a></span>
+          <span><a href="/feed.xml">RSS</a></span>
           <span class="point"> · </span>
           <span>Embedded System, Linux, Python & Ruby</span>
           <span class="point"> · </span>

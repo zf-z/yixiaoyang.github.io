@@ -145,6 +145,7 @@ ul, ol {
 	background-color: rgba(0,0,10,0.075);
 	color: #983;
 }
+
 .categories-list-item .my-badge{
 	font-size: 12px;
 	font-weight: bold;
@@ -158,6 +159,7 @@ ul, ol {
 	-moz-transition:0.4s ease;
 	-o-transition:0.4s ease;
 }
+
 .categories-list-item:hover .my-badge{
 	-webkit-transform:rotate(360deg) scale(1.2);
 	-moz-transform:rotate(360deg) scale(1.2);
@@ -165,6 +167,25 @@ ul, ol {
 	-ms-transform:rotate(360deg) scale(1.2);
 	transform:rotate(360deg) scale(1.2);
 }
+
+.tags_span{
+  font-size: 12px;
+  font-weight: bold;
+  color: #FFF;
+  background-color:rgba(17, 17, 17, 0.79);
+  
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  /*background-color: #E66;*/
+  padding: 2px 8px 2px 8px;
+  border-radius: 9px;
+  transition:0.4s ease;
+  -webkit-transition:0.4s ease;
+  -moz-transition:0.4s ease;
+  -o-transition:0.4s ease;
+}
+
 
 /* shadow */
 .shadow-corner-curl{

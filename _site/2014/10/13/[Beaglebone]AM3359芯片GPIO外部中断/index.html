@@ -9,17 +9,17 @@
   <title>[Beaglebone] AM3359芯片GPIO外部中断</title>
   <meta name="description" content="AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的gpio_omap.c中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&gt;设置input方向-&gt;使能中断-&gt;填写中断处理函数槽-&gt;清中断标记位等几个步骤...">
 
-  <link rel="stylesheet" href="http://yixiaoyang.github.io/css/main.css">
-  <link rel="canonical" href="http://yixiaoyang.github.io/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/">
-  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="http://yixiaoyang.github.io/feed.xml" />
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/_syntax-highlighting.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://yixiaoyang.github.io/js/index.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
@@ -32,7 +32,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="http://yixiaoyang.github.io/">Leon's Blog</a>
+    <a class="site-title" href="/">Leon's Blog</a>
     <nav class="site-nav">
       <a href="#" class="menu-icon">
         <svg viewBox="0 0 18 15">
@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe.html">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/message.html">留言板</a>
+          <a class="page-link" href="/message.html">留言板</a>
           
         
       </div>
@@ -74,6 +74,22 @@
     <h1 class="post-title">[Beaglebone] AM3359芯片GPIO外部中断</h1>
     <p class="post-meta">2014-10-13 • leon_e@163.com</p>
   </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">Beaglebone</span>
+	
+	  <span class="tags_span">C</span>
+	
+	  <span class="tags_span">嵌入式</span>
+	
+	  <span class="tags_span">编程</span>
+	
+  
+ </div>
+ 
 
   <article class="post-content">
     <p>AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的<code>gpio_omap.c</code>中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&gt;设置input方向-&gt;使能中断-&gt;填写中断处理函数槽-&gt;清中断标记位等几个步骤。需要理解的异步通知fasync的使用，这是中断等信号传递到用户空间的常用方法。</p>
@@ -152,19 +168,19 @@
     <span class="k">return</span> <span class="p">;</span>
 
   <span class="k">switch</span><span class="p">(</span><span class="n">enable</span><span class="p">){</span>
-    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="o">:</span>
       <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;enable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
       <span class="n">enable_irq</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">;</span>  
       <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="o">:</span>
       <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;disable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
       <span class="n">disable_irq_nosync</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">;</span>  
       <span class="k">break</span><span class="p">;</span>
-    <span class="k">default</span><span class="o">:</span>
+    <span class="nl">default:</span>
       <span class="k">break</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;irq_enable finished</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
@@ -244,15 +260,15 @@
     <span class="p">}</span>
     <span class="k">switch</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  
     <span class="p">{</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_NONE</span><span class="p">:</span>  
+        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_NONE</span><span class="o">:</span>  
           <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>  
+        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="o">:</span>  
           <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="p">);</span>
           <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="o">:</span>
           <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="p">);</span>
           <span class="k">break</span><span class="p">;</span>
-        <span class="k">default</span><span class="o">:</span>  
+        <span class="nl">default:</span>  
           <span class="k">return</span> <span class="o">-</span><span class="n">ENOTTY</span><span class="p">;</span>  
           <span class="k">break</span><span class="p">;</span>  
     <span class="p">}</span>  
@@ -333,9 +349,9 @@
     <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;fpga_key_to_app_init</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>      
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
 
-<span class="nl">fail2</span><span class="p">:</span>  
+<span class="nl">fail2:</span>  
     <span class="n">gpio_free</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>  
-<span class="nl">fail1</span><span class="p">:</span>    
+<span class="nl">fail1:</span>    
     <span class="n">device_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span>  
     <span class="n">class_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">);</span>   
     <span class="n">cdev_del</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">);</span>  
@@ -489,7 +505,7 @@
           
           
           <span class="point"> · </span>
-          <span><a href="http://yixiaoyang.github.io/feed.xml">RSS</a></span>
+          <span><a href="/feed.xml">RSS</a></span>
           <span class="point"> · </span>
           <span>Embedded System, Linux, Python & Ruby</span>
           <span class="point"> · </span>

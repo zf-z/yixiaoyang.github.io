@@ -9,17 +9,17 @@
   <title>[Beaglebone] U-boot and Buildroot for Beaglebone</title>
   <meta name="description" content="U-Boot for BeagleBone[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make CROSSCOMPILE=arm-linux-gnueabihf- ARCH=arm dis...">
 
-  <link rel="stylesheet" href="http://yixiaoyang.github.io/css/main.css">
-  <link rel="canonical" href="http://yixiaoyang.github.io/2014/05/07/buildroot-for-beaglebone/">
-  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="http://yixiaoyang.github.io/feed.xml" />
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/05/07/buildroot-for-beaglebone/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="http://yixiaoyang.github.io/css/_syntax-highlighting.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="http://yixiaoyang.github.io/js/index.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
@@ -32,7 +32,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="http://yixiaoyang.github.io/">Leon's Blog</a>
+    <a class="site-title" href="/">Leon's Blog</a>
     <nav class="site-nav">
       <a href="#" class="menu-icon">
         <svg viewBox="0 0 18 15">
@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe.html">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="http://yixiaoyang.github.io/message.html">留言板</a>
+          <a class="page-link" href="/message.html">留言板</a>
           
         
       </div>
@@ -75,6 +75,12 @@
     <p class="post-meta">2014-05-07 • leon</p>
   </header>
 
+
+  <div class="tags_div">
+  
+ </div>
+ 
+
   <article class="post-content">
     <h3 id="u-boot-for-beaglebone">U-Boot for BeagleBone</h3>
 
@@ -89,7 +95,7 @@ GNU/Linux</code>
 
 <h3 id="buildroot-for-beaglebone">Buildroot for Beaglebone</h3>
 
-<h4 id="waht-39-s-buildroot">Waht&#39;s BuildRoot</h4>
+<h4 id="waht&#39;s-buildroot">Waht&#39;s BuildRoot</h4>
 
 <p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. 
 Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a 
@@ -97,7 +103,7 @@ bootloader image. Buildroot is useful mainly for people working with small or em
 CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
 system and eases the cross-compilation process.</p>
 
-<h4 id="why-buildroot？">Why BuildRoot？===</h4>
+<h4 id="why-buildroot？===">Why BuildRoot？===</h4>
 
 <p>首先是其对BeagleBone 的原生支持，不需要另行移植；其次是其大小，相较于Angstrom 与 Ubuntu 的体积来说，BuildRoot非常袖珍，除去大家都一样的bootloader 与 Kernel 不算，根文件系统只有4MB 左右，还包括了uClibc。当然我们可以在编译的时候指定第三方的编译环境，比如Ti SDK 或是 cross-N，libc 也可以使用诸如eglibc 和 标准的glibc，这都不是问题。更详细的介绍参见其官方网站 <a href="http://buildroot.uclibc.org/">http://buildroot.uclibc.org/</a> ，此项目到目前为止还在维护中。</p>
 
@@ -181,19 +187,19 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 <span class="s">1,48,0xE,*</span>
 <span class="s">,,,-</span>
 <span class="s">__EOF__</span>
-<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> -n boot
-<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> -L rootfs
+<span class="nv">$ </span>sudo mkfs.vfat -F 16 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 -n boot
+<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 -L rootfs
 <span class="nv">$ </span>sudo mkdir -p /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/rootfs/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> /media/boot/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> /media/rootfs/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 /media/boot/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 /media/rootfs/
 <span class="nv">$ </span>sudo cp -v MLO  /media/boot/       
 <span class="nv">$ </span>sudo cp -v u-boot.img  /media/boot/
 <span class="nv">$ </span>sudo cp -v ./uEnv.txt /media/boot/
 <span class="nv">$ </span>sudo cp -v uImage  /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/boot/dtbs/          
 <span class="nv">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 <span class="nv">bs</span><span class="o">=</span>128k
 <span class="nv">$ </span>sync
 <span class="nv">$ </span>sudo umount /media/boot
 <span class="nv">$ </span>sudo umount /media/rootfs
@@ -209,7 +215,7 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 <p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：
 <code>uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
 
-<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12-04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
+<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12.04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
 
 <p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="s">&lt;&lt;EOF</span>
@@ -290,7 +296,7 @@ sudo udevadm control --reload-rules
           
           
           <span class="point"> · </span>
-          <span><a href="http://yixiaoyang.github.io/feed.xml">RSS</a></span>
+          <span><a href="/feed.xml">RSS</a></span>
           <span class="point"> · </span>
           <span>Embedded System, Linux, Python & Ruby</span>
           <span class="point"> · </span>

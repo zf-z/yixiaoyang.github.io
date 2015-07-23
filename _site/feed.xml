@@ -3,10 +3,10 @@
   <channel>
     <title>Leon&#39;s Blog</title>
     <description>Embedded System, Linux, Python &amp; Ruby</description>
-    <link>http://yixiaoyang.github.io/</link>
-    <atom:link href="http://yixiaoyang.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Jul 2015 19:21:24 +0000</pubDate>
-    <lastBuildDate>Thu, 23 Jul 2015 19:21:24 +0000</lastBuildDate>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 23 Jul 2015 21:05:53 +0000</pubDate>
+    <lastBuildDate>Thu, 23 Jul 2015 21:05:53 +0000</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -220,7 +220,7 @@
 
 &lt;p&gt;黑客文化没有领袖，这点是确认无疑的。但黑客圈里确实有些文化英雄、部落长者、史学家、还有发言人。如果你在这圈里呆足够长时间，你也许也能成为其中之一。 记住：黑客们不相信他们的部落长者的自夸，因此过分追求这种名誉是危险的。与其奋力追求，不如先摆正自己的位置，等它自己落到你的手中——那时则要做到谦虚和优雅。&lt;/p&gt;
 
-&lt;h3 id=&quot;黑客和书呆子-nerd-的联系&quot;&gt;黑客和书呆子(Nerd)的联系&lt;/h3&gt;
+&lt;h3 id=&quot;黑客和书呆子(nerd)的联系&quot;&gt;黑客和书呆子(Nerd)的联系&lt;/h3&gt;
 
 &lt;p&gt;和大家普遍认为的相反，并不是只有书呆子才能成为一名黑客。但它确实有帮助，而且许多黑客事实上是书呆子。做一个深居简出的人有助于你集中精力进行十分重要的事情，如思考和编程。&lt;/p&gt;
 
@@ -359,7 +359,7 @@
 
 &lt;p&gt;这是骇客行为。滚得远远的，白痴。&lt;/p&gt;
 
-&lt;h4 id=&quot;我如何入侵-查看-监视别人的-email？&quot;&gt;我如何入侵/查看/监视别人的 Email？&lt;/h4&gt;
+&lt;h4 id=&quot;我如何入侵/查看/监视别人的-email？&quot;&gt;我如何入侵/查看/监视别人的 Email？&lt;/h4&gt;
 
 &lt;p&gt;这是骇客行为。在我面前消失，智障。&lt;/p&gt;
 
@@ -434,8 +434,8 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
 &lt;/blockquote&gt;
 </description>
         <pubDate>Thu, 23 Jul 2015 19:10:25 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/23/how-to-become-a-hacker/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/23/how-to-become-a-hacker/</guid>
+        <link>/2015/07/23/how-to-become-a-hacker/</link>
+        <guid isPermaLink="true">/2015/07/23/how-to-become-a-hacker/</guid>
         
         <category>计算机文化</category>
         
@@ -485,8 +485,8 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
 &lt;p&gt;一本讲述http协议的必备工具书。内容不难，可以窥见一套应用协议设计成型过程中的各种妥协和进化历程。&lt;/p&gt;
 </description>
         <pubDate>Wed, 22 Jul 2015 12:10:05 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/22/books/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/22/books/</guid>
+        <link>/2015/07/22/books/</link>
+        <guid isPermaLink="true">/2015/07/22/books/</guid>
         
         <category>books</category>
         
@@ -565,9 +565,6 @@ A single 4KB EEPROM is provided on I2C0 that holds the board information. This i
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
-&lt;p&gt;eeprom design as below:&lt;br&gt;
-&lt;img src=&quot;./img/bbb-eeprom-revA5.png&quot; alt=&quot;bbb-eeprom-revA5&quot;&gt;&lt;/p&gt;
-
 &lt;p&gt;从BBW读出来数据如下：  &lt;/p&gt;
 
 &lt;pre&gt;
@@ -642,8 +639,8 @@ No size specified (using byte-data access)
 # i2cset -y 1 0x50 3 0xEE
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Mon, 20 Jul 2015 12:37:52 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/20/bbb-eeprom/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/20/bbb-eeprom/</guid>
+        <link>/2015/07/20/bbb-eeprom/</link>
+        <guid isPermaLink="true">/2015/07/20/bbb-eeprom/</guid>
         
         <category>Beaglebone</category>
         
@@ -817,8 +814,8 @@ No size specified (using byte-data access)
 &lt;/ol&gt;
 </description>
         <pubDate>Mon, 20 Jul 2015 12:37:52 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/20/RaspberyPi-pm25-sensor-with-yeelink/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/20/RaspberyPi-pm25-sensor-with-yeelink/</guid>
+        <link>/2015/07/20/RaspberyPi-pm25-sensor-with-yeelink/</link>
+        <guid isPermaLink="true">/2015/07/20/RaspberyPi-pm25-sensor-with-yeelink/</guid>
         
         <category>嵌入式</category>
         
@@ -964,7 +961,7 @@ Symbol: MTD_M25P80 [=y]
 };
 &lt;/pre&gt;
 
-&lt;h4 id=&quot;buildroot-amp-busybox-amp-kernel加入mtd支持&quot;&gt;buildroot &amp;amp; busybox &amp;amp; kernel加入mtd支持&lt;/h4&gt;
+&lt;h4 id=&quot;buildroot-&amp;amp;-busybox-&amp;amp;-kernel加入mtd支持&quot;&gt;buildroot &amp;amp; busybox &amp;amp; kernel加入mtd支持&lt;/h4&gt;
 
 &lt;p&gt;首先加入mtd基本工具和flash&lt;em&gt;erase的支持，叫交叉编译出flash&lt;/em&gt;erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。&lt;/p&gt;
 
@@ -1052,7 +1049,7 @@ flash0.0x1000_0x10000.img
 16+0 records in
 16+0 records out
 &lt;span class=&quot;c&quot;&gt;# mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;  362.309070&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; jffs2: notice: &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;198&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jffs2_build_xattr_subsystem: &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;building xattr subsystem, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; of xdatum &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; unchecked, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; of xref &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; dead, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; found.
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;  362.309070&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; jffs2: notice: &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;198&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jffs2_build_xattr_subsystem: &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;building xattr subsystem, 0 of xdatum &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 unchecked, 0 orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and 0 of xref &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 dead, 0 orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; found.
 &lt;span class=&quot;c&quot;&gt;# &lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;至此，flash设备成功挂载到用户空间的文件系统中去了。&lt;/p&gt;
@@ -1063,8 +1060,8 @@ flash0.0x1000_0x10000.img
 - &lt;a href=&quot;http://www.linux-mtd.infradead.org/doc&quot;&gt;http://www.linux-mtd.infradead.org/doc&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 15 Jul 2015 10:37:52 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/15/bbb-3.8-spi-flash/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/15/bbb-3.8-spi-flash/</guid>
+        <link>/2015/07/15/bbb-3.8-spi-flash/</link>
+        <guid isPermaLink="true">/2015/07/15/bbb-3.8-spi-flash/</guid>
         
         <category>Beaglebone</category>
         
@@ -1216,7 +1213,7 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 
 &lt;p&gt;3.2-Standard迁移到3.8-RT内核需要变化的驱动包括LCD7和GPMC驱动（包括DMA），两块驱动都以Device Tree Overlay的方法加载。此外，配套Device tree的U-Boot需要升级，老版本U-boot不支持Device Tree &amp;amp; Overlay。&lt;/p&gt;
 
-&lt;h4 id=&quot;3-8内核实时性的检验&quot;&gt;3.8内核实时性的检验&lt;/h4&gt;
+&lt;h4 id=&quot;3.8内核实时性的检验&quot;&gt;3.8内核实时性的检验&lt;/h4&gt;
 
 &lt;p&gt;因为正好有FPGA端需要处理的中断源，因此使用示波器跑一下脉宽就可以检验。&lt;/p&gt;
 
@@ -1231,8 +1228,8 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 &lt;/ol&gt;
 </description>
         <pubDate>Wed, 15 Jul 2015 10:37:52 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/07/15/bbb-3.8-rt-patch/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/07/15/bbb-3.8-rt-patch/</guid>
+        <link>/2015/07/15/bbb-3.8-rt-patch/</link>
+        <guid isPermaLink="true">/2015/07/15/bbb-3.8-rt-patch/</guid>
         
         <category>Beaglebone</category>
         
@@ -1257,7 +1254,7 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 &lt;li&gt;生成器send函数理解&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;可迭代对象-迭代器&quot;&gt;可迭代对象/迭代器&lt;/h3&gt;
+&lt;h3 id=&quot;可迭代对象/迭代器&quot;&gt;可迭代对象/迭代器&lt;/h3&gt;
 
 &lt;p&gt;当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象。他基于两个方法:
 1. &lt;code&gt;next()&lt;/code&gt; 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常
@@ -1539,8 +1536,8 @@ This itertool may require significant auxiliary storage (depending on how much t
 &lt;p&gt;&lt;strong&gt;保持代码简单，而不是数据&lt;/strong&gt;: 拥有许多简单的处理序列值的可迭代函数。要比一个复杂的、每次计算一个值的函数更好&lt;/p&gt;
 </description>
         <pubDate>Wed, 22 Apr 2015 02:34:58 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/04/22/%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/04/22/%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/</guid>
+        <link>/2015/04/22/%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/</link>
+        <guid isPermaLink="true">/2015/04/22/%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E8%BF%AD%E4%BB%A3%E5%99%A8/</guid>
         
         <category>python</category>
         
@@ -1659,8 +1656,8 @@ This itertool may require significant auxiliary storage (depending on how much t
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Fri, 20 Mar 2015 02:40:55 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/03/20/NIOS_Pio%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/03/20/NIOS_Pio%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86/</guid>
+        <link>/2015/03/20/NIOS_Pio%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86/</link>
+        <guid isPermaLink="true">/2015/03/20/NIOS_Pio%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86/</guid>
         
         <category>NIOS</category>
         
@@ -1692,8 +1689,8 @@ This itertool may require significant auxiliary storage (depending on how much t
 &lt;p&gt;&lt;a href=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/Qtodo.png&quot;&gt;&lt;img src=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/Qtodo.png&quot; alt=&quot;Qtodo截图&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 07 Jan 2015 12:10:58 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</guid>
+        <link>/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</link>
+        <guid isPermaLink="true">/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</guid>
         
         <category>工具</category>
         
@@ -1780,19 +1777,19 @@ This itertool may require significant auxiliary storage (depending on how much t
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;enable irq&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;enable_irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_DISABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_ENABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
       &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;disable irq&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;disable_irq_nosync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_ENABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_DISABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
       &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;nl&quot;&gt;default:&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;irq_enable finished&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
@@ -1872,15 +1869,15 @@ This itertool may require significant auxiliary storage (depending on how much t
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
     &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;IOCTL_CMD_IRQ_NONE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  
+        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_NONE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;  
           &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  
+        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;  
           &lt;span class=&quot;n&quot;&gt;irq_enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
           &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
           &lt;span class=&quot;n&quot;&gt;irq_enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
           &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;  
+        &lt;span class=&quot;nl&quot;&gt;default:&lt;/span&gt;  
           &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ENOTTY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
           &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
@@ -1961,9 +1958,9 @@ This itertool may require significant auxiliary storage (depending on how much t
     &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_key_to_app_init&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;      
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
 
-&lt;span class=&quot;nl&quot;&gt;fail2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  
+&lt;span class=&quot;nl&quot;&gt;fail2:&lt;/span&gt;  
     &lt;span class=&quot;n&quot;&gt;gpio_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;nl&quot;&gt;fail1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;    
+&lt;span class=&quot;nl&quot;&gt;fail1:&lt;/span&gt;    
     &lt;span class=&quot;n&quot;&gt;device_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
     &lt;span class=&quot;n&quot;&gt;class_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;   
     &lt;span class=&quot;n&quot;&gt;cdev_del&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
@@ -2070,8 +2067,8 @@ This itertool may require significant auxiliary storage (depending on how much t
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         <pubDate>Mon, 13 Oct 2014 07:49:12 +0000</pubDate>
-        <link>http://yixiaoyang.github.io/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</link>
-        <guid isPermaLink="true">http://yixiaoyang.github.io/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</guid>
+        <link>/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</link>
+        <guid isPermaLink="true">/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</guid>
         
         <category>Beaglebone</category>
         

@@ -3,8 +3,8 @@ title: Leon's Blog
 email: leon_e@163.com
 description: "Embedded System, Linux, Python & Ruby"
 github_username: yixiaoyang
-#baseurl: "http://yixiaoyang.github.io"
-baseurl:  ''
+baseurl: "http://yixiaoyang.github.io"
+#baseurl:  ''
 # About/contact
 author:
   name:              Leon
