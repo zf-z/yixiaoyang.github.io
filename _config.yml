@@ -1,0 +1,22 @@
+# Site settings
+title: Leon's Blog
+email: leon_e@163.com
+description: "Embedded System, Linux, Python & Ruby"
+github_username: yixiaoyang
+#baseurl: "http://yixiaoyang.github.io"
+baseurl:  ''
+# About/contact
+author:
+  name:              Leon
+  url:               ''
+  email:             leon_e@163.com
+  
+# Build settings
+#markdown: kramdown
+markdown: redcarpet
+redcarpet: 
+       extensions: ["fenced_code_blocks", "tables", "highlight", "with_toc_data", "strikethrough", "with_toc_data", "autolink"]
+permalink: /:year/:month/:day/:title/
+
+highlighter: pygments
+

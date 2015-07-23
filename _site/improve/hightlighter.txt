@@ -1,0 +1,10 @@
+Step 1. Install Redcarpet.
+   gem install redcarpet
+
+Step 2. Update the build settings in your _config.yaml like this.
+   # Build settings
+   #markdown: kramdown
+   markdown: redcarpet
+
+
+

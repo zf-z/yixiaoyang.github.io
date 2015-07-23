@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Beaglebone] U-boot and Buildroot for Beaglebone</title>
+  <meta name="description" content="U-Boot for BeagleBone[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make CROSSCOMPILE=arm-linux-gnueabihf- ARCH=arm dis...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/05/07/buildroot-for-beaglebone/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">[Beaglebone] U-boot and Buildroot for Beaglebone</h1>
+    <p class="post-meta">2014-05-07 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <h3 id="u-boot-for-beaglebone">U-Boot for BeagleBone</h3>
+
+<h4 id="host-machine">Host Machine</h4>
+
+<pre>
+Ubuntu 12.04 LTS Intel® Core™ i3-3220 CPU @ 3.30GHz × 4
+$ uname -a
+Linux xiaoyang-desktop 3.2.0-57-generic #87-Ubuntu SMP Tue Nov 12 21:35:10 UTC 2013 x86_64 x86_64 x86_64 
+GNU/Linux</code>
+</pre>
+
+<h3 id="buildroot-for-beaglebone">Buildroot for Beaglebone</h3>
+
+<h4 id="waht-39-s-buildroot">Waht&#39;s BuildRoot</h4>
+
+<p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. 
+Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a 
+bootloader image. Buildroot is useful mainly for people working with small or embedded systems, using various 
+CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
+system and eases the cross-compilation process.</p>
+
+<h4 id="why-buildroot？">Why BuildRoot？===</h4>
+
+<p>首先是其对BeagleBone 的原生支持，不需要另行移植；其次是其大小，相较于Angstrom 与 Ubuntu 的体积来说，BuildRoot非常袖珍，除去大家都一样的bootloader 与 Kernel 不算，根文件系统只有4MB 左右，还包括了uClibc。当然我们可以在编译的时候指定第三方的编译环境，比如Ti SDK 或是 cross-N，libc 也可以使用诸如eglibc 和 标准的glibc，这都不是问题。更详细的介绍参见其官方网站 <a href="http://buildroot.uclibc.org/">http://buildroot.uclibc.org/</a> ，此项目到目前为止还在维护中。</p>
+
+<h4 id="system-requirements">System requirements</h4>
+
+<p>Install required packages following &#39;Mandatory packagesin&#39; section in document。</p>
+
+<p><code>$ sudo apt-get install binutils build-essential g++ gcc perl  cpio rsync ncurses-dev</code></p>
+
+<h4 id="config-and-build">Config and Build</h4>
+
+<p>Use the beaglebone_defconfig</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>make beaglebone_defconfig
+<span class="nv">$ </span>makemenuconfig
+</code></pre></div>
+<p>Select following options：
+- Toolchain -&gt; C library (glibc)
+- System configuration -&gt; remount root filesystem read-write during boot 此选项用于在boot后重新挂载可读写文件系统
+- Target packages -&gt; Filesystem and flash utilities 添加nfs组件从host机器上传输文件</p>
+
+<p>You can also using &quot;make linux-menuconfig | glibc-menuconfig | busybox-menuconfig&quot; to config linux kernel or glibc or busybox.Then you can begin download source by <code>$ make source</code></p>
+
+<blockquote>
+<p>Tips:由于国内网络在下载am33x-cm3-AM335xPSP时会比较慢，可以自行下载am33x-cm3-AM335xPSP_04.06.00.10-rc1.tar.gz对应文件到/buildroot/buildroot-2013.11/dl目录。重新make source就会使用次工具包。同理在下载ti linux时，为了节省时间也可以自行下载源文件打包，放置到此目录。</p>
+</blockquote>
+
+<p>The make command will generally perform the following steps:</p>
+
+<ul>
+<li>download source files (as required);</li>
+<li>configure, build and install the cross-compiling toolchain using the appropriate toolchain backend, or simply import an external toolchain;</li>
+<li>build/install selected target packages;</li>
+<li>build a kernel image, if selected;</li>
+<li>build a bootloader image, if selected;</li>
+<li>create a root filesystem in selected formats. </li>
+</ul>
+
+<h4 id="目录结构">目录结构</h4>
+
+<p>Buildroot output is stored in a single directory, output/. This directory contains several subdirectories:</p>
+
+<ul>
+<li><strong>images/</strong> where all the images (kernel image, bootloader and root filesystem images) are stored.</li>
+<li><strong>build/</strong> where all the components except for the cross-compilation toolchain are built (this includes tools needed to run Buildroot on the host and packages compiled for the target). The build/ directory contains one subdirectory for each of these components.</li>
+<li><strong>taging/</strong> which contains a hierarchy similar to a root filesystem hierarchy. This directory contains the installation of the cross-compilation toolchain and all the userspace packages selected for the target. However, this directory is not intended to be the root filesystem for the target: it contains a lot of development files, unstripped binaries and libraries that make it far too big for an embedded system. These development files are used to compile libraries and applications for the target that depend on other libraries.</li>
+<li><strong>target/</strong> which contains almost the complete root filesystem for the target: everything needed is present except the device files in /dev/ (Buildroot can’t create them because Buildroot doesn’t run as root and doesn’t want to run as root). Also, it doesn’t have the correct permissions (e.g. setuid for the busybox binary). Therefore, this directory should not be used on your target. Instead, you should use one of the images built in the images/ directory. If you need an extracted image of the root filesystem for booting over NFS, then use the tarball image generated in images/ and extract it as root. Compared to staging/, target/ contains only the files and libraries needed to run the selected target applications: the development files (headers, etc.) are not present, the binaries are stripped.</li>
+<li><strong>host/</strong> contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain.</li>
+<li><strong>toolchain/</strong> contains the build directories for the various components of the cross-compilation toolchain. </li>
+</ul>
+
+<h3 id="uboot-comiple-with-ti-sdk">uboot comiple with Ti SDK</h3>
+
+<p>uboot comiple with Ti SDK</p>
+
+<pre>
+make CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm distclean
+xiaoyang@xiaoyang-desktop:/opt/ti-sdk-am335x/linux-devkit$ source environment-setup
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> make CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm distclean
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> ls board/ti/
+am335x  am3517crane  beagle  dra7xx  evm  omap1510inn  omap2420h4  omap5912osk  omap5_evm  omap730p2  panda  sdp3430  sdp4430  tnetv107xevm
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
+</pre>
+
+<p>编译最后会出现问题mkimage的问题，应该是ubuntu环境下TI提供的mkimage工具不兼容导致，解决办法：<code>$ apt-get install uboot-mkimage</code></p>
+
+<p>然后修改makefile将mkimage前的路径去掉，使用系统默认的mkimage，或者直接mkimage</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">$: mkimage -T omapimage -a 0x402F0400 -d /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/spl/u-boot-spl.bin /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/MLO
+make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
+</code></pre></div>
+<h3 id="make-the-bootable-microsd-card-for-beaglebone">Make the bootable MicroSD Card for Beaglebone</h3>
+
+<p>First Check your disk and find SD card, <strong>/dev/sdb</strong> for example:</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo emerge dosfstools
+<span class="nv">$ </span>sudo fdisk -l
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdb
+</code></pre></div>
+<p>Then unmount the disk, and flash /dev/sdb</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
+<span class="nv">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="s">&lt;&lt;-__EOF__</span>
+<span class="s">1,48,0xE,*</span>
+<span class="s">,,,-</span>
+<span class="s">__EOF__</span>
+<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> -n boot
+<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> -L rootfs
+<span class="nv">$ </span>sudo mkdir -p /media/boot/
+<span class="nv">$ </span>sudo mkdir -p /media/rootfs/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> /media/boot/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> /media/rootfs/
+<span class="nv">$ </span>sudo cp -v MLO  /media/boot/       
+<span class="nv">$ </span>sudo cp -v u-boot.img  /media/boot/
+<span class="nv">$ </span>sudo cp -v ./uEnv.txt /media/boot/
+<span class="nv">$ </span>sudo cp -v uImage  /media/boot/
+<span class="nv">$ </span>sudo mkdir -p /media/boot/dtbs/          
+<span class="nv">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
+<span class="nv">$ </span>sync
+<span class="nv">$ </span>sudo umount /media/boot
+<span class="nv">$ </span>sudo umount /media/rootfs
+<span class="nv">$ </span><span class="nb">exit</span>
+</code></pre></div>
+<p>Following pages may helpful:
+<a href="http://linux-sunxi.org/Bootable_SD_card">http://linux-sunxi.org/Bootable<em>SD</em>card</a></p>
+
+<p>现在SD卡被分成两个区，一个LBA vfat区放置boot相关文件，一个ext4放置文件系统等。现在将文件系统强制拷贝到第二个分区，因为文件系统带有分区信息，因此可以直接dd拷贝1</p>
+
+<p><code>$ sudo dd if=rootfs.ext2 of=/dev/sdc2 bs=128k</code></p>
+
+<p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：
+<code>uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
+
+<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12-04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
+
+<p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="s">&lt;&lt;EOF</span>
+<span class="s">ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ENV{DEVTYPE}==&quot;usb_interface&quot;, \</span>
+<span class="s">        ATTRS{idVendor}==&quot;0403&quot;, ATTRS{idProduct}==&quot;a6d0&quot;, \</span>
+<span class="s">        DRIVER==&quot;&quot;, RUN+=&quot;/sbin/modprobe -b ftdi_sio&quot;</span>
+
+<span class="s">ACTION==&quot;add&quot;, SUBSYSTEM==&quot;drivers&quot;, \</span>
+<span class="s">        ENV{DEVPATH}==&quot;/bus/usb-serial/drivers/ftdi_sio&quot;, \</span>
+<span class="s">        ATTR{new_id}=&quot;0403 a6d0&quot;</span>
+
+<span class="s">ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \</span>
+<span class="s">    ATTRS{interface}==&quot;BeagleBone&quot;, \</span>
+<span class="s">        ATTRS{bInterfaceNumber}==&quot;00&quot;, \</span>
+<span class="s">    SYMLINK+=&quot;beaglebone-jtag&quot;</span>
+
+<span class="s">ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \</span>
+<span class="s">    ATTRS{interface}==&quot;BeagleBone&quot;, \</span>
+<span class="s">        ATTRS{bInterfaceNumber}==&quot;01&quot;, \</span>
+<span class="s">    SYMLINK+=&quot;beaglebone-serial&quot;</span>
+<span class="s">EOF</span>
+
+sudo udevadm control --reload-rules
+</code></pre></div>
+<h3 id="using-sitara-linux-sdk">Using Sitara Linux SDK</h3>
+
+<ul>
+<li><a href="http://processors.wiki.ti.com/index.php/Sitara_Linux_Software_Developer%E2%80%99s_Guide">Sitara_Linux_Software_Developer_Guide</a></li>
+<li><a href="http://my.oschina.net/u/614480/blog/105059">BuildRoot FOR BeagleBone</a></li>
+<li><a href="http://eewiki.net/display/linuxonarm/BeagleBone">Linux on ARM BeagleBone</a> </li>
+</ul>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

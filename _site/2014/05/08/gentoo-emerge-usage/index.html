@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Gentoo emerge使用</title>
+  <meta name="description" content="gentoo常用命令">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/05/08/gentoo-emerge-usage/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Gentoo emerge使用</h1>
+    <p class="post-meta">2014-05-08 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <h3 id="gentoo常用命令">gentoo常用命令</h3>
+
+<p>emerg的常用用法</p>
+
+<h4 id="更新系统">更新系统</h4>
+
+<ol>
+<li>更新系统并移除孤立依赖的软件包
+<code bash>
+# emerge --update --deep --newuse world
+# emerge --depclean
+# revdep-rebuild (搜索相应缺失的库，并且重新emerge相应的包，需安装gentoolkit，并需运行两次以便确认)
+</code></li>
+</ol>
+
+<h4 id="emerge常用参数">emerge常用参数</h4>
+
+<pre>
+  -world | system， world范围更广，包含了system，这是两个set，前面不用加--或-
+  --p pretend 预览
+  --a ask 先予询问
+  --c clean 清理系统
+  --C unmerge 卸载，与emerge相反
+  ---depclean 深度清理，移除与系统无关的包
+  --h help 帮助文件
+  --v verbose 详细内容
+  --s search 查找
+  --S searchdesc 从文件名和描述中查找，要慢一些
+  --u update 升级软件包
+  --D deep 计算整个系统的依赖关系
+  --e emptytree 清空依赖树，一般不用，危险命令
+  --1 oneshot 一次性安装，不将其信息加入系统目录树
+  --o onlydeps 只安装其依赖关系，而不安装软件本身
+  --t tree 显示其目录树信息
+  --k usepkg 使用二进制包
+  --K usepkgonly 只使用二进制包
+  --f fetchonly 仅下载安装包
+  ---sync 从指定的rsync站点更新portage树，先前所作所有portage树更改均失效
+  --N newuse 使用新的USE FLAG，如有必要，需重新编译
+  --n noreplace 更新system，但先前安装的软件不予覆盖
+</pre>
+
+<h4 id="查找最快的mirror">查找最快的mirror</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># mirrorselect -s3 -b10 -o -D &gt;&gt; /etc/make.conf
+</code></pre></div>
+<p>此命令对每个mirror均下载100k文件，以此确定最快源，要注意修改/etc/make.conf</p>
+
+<h4 id="系统升级">系统升级</h4>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># emerge --sync 或 # emerge-webrsync （更新或称同步portage树）
+# emerge --update --deep --newuse world
+# emerge --depclean -pv
+# revdep-rebuild (需安装gentoolkit)
+</code></pre></div>
+<p>如果使用emerge-webrsync命令进行升级，可先下载最新的portage（以日期命名，而不要用latest命名）至/var/tmp/emerge-webrsync/目录</p>
+
+<p>查看安装XXX的情况，同时列出了使用的 USE 和 LINGUAS
+<code># emerge -pv XXX</code></p>
+
+<p>在world中增加记录，避免自己已手动编译的软件被再次编译
+<code># emerge -n fcitx （添加fcitx至emerge tree）</code></p>
+
+<p>配置文件更新工具
+<code># etc-update 或 # dispatch-conf</code></p>
+
+<p>查询XXX包用了什么USE（需gentoolkit）
+<code># equery uses XXX</code></p>
+
+<p>找到 /bin/ls 所属包
+<code># qfile /bin/ls</code></p>
+
+<p>列出 glibc 包所包含文件
+<code># qlist glibc</code></p>
+
+<h4 id="etc-portage-package-应用举例">/etc/portage/package.*应用举例</h4>
+
+<p><strong>package.use</strong></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sys-apps/man-pages -nls sys-apps/pciutils -zlib media-libs/freetype bindist app-text/acroread linguas_zh_TW linguas_zh_CN linguas_en
+</code></pre></div>
+<p>作用：
+不改变全局USE的同时，微调包的USE。 开始2个是说这2个包不使用相应的 USE，第三个说明要单独在这个包使用这个USE，最后一个是调整 LINGUAS 的，很容易明白。</p>
+
+<p><strong>package.keywordssys-apps/hdparm ~x86</strong></p>
+
+<p>作用：
+指定相应的包的 KEYWORDS。比如你想 hdparm 包用 ~x86 的版本，而不用 x86 的版本，就用这个来指定。 注意，因为 emerge 的设计，如果你的 make.conf 里边指定了 ~x86的话，你不能反过来通过指定 x86 而 不要 ~x86，只能用 -~x86 来达到目的。 引用 gentoo@freenode 上<kojiro>的话： ”ACCEPT_KEYWORDS is incremental“</p>
+
+<p><strong>package.mask&gt;sys-devel/libtool-1.5.23</strong></p>
+
+<p>作用：
+屏蔽某个包某个版本，或者某些版本，甚至整个包。
+比如 libtool-1.5.23b 在我的系统有问题，那么就屏蔽一下，只用 比 1.5.23 小的。</p>
+
+<p><strong>package.unmask=net-www/apache-2.2.4 games-arcade/stepmania</strong>
+和 mask 一样，不过效果正好相反。我要用 2.2.4 的 apache，但是 portage 把他 mask 了，所以手动 unmask 一下。</p>
+
+<p>往 default runlevel 里边加入 XXX 服务 (add)
+<code># rc-update -a XXX default</code></p>
+
+<p>从 default runlevel 里边删除 XXX 服务 (delete)
+<code># rc-update -d XXX default</code></p>
+
+<p>列出 default runlevel 所有的服务 (show)
+<code># rc-update -s default</code></p>
+
+<p>删除过期的包
+<code># eclean distfiles (请先 emerge gentoolkit)</code></p>
+
+<p>清除emerge过程中产生的临时文件
+<code># rm -rf /var/tmp/portage/*</code></p>
+
+<p>清除所有安装源码包（除非太穷，否则不建议）
+<code># rm -rf /usr/portage/distfiles/*</code></p>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Git Server on Centos via SSH</title>
+  <meta name="description" content="Git Server on Centos via SSH">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/05/08/git-server-on-centos/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Git Server on Centos via SSH</h1>
+    <p class="post-meta">2014-05-08 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <h3 id="git-server-on-centos-via-ssh">Git Server on Centos via SSH</h3>
+
+<p>本wiki为Centos上部署git服务器提供文档。</p>
+
+<h4 id="基本软件安装">基本软件安装</h4>
+
+<pre>
+$ yum install python python-setuptools
+$ git clone git://eagain.net/gitosis.git gitosis
+$ python setup.py install --record uninstall.txt 
+$ su git
+$ gitosis-init < /tmp/id_rsa.pub 
+$ cd /var/git/
+$ ln -s /home/git/repositories/ repo
+$ chmod 755 /var/git/repo/gitosis-admin.git/hooks/post-update
+$ ssh git@server.holocene-instrument.com
+ERROR:gitosis.serve.main:Need SSH_ORIGINAL_COMMAND in environment.
+Connection to server.holocene-instrument.com closed.
+</pre>
+
+<p>大功告成，说明gitosis生效</p>
+
+<h4 id="添加用户（ssh）">添加用户（ssh）</h4>
+
+<p>To add new users:
+- add a keys/USER.pub file
+- authorize them to read/write repositories as needed (or just authorize the group @all)
+To create new repositories, just authorize writing to them and push. It&#39;s that simple! For example: let&#39;s assume your username is jdoe and you want to create a repository myproject. In your clone of gitosis-admin, edit gitosis.conf and add:
+<pre>
+[group myteam]
+members = jdoe
+writable = myproject
+</pre></p>
+
+<p>Commit that change and push. Then create the initial commit and push it:</p>
+
+<pre>
+mkdir myproject
+cd mypyroject
+git init
+git remote add myserver git@MYSERVER:myproject.git
+# do some work, git add and commit files
+git push myserver master:refs/heads/master
+</pre>
+
+<p>That&#39;s it. If you now add others to members, they can use that repository too.</p>
+
+<h4 id="权限修改">权限修改</h4>
+
+<p>提交本地工程到服务器，首先clonegitosis-admin项目到本地
+<pre>
+$ git clone <a href="mailto:git@server.holocene-instrument.com">git@server.holocene-instrument.com</a>:gitosis-admin.git
+Cloning into gitosis-admin
+remote: Counting objects: 5, done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 5 (delta 0), reused 5 (delta 0)
+Receiving objects: 100% (5/5), done.
+</pre>
+修改查看到gitosis.conf
+<pre>
+[gitosis]
+[group gitosis-admin]
+writable = gitosis-admin
+members = yuan
+[group eontime]
+writable = costdb \
+           oryx-editor \
+           demo/test
+members = yuan
+</pre>
+如上所示，分有2个组类型admin和我们自定义的，你可以随便定义一个组，其实就是个权限集合.writable意思是，这个权限组有哪几个项目的写权限？这里是空格分开，如果太长就换行，例如demo/test的话，就是：</p>
+
+<pre>$ git remote add origin git@gitserver:demo/test.git</pre>
+
+<p>members就是有这个权限的组成员了，通过把有权限的开发者的公钥上传至keydir,最后将gitosis-admin提交至远程</p>
+
+<pre>$ git push remote origin master</pre>
+
+<p>服务端将同步有一个仓库了。</p>
+
+<h4 id="新建git库">新建git库</h4>
+
+<p>服务器端新建git空库</p>
+
+<pre>
+$ ssh xxx@server.holocene-instrument.com
+  ...
+$ su git
+$ cd /home/git/repositories
+$ ./gitc.sh bone
+</pre>
+
+<p>在客户端拷贝新的空库
+<pre>$ git clone <a href="mailto:git@server.holocene-instrument.com">git@server.holocene-instrument.com</a>:bone.git</pre>
+如果拥有读写权限就可以开始使用git工作了。</p>
+
+<h3 id="q-amp-a">Q&amp;A</h3>
+
+<p><strong>(1)ERROR:gitosis.serve.main:Repository read access denied</strong></p>
+
+<p>原因:gitosis.conf中的members与keydir中的用户名不一致，如gitosis中的members = foo@bar，但keydir中的公密名却叫foo.pub</p>
+
+<p>解决:使keydir的名称与gitosis中members所指的名称一致。 </p>
+
+<p><strong>(2)git push时提示remote:error:refusing to update checked out branch:refs/heads/master</strong></p>
+
+<p>原因:这是在服务器创建git新库时使用git init而没有使用git init --bare引起git服务器默认拒绝了push操作</p>
+
+<p>解决:需要进行设置可修改.git/config文件后面添加如下代码
+<pre>
+[receive]
+denyCurrentBranch = ignore
+</pre></p>
+
+<p><strong>(3)自己写的库创建脚本</strong></p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># log:</span>
+<span class="c">#   1.  create, 11Jan14</span>
+
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-lt <span class="m">1</span> <span class="o">]</span> 
+<span class="k">then</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Argument error:$# arguments&quot;</span>
+    <span class="nb">exit</span>
+<span class="k">fi</span>
+
+<span class="nv">repo</span><span class="o">=</span><span class="s2">&quot;$1.git&quot;</span>
+mkdir <span class="nv">$repo</span>
+<span class="nb">echo</span> <span class="s2">&quot;mkdir $repo&quot;</span>
+
+<span class="nb">cd</span> <span class="nv">$repo</span>
+git init --bare
+touch Readme.rm
+date +<span class="s2">&quot;%Y-%m-%d %H:%M:%S&quot;</span> &gt;&gt; Readme.rm
+<span class="nb">echo</span> <span class="s2">&quot;by git.&quot;</span> &gt;&gt; Readme.rm
+
+
+<span class="nb">echo</span> <span class="s2">&quot;Create repo $repo succced~&quot;</span>
+</code></pre></div>
+<p><strong>(4)Split subtree as new repo</strong></p>
+
+<p>参考：<a href="http://stackoverflow.com/questions/359424/detach-subdirectory-into-separate-git-repository/17864475#17864475">http://stackoverflow.com/questions/359424/detach-subdirectory-into-separate-git-repository/17864475#17864475</a></p>
+
+<p><strong>(5)如何恢复误删除的git文件</strong></p>
+
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 具体做法 git checkout file 同时恢复多个被删除的文件： 
+<code>bash
+git ls-files -d | xargs -i git checkout {}
+</code></p>
+
+<ul>
+<li>Q1: 如果是不小心执行了git reset，还有办法取消吗？ A:git reflog 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</li>
+<li>Q2: 怎样找回历史版本中删除的文件？ A:先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt;</code>就可以恢复 </li>
+</ul>
+
+<h3 id="reference">Reference</h3>
+
+<p><a href="http://www.blogjava.net/yuanqixun/archive/2011/05/26/351057.html">http://www.blogjava.net/yuanqixun/archive/2011/05/26/351057.html</a></p>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

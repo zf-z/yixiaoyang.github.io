@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Raspberry Pi检测PM2.5并同步到Yeelink</title>
+  <meta name="description" content="几年前买的树莓派几乎没动，相对于Beaglebone太弱了，不过Rpi社区比Beaglebone活跃很多。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/07/20/RaspberyPi-pm25-sensor-with-yeelink/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Raspberry Pi检测PM2.5并同步到Yeelink</h1>
+    <p class="post-meta">2015-07-20 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <p>几年前买的树莓派几乎没动，相对于Beaglebone太弱了，不过Rpi社区比Beaglebone活跃很多。</p>
+
+<ol>
+<li><p>PM2.5传感器</p>
+
+<p>女朋友喉咙不太舒服，所以买了一个Pm2.5的Sensor监测一下空气质量，经过UART封装后可以轻松的连接到MCU，一个大洋150左右。注意不要买粉尘传感器，粉尘传感器分辨率太低。</p></li>
+<li><p>构建Rpi的运行系统</p>
+
+<p>素不喜欢定制的Debian之类系统，必须Buildroot一路自行编译uboot、kernel和rootfs下载到SD卡。</p></li>
+<li><p>添加USB无线适配器驱动</p>
+
+<p>我使用RTL8192芯片的EDUP NP8508GS适配器，需要编译RTL8192系列驱动，并在系统启动时modprobe。</p></li>
+<li><p>设置wp_suplication</p>
+
+<p>主要在<code>/etc/wpa_supplicant.conf</code>文件中设置无限ssid和密码，网关和dns看需要设置。</p></li>
+<li><p>Python读取PM2.5传感器数值</p>
+
+<p>读出的数据已经被转成数字信号了，可以直接拿来换算。代码如下：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#! /usr/bin/env python  </span>
+<span class="c"># -*- coding: utf-8 -*-  </span>
+
+<span class="c">#</span>
+<span class="c"># email sent app</span>
+<span class="c"># by leon@2015-07-09</span>
+<span class="c">#</span>
+<span class="c"># curl -d &quot;{\&quot;value\&quot;:50}&quot; -H &quot;U-ApiKey: my_key&quot; &#39;my_url&#39;</span>
+<span class="c">#</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="c"># example: http://api.yeelink.net/v1.1/device/115088/sensor/144111/datapoints</span>
+<span class="k">class</span> <span class="nc">YeelinkHelper</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://api.yeelink.net/v1.1&#39;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">hdr</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">dev</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">sensors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">dev</span><span class="p">,</span><span class="n">sensors</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dev</span> <span class="o">=</span> <span class="n">dev</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span> <span class="o">=</span> <span class="n">sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hdr</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;U-ApiKey&#39;</span><span class="p">:</span><span class="n">key</span><span class="p">,</span><span class="s">&#39;content-type&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">}</span>
+    <span class="k">def</span> <span class="nf">up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vals</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">utime</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%Y-%m-</span><span class="si">%d</span><span class="s">T%H:%M:%S&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sen</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+                <span class="n">post_url</span><span class="o">=</span><span class="s">r&#39;</span><span class="si">%s</span><span class="s">/device/</span><span class="si">%s</span><span class="s">/sensor/</span><span class="si">%s</span><span class="s">/datapoints&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dev</span><span class="p">,</span> <span class="n">sen</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;timestamp&quot;</span><span class="p">:</span><span class="n">utime</span> <span class="p">,</span> <span class="s">&quot;value&quot;</span><span class="p">:</span> <span class="n">vals</span><span class="p">[</span><span class="n">idx</span><span class="p">]}</span>
+                <span class="n">res</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">post_url</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hdr</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">print</span><span class="p">(</span><span class="s">&quot;utime:</span><span class="si">%s</span><span class="s">, url:</span><span class="si">%s</span><span class="s">, status_code:</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">utime</span><span class="p">,</span><span class="n">post_url</span><span class="p">,</span><span class="n">res</span><span class="o">.</span><span class="n">status_code</span><span class="p">))</span>
+                <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hdr</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</code></pre></div></li>
+<li><p>注册Yeelink账号并编写python数据上传脚本</p>
+
+<p>yeelink的IOT（物联网）服务可添加简单的传感器数值，由平台保存数据并进行可视化。其上传格式可参见开发者API手册。上传部分代码如下：</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#! /usr/bin/env python</span>
+<span class="c"># -*- coding: utf-8 -*-  </span>
+
+<span class="c">#</span>
+<span class="c"># pms module detect</span>
+<span class="c"># by leon@2015-07-09</span>
+<span class="c"># </span>
+<span class="c">#</span>
+
+<span class="c"># -*- coding: utf-8 -*-  </span>
+
+<span class="kn">import</span> <span class="nn">serial</span>
+<span class="kn">from</span> <span class="nn">yeelink</span> <span class="kn">import</span> <span class="n">YeelinkHelper</span>
+
+<span class="c"># global enum</span>
+<span class="n">DATALEN</span>     <span class="o">=</span> <span class="mi">10</span>
+<span class="n">SBYTE</span>       <span class="o">=</span> <span class="mh">0xaa</span>
+<span class="n">EBYTE</span>       <span class="o">=</span> <span class="mh">0xab</span>
+<span class="n">HDR_IDX</span>     <span class="o">=</span> <span class="mi">0</span>     <span class="c">#0xaa</span>
+<span class="n">CMD_IDX</span>     <span class="o">=</span> <span class="mi">1</span>
+<span class="n">PM25L_IDX</span>   <span class="o">=</span> <span class="mi">2</span>
+<span class="n">PM25H_IDX</span>   <span class="o">=</span> <span class="mi">3</span>
+<span class="n">PM10L_IDX</span>   <span class="o">=</span> <span class="mi">4</span>
+<span class="n">PM10H_IDX</span>   <span class="o">=</span> <span class="mi">5</span>
+<span class="n">R1_IDX</span>      <span class="o">=</span> <span class="mi">6</span>
+<span class="n">R2_IDX</span>      <span class="o">=</span> <span class="mi">7</span>
+<span class="n">CHK_IDX</span>     <span class="o">=</span> <span class="mi">8</span>
+<span class="n">END_IDX</span>     <span class="o">=</span> <span class="mi">9</span>     <span class="c">#0xab</span>
+
+<span class="c"># yeelink </span>
+<span class="n">YEELINK_API_KAY</span> <span class="o">=</span> <span class="s">&#39;my_key&#39;</span>
+<span class="n">YEELINK_DEV</span> <span class="o">=</span> <span class="s">&#39;115167&#39;</span>
+<span class="c"># pm2.5, pm10, cpu_temp</span>
+<span class="n">YEELINK_SENSORS</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;144020&#39;</span><span class="p">,</span><span class="s">&#39;144022&#39;</span><span class="p">,</span><span class="s">&#39;144483&#39;</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">RPiDev</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_cpu_temp</span><span class="p">():</span>
+        <span class="n">cpu_temp_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span> <span class="s">&quot;/sys/class/thermal/thermal_zone0/temp&quot;</span> <span class="p">)</span>
+        <span class="n">cpu_temp</span> <span class="o">=</span> <span class="n">cpu_temp_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">cpu_temp_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">cpu_temp</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span>
+
+<span class="k">class</span> <span class="nc">PmsMod</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">ydev</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxLen</span> <span class="o">=</span> <span class="n">DATALEN</span><span class="o">*</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">maxLen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ydev</span> <span class="o">=</span> <span class="n">ydev</span>
+
+    <span class="k">def</span> <span class="nf">getPm25</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">):</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">pos</span><span class="o">*</span><span class="n">DATALEN</span> <span class="o">+</span> <span class="n">PM25L_IDX</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datas</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span><span class="o">+</span><span class="mi">256</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">datas</span><span class="p">[</span><span class="n">offset</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">10</span><span class="p">;</span>
+
+    <span class="k">def</span> <span class="nf">getPm10</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pos</span><span class="p">):</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">pos</span><span class="o">*</span><span class="n">DATALEN</span> <span class="o">+</span> <span class="n">PM10L_IDX</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datas</span><span class="p">[</span><span class="n">offset</span><span class="p">]</span><span class="o">+</span><span class="mi">256</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">datas</span><span class="p">[</span><span class="n">offset</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mi">10</span><span class="p">;</span>        
+
+    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># read firs start byte</span>
+        <span class="n">byte</span><span class="o">=</span><span class="nb">ord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">while</span> <span class="n">byte</span> <span class="o">!=</span> <span class="n">EBYTE</span><span class="p">:</span>
+            <span class="n">byte</span><span class="o">=</span><span class="nb">ord</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">byte</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">datas</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxLen</span><span class="p">:</span>
+                <span class="n">count</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="c"># every 5*2=10s</span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="o">/</span><span class="n">DATALEN</span><span class="o">-</span><span class="mi">1</span>
+                    <span class="n">pm25</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPm25</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="n">pm10</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPm10</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+                    <span class="n">cpu_temp</span> <span class="o">=</span> <span class="n">RPiDev</span><span class="o">.</span><span class="n">get_cpu_temp</span><span class="p">()</span>
+                    <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">pm25</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">pm10</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">cpu_temp</span><span class="p">)]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">ydev</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s">&quot;pm25=</span><span class="si">%.1f</span><span class="s">ug/m3, pm10=</span><span class="si">%.1f</span><span class="s">ug/m3 tmp=</span><span class="si">%.1f</span><span class="s">&#39;C&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">pm25</span><span class="p">,</span><span class="n">pm10</span><span class="p">,</span><span class="n">cpu_temp</span><span class="p">))</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">ydev1</span> <span class="o">=</span> <span class="n">YeelinkHelper</span><span class="p">(</span><span class="n">YEELINK_API_KAY</span><span class="p">,</span><span class="n">YEELINK_DEV</span><span class="p">,</span><span class="n">YEELINK_SENSORS</span><span class="p">)</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="s">&quot;/dev/ttyAMA0&quot;</span><span class="p">,</span><span class="n">baudrate</span><span class="o">=</span><span class="mi">9600</span><span class="p">,</span><span class="n">bytesize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">parity</span><span class="o">=</span><span class="s">&#39;N&#39;</span><span class="p">,</span><span class="n">stopbits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xonxoff</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="n">mod</span> <span class="o">=</span> <span class="n">PmsMod</span><span class="p">(</span><span class="n">port</span><span class="p">,</span><span class="n">ydev1</span><span class="p">)</span>
+    <span class="n">mod</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+    <span class="n">port</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></li>
+</ol>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

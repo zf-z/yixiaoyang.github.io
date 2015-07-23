@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[NIOS] NIOS Pio中断处理</title>
+  <meta name="description" content="使用NIOS PIO中断响应外部信号">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/03/20/NIOS_Pio%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">[NIOS] NIOS Pio中断处理</h1>
+    <p class="post-meta">2015-03-20 • leon_e@163.com</p>
+  </header>
+
+  <article class="post-content">
+    <p>使用NIOS PIO中断响应外部信号</p>
+
+<h3 id="寄存器定义">寄存器定义</h3>
+
+<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png" alt="nios_pio_reg_def"></a></p>
+
+<h3 id="edgecapture-register">edgecapture Register</h3>
+
+<p>Bit n in the  edgecapture register is set to 1 whenever an edge is detected on input port n. An Avalon-MM master peripheral can read the  edgecapture register to determine if an edge has occurred on any of the PIO input ports. <strong>If the option <code>Enable bit-clearing for edge capture register</code> is turned off, writing any value to the  edgecapture register clears all bits in the register. Otherwise, writing a 1 to a particular bit in the register clears only that bit.</strong></p>
+
+<p>The type of edge(s) to detect is fixed in hardware at system generation time. The edgecapture register only exists when the hardware is configured to capture edges. If the core is not configured to capture edges, reading from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</p>
+
+<h3 id="pio定义">PIO定义</h3>
+
+<p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png" alt="nios_pio_irq_def"></a></p>
+
+<h3 id="编程模式">编程模式</h3>
+
+<ol>
+<li><p>使能中断。对mask寄存器对应位set。</p></li>
+<li><p>清edgecapture寄存器，设置中断处理函数。</p></li>
+<li><p>进入中断函数后先读取eadecapture的值，查看对应触发的位进行相应处理。</p></li>
+<li><p>退出中断处理函数前清除edgecapture寄存器。</p></li>
+</ol>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp">    <span class="kt">void</span> <span class="nf">init_pio</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="cm">/* Enable all interrupts */</span>
+        <span class="n">IOWR_ALTERA_AVALON_PIO_IRQ_MASK</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span>
+                <span class="n">PIO_IRQ_PLOT_EN</span> <span class="o">|</span> <span class="n">PIO_IRQ_FO_WR_DONE</span> <span class="o">|</span> <span class="n">PIO_IRQ_DDR3_RD_REQ</span><span class="p">);</span>
+
+        <span class="cm">/* Reset the edge capture register */</span>
+        <span class="n">IOWR_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">);</span>
+
+    <span class="cp">#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT</span>
+        <span class="n">alt_ic_isr_register</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_IRQ_INTERRUPT_CONTROLLER_ID</span><span class="p">,</span>
+                <span class="n">PARALLEL_INPUT_IRQ_16_IRQ</span><span class="p">,</span>  <span class="cm">/* 硬件中断号，NIOS中定义 */</span>
+                <span class="n">handle_irq_pio16_input</span><span class="p">,</span>     <span class="cm">/* 中断handler */</span>
+                <span class="n">edge_capture_ptr</span><span class="p">,</span>           <span class="cm">/* 用于存储edgecapture寄存器内容*/</span>
+                <span class="mi">0</span><span class="p">);</span>
+    <span class="cp">#endif</span>
+    <span class="p">}</span>
+    <span class="cp">#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT</span>
+
+    <span class="cm">/**</span>
+<span class="cm">     * @param context 存储edgecapture值的位置</span>
+<span class="cm">     *</span>
+<span class="cm">     * @ note: Bit n in the  edgecapture register is set to 1 whenever an edge is detected on input port n.</span>
+<span class="cm">     * An Avalon-MM master peripheral can read the  edgecapture register to determine if an edge has</span>
+<span class="cm">     * occurred on any of the PIO input ports. If the option Enable bit-clearing for edge capture register</span>
+<span class="cm">     * is turned off, writing any value to the  edgecapture register clears all bits in the register.</span>
+<span class="cm">     * Otherwise, writing a 1 to a particular bit in the register clears only that bit. The type of edge(s)</span>
+<span class="cm">     * to detect is fixed in hardware at system generation time. The edgecapture register only exists when</span>
+<span class="cm">     * the hardware is configured to capture edges. If the core is not configured to capture edges, reading</span>
+<span class="cm">     * from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</span>
+<span class="cm">     */</span>
+    <span class="kt">void</span> <span class="nf">handle_irq_pio16_input</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">context</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* Cast context to edge_capture&#39;s type. It is important that this</span>
+<span class="cm">        be declared volatile to avoid unwanted compiler optimization. */</span>
+        <span class="k">volatile</span> <span class="kt">int</span><span class="o">*</span> <span class="n">edge_capture_ptr</span> <span class="o">=</span> <span class="p">(</span><span class="k">volatile</span> <span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">context</span><span class="p">;</span>
+
+        <span class="cm">/*</span>
+<span class="cm">        * Read the edge capture register on the button PIO.</span>
+<span class="cm">        * Store value.</span>
+<span class="cm">        */</span>
+        <span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">=</span> <span class="n">IORD_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">);</span>
+
+        <span class="cm">/* 中断处理 */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_PLOT_EN</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">handle_irq_plot_en</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_FO_WR_DONE</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">handle_irq_fo_wr_done</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_DDR3_RD_REQ</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">handle_irq_ddr3_read_req</span><span class="p">();</span>
+        <span class="p">}</span>
+
+
+        <span class="cm">/* Write to the edge capture register to reset it. */</span>
+        <span class="cm">/*IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE, 0);*/</span>
+        <span class="n">IOWR_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">);</span>
+
+
+        <span class="cm">/* Read the PIO to delay ISR exit. This is done to prevent a</span>
+<span class="cm">        spurious interrupt in systems with high processor -&gt; pio</span>
+<span class="cm">        latency and fast interrupts. */</span>
+        <span class="n">IORD_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div>
+<h3 id="测试">测试</h3>
+
+<p>将pio irq接到pio output上，控制pio output的高低即可模拟外部中断信号的输入。</p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="p">...</span>
+        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+            <span class="n">test_trigger_pio</span><span class="p">(</span><span class="n">PIO_IRQ_PLOT_EN</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+            <span class="cm">/* sleep for 1sec */</span>
+            <span class="n">usleep</span><span class="p">(</span><span class="mi">3000000</span><span class="p">);</span>
+
+            <span class="n">test_trigger_pio</span><span class="p">(</span><span class="n">PIO_IRQ_PLOT_EN</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+            <span class="cm">/* sleep for 1sec */</span>
+            <span class="n">usleep</span><span class="p">(</span><span class="mi">3000000</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">...</span>
+    <span class="p">}</span>
+</code></pre></div>
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Beaglebone] BBB迁移到linux 3.8实时内核</title>
+  <meta name="description" content="动机">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/07/15/bbb-3.8-rt-patch/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">[Beaglebone] BBB迁移到linux 3.8实时内核</h1>
+    <p class="post-meta">2015-07-15 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <h4 id="动机">动机</h4>
+
+<p>之前使用TI SDK提供的3.2标准内核，在和fpga进行高速通信时出现CPU 100%中断响应延迟严重（偶尔&gt;50ms）造成数据丢包。为达到严格的中断响应速度（&lt;10ms），亟需实时操作系统内核支持。方案有两个：</p>
+
+<ol>
+<li>Standard Linux -&gt; RTOS Linux</li>
+<li>Standard Linux -&gt; other RTOS( RT-Thread, freeRTOS,uc/os-ii等)
+当前在不牺牲功能性的情况下直接打上内核补丁是最好的方案。</li>
+</ol>
+
+<h4 id="关于rt-preempt内核">关于RT-Preempt内核</h4>
+
+<p>The standard Linux kernel only meets soft real-time requirements: it provides basic POSIX operations for userspace time handling but has no guarantees for hard timing deadlines. With Ingo Molnar&#39;s Realtime Preemption patch (referenced to as RT-Preempt in this document) and Thomas Gleixner&#39;s generic clock event layer with high resolution support, the kernel gains <strong>hard realtime capabilities</strong>.</p>
+
+<p>The RT-Preempt patch has raised quite some interest throughout the industry. Its clean design and consequent aim towards mainline integration makes it an interesting option for hard and firm realtime applications, reaching from professional audio to industrial control.
+...</p>
+
+<p>The RT-Preempt patch converts Linux into a fully preemptible kernel. The magic is done with:</p>
+
+<ul>
+<li>Making in-kernel locking-primitives (using spinlocks) preemptible though reimplementation with rtmutexes</li>
+<li>Critical sections protected by i.e. spinlock<em>t and rwlock</em>t are now preemptible. The creation of non-preemptible sections (in kernel) is still possible with raw<em>spinlock</em>t (same APIs like spinlock_t)</li>
+<li>Implementing priority inheritance for in-kernel mutexes, spinlocks and rw_semaphores. For more information on priority inversion and priority inheritance please consult Introduction to Priority Inversion</li>
+<li>Converting interrupt handlers into preemptible kernel threads: The RT-Preempt patch treats soft interrupt handlers in kernel thread context, which is represented by a task_struct like a common userspace process. However it is also possible to register an IRQ in kernel context.</li>
+<li>Converting the old Linux timer API into separate infrastructures for high resolution kernel timers plus one for timeouts, leading to userspace POSIX timers with high resolution. </li>
+</ul>
+
+<p>git：<a href="https://github.com/beagleboard/kernel/tree/3.8-rt%EF%BC%8Cbeagleboard%E5%AE%98%E6%96%B9%E7%BB%B4%E6%8A%A4%E5%86%85%E6%A0%B8%E5%BA%93">https://github.com/beagleboard/kernel/tree/3.8-rt，beagleboard官方维护内核库</a></p>
+
+<h4 id="device-tree">Device Tree</h4>
+
+<p>Device Tree在ARM社区的推行来源于Linus对长期以来内核代码里ARM架构上充斥的相关板级驱动代码、平台相关的垃圾代码无情谩骂，长久以来arch/arm/目录下的诸多platform级描述对内核来说就是一堆×××，因此ARM社区借鉴了PowerPC社区Device Tree概念。</p>
+
+<p><strong>&quot;The Device Tree is a data structure for describing hardware. Rather than hard coding every detail of a device into an operating system, many aspect of the hardware can be described in a data structure that is passed to the operating system at boot time.&quot;</strong> </p>
+
+<p>Device Tree代替了以前的硬件platform上的写法，而是用树形节点描述硬件，对硬件的管教分配、时序、资源（中断、DMA通道、物理和虚拟空间等）进行描述，然后自动probe在对应各自模块的驱动下进行探测，解析硬件描述信息，完成platform或者其上的device驱动的注册。</p>
+
+<p><strong>原platform驱动模型下的实现</strong></p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cm">/* In the foo_platform_data.h file:*/</span>
+<span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="p">{</span>
+    <span class="n">u32</span> <span class="n">bar</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/* In the board file:*/</span>
+<span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="n">foo_pdata</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">bar</span>        <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">platform_device</span> <span class="n">foo_dev</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foo_pdata</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="cm">/* And in the board setup function*/</span>
+<span class="n">platform_device_register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_dev</span><span class="p">);</span>
+
+<span class="cm">/* The driver gets access to the platform data in the probe function.*/</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">foo_probe</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+    <span class="n">pdata</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="cm">/* ERROR */</span>
+    <span class="p">...</span>
+
+    <span class="cm">/* access pdata-&gt;bar for configuration */</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">platform_driver</span> <span class="n">foo_driver</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">probe</span> <span class="o">=</span> <span class="n">foo_probe</span><span class="p">,</span>
+    <span class="p">....</span>
+    <span class="p">.</span><span class="n">driver</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+   <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">module_platform_driver</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_driver</span><span class="p">);</span>
+</code></pre></div>
+<p><strong>设备树下的实现</strong></p>
+
+<p>This method no longer works; in a DT based system what you have to do come up with device driver bindings, which contain the configuration the driver requires.
+You must add a device node in board.dts under the on-chip-peripherals(OCP) device node:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">foo</span> <span class="p">{</span>
+    <span class="n">compatible</span> <span class="o">=</span> <span class="s">&quot;corp,foo&quot;</span><span class="p">;</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">5</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>No change in the board file (generic anyway) needs to be made, but the device driver must be updated to support the DT method, with something similar to the following:</p>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span>
+<span class="nf">foo_parse_dt</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="k">struct</span> <span class="n">device_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">;</span>
+   <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+
+   <span class="n">pdata</span> <span class="o">=</span> <span class="n">devm_kzalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">pdata</span><span class="p">),</span> <span class="n">GFP_KERNEL</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+           <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span> <span class="cm">/* out of memory */</span>
+
+   <span class="cm">/* no such property */</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">of_property_read_u32</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">&quot;bar&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pdata</span><span class="o">-&gt;</span><span class="n">bar</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+           <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+
+   <span class="cm">/* pdata-&gt;bar is filled in with 5 */</span>
+   <span class="k">return</span> <span class="n">pdata</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">foo_probe</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+
+    <span class="n">pdata</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="cm">/* ERROR */</span>
+            <span class="p">...</span>
+
+    <span class="cm">/* access pdata-&gt;bar for configuration */</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">platform_driver</span> <span class="n">foo_driver</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">probe</span> <span class="o">=</span> <span class="n">foo_probe</span><span class="p">,</span>
+    <span class="p">....</span>
+    <span class="p">.</span><span class="n">driver</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;foo&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">module_platform_driver</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_driver</span><span class="p">);</span>
+</code></pre></div>
+<h4 id="其他">其他</h4>
+
+<p>3.2-Standard迁移到3.8-RT内核需要变化的驱动包括LCD7和GPMC驱动（包括DMA），两块驱动都以Device Tree Overlay的方法加载。此外，配套Device tree的U-Boot需要升级，老版本U-boot不支持Device Tree &amp; Overlay。</p>
+
+<h4 id="3-8内核实时性的检验">3.8内核实时性的检验</h4>
+
+<p>因为正好有FPGA端需要处理的中断源，因此使用示波器跑一下脉宽就可以检验。</p>
+
+<h4 id="参考">参考</h4>
+
+<ol>
+<li><a href="https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO">https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO</a></li>
+<li><a href="https://github.com/beagleboard/kernel/tree/3.8-rt">https://github.com/beagleboard/kernel/tree/3.8-rt</a></li>
+<li><a href="http://elinux.org/BeagleBone_and_the_3.8_Kernel">http://elinux.org/BeagleBone_and_the_3.8_Kernel</a></li>
+<li><a href="http://devicetree.org/mediawiki/index.php?title=Device_Tree_Usage">http://devicetree.org/mediawiki/index.php?title=Device_Tree_Usage</a></li>
+<li><a href="http://valentfx.com/wiki/index.php?title=LOGI_-_BBB_GPMC_Bus-_HW">http://valentfx.com/wiki/index.php?title=LOGI_-_BBB_GPMC_Bus-_HW</a></li>
+</ol>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

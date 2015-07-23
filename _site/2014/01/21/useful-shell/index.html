@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[Beaglebone] 个人常用Shell集锦</title>
+  <meta name="description" content="shell是Unix系统的一个特色，fuck点和hack点并存：">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2014/01/21/useful-shell/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">[Beaglebone] 个人常用Shell集锦</h1>
+    <p class="post-meta">2014-01-21 • leon</p>
+  </header>
+
+  <article class="post-content">
+    <p>shell是Unix系统的一个特色，fuck点和hack点并存：</p>
+
+<ul>
+<li>fuck点： 需要记住一些复杂的命令，看组织得还算不错的man &amp; help，有一个学习的过程，相比所见所得的视窗真是反人类。代表包括grep、sed、awk。</li>
+<li>hack点： 可以用简单的命令完成复杂的工作，如替换多个文档里的字符串，grep、seed、find再结合正则表达式简直无敌，代表包括grep、sed、awk。</li>
+</ul>
+
+<p>本文将平时用的一些shell集合起来，待不时之需。</p>
+
+<h3 id="文本替换">文本替换</h3>
+
+<ol>
+<li><p>替换所有特定后缀的文件中的字符串，无正则 </p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">find -type f -name <span class="s2">&quot;*.markdown&quot;</span> <span class="p">|</span> xargs sed -i <span class="s1">&#39;s/${oldstr}/${newstr}/g&#39;</span>
+</code></pre></div></li>
+</ol>
+
+<h3 id="awk">awk</h3>
+
+<ol>
+<li><p>awk工作模式
+awk被设计成数据流方式处理，内建很多基本的语法，因此使用起来非常灵活和强大，常用作字符处理。最基本的awk命令模式类似：</p>
+
+<p><code>awk &#39; BEGIN{  print &quot;start&quot; } pattern { commands } END{ print &quot;end&quot; }  file</code></p>
+
+<blockquote>
+<p>How it Works? The awk command works in the following manner:</p>
+
+<ul>
+<li>Execute the statements in the BEGIN { commands } block.</li>
+<li>Read one line from the file or stdin, and execute pattern { commands }. Repeat this step until the end of the file is reached.</li>
+<li>When the end of the input stream is reached, execute the END { commands } block.</li>
+</ul>
+</blockquote>
+
+<p>awk首先调用BEGIN区块，然后逐行处理流，按照相应的匹配模式作相应的处理动作，最后调用END区块。 一个简单的行数计数用法如下：</p>
+
+<p><code>awk &#39;BEGIN {i=0} {i++} END {print i}&#39; filename</code></p></li>
+<li><p>特殊变量</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Usage</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>NR</td>
+<td>It stands for number of records and corresponds to current line number under execution.</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>It is a variable that contain the text content of current line under execution.</td>
+</tr>
+<tr>
+<td>$1</td>
+<td>It is a variable that holds the text of the first field.</td>
+</tr>
+<tr>
+<td>$2</td>
+<td>It is the variable that holds the test of the second field text.</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>It stands for number of fields and corresponds to number of fields in the current line under execution (Fields are delimited by space).</td>
+</tr>
+</tbody></table></li>
+</ol>
+
+<h3 id="git">Git</h3>
+
+<ol>
+<li>git恢复已经删除的文件</li>
+</ol>
+
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 
+具体做法 <code>git checkout file</code> 同时恢复多个被删除的文件：<code>git ls-files -d | xargs -i git checkout {}</code></p>
+
+<p>在使用Git的过程中，有时可能会有一些误操作 比如：执行<code>checkout -f</code> 或 <code>reset -hard</code> 或 <code>branch -d</code>删除一个分支 结果造成本地（远程）的分支或某些commit丢失 可以通过reflog来进行恢复，前提是丢失的分支或commit信息没有被<code>git gc</code>清除 一般情况下，gc对那些无用的object会保留很长时间后才清除的 reflog是git提供的一个内部工具，用于记录对git仓库进行的各种操作,可以使用<code>git reflog show</code>或<code>git log -g</code>命令来看到所有的操作日志。恢复的过程很简单：通过<code>git log -g</code>命令来找到我们需要恢复的信息对应的<code>commit_id</code>，可以通过提交的时间和日期来辨别。</p>
+
+<p>一个好的办法是运行：</p>
+
+<ol>
+<li><code>git log –since=&quot;2 weeks ago&quot; – myfile</code> 可以2个星期期间的myfile历史；</li>
+<li><code>git log –branches=&quot;develop&quot;</code> 可以查看develop的commit </li>
+<li>通过<code>git branch recover_branch[新分支] commit_id</code>来建立一个新的分支</li>
+</ol>
+
+<p>这样，我们就把丢失的东西给恢复到了<code>recover_branch</code>分支上了。</p>
+
+<p><strong>Q1:</strong> 如果是不小心执行了<code>git reset</code>，还有办法取消吗？ </p>
+
+<p><strong>A1:</strong> <code>git reflog</code> 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</p>
+
+<p><strong>Q2:</strong> 怎样找回历史版本中删除的文件？</p>
+
+<p><strong>A2:</strong> 先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt;</code> 就可以恢复</p>
+
+<h3 id="diff-amp-patch">Diff &amp; Patch</h3>
+
+<ol>
+<li><p>diff</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>your-kernel-tree
+<span class="nb">cd</span> ..
+diff -Narup org-kernel-source your-kernel-tree &gt; kernel.patch
+</code></pre></div>
+<p>-x 过滤掉所比较目录中一些不想比较的文件类型，可以使用其他的pattern。实际上如果需要过滤的文件类型比较多的时候，使用-x这个选项就有点麻烦了，查看了文档之后，diff提供了更加方便的参数过滤文件。 -X excludefile 忽略在excludefile中的文件类型，注意每种文件占一行 pallying patches</p></li>
+<li><p>patch</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>kernel-source
+patch -p1 &lt; ../kernel.patch
+patch -R -p1 &lt; ../kernel.patch
+</code></pre></div></li>
+</ol>
+
+  </article>
+
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+	 /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = 'leon-blog';
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+   })();
+  </script>
+
+
+</div>
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>
