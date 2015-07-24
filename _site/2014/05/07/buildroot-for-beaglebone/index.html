@@ -68,18 +68,18 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">[Beaglebone] U-boot and Buildroot for Beaglebone</h1>
-    <p class="post-meta">2014-05-07 • leon</p>
   </header>
 
 
   <div class="tags_div">
   
+  <span class="post-meta">2014-05-07 • leon</span>
  </div>
- 
+
 
   <article class="post-content">
     <h3 id="u-boot-for-beaglebone">U-Boot for BeagleBone</h3>
@@ -95,7 +95,7 @@ GNU/Linux</code>
 
 <h3 id="buildroot-for-beaglebone">Buildroot for Beaglebone</h3>
 
-<h4 id="waht&#39;s-buildroot">Waht&#39;s BuildRoot</h4>
+<h4 id="waht-39-s-buildroot">Waht&#39;s BuildRoot</h4>
 
 <p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. 
 Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a 
@@ -103,7 +103,7 @@ bootloader image. Buildroot is useful mainly for people working with small or em
 CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
 system and eases the cross-compilation process.</p>
 
-<h4 id="why-buildroot？===">Why BuildRoot？===</h4>
+<h4 id="why-buildroot？">Why BuildRoot？===</h4>
 
 <p>首先是其对BeagleBone 的原生支持，不需要另行移植；其次是其大小，相较于Angstrom 与 Ubuntu 的体积来说，BuildRoot非常袖珍，除去大家都一样的bootloader 与 Kernel 不算，根文件系统只有4MB 左右，还包括了uClibc。当然我们可以在编译的时候指定第三方的编译环境，比如Ti SDK 或是 cross-N，libc 也可以使用诸如eglibc 和 标准的glibc，这都不是问题。更详细的介绍参见其官方网站 <a href="http://buildroot.uclibc.org/">http://buildroot.uclibc.org/</a> ，此项目到目前为止还在维护中。</p>
 
@@ -187,19 +187,19 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 <span class="s">1,48,0xE,*</span>
 <span class="s">,,,-</span>
 <span class="s">__EOF__</span>
-<span class="nv">$ </span>sudo mkfs.vfat -F 16 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 -n boot
-<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 -L rootfs
+<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> -n boot
+<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> -L rootfs
 <span class="nv">$ </span>sudo mkdir -p /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/rootfs/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 /media/boot/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 /media/rootfs/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> /media/boot/
+<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> /media/rootfs/
 <span class="nv">$ </span>sudo cp -v MLO  /media/boot/       
 <span class="nv">$ </span>sudo cp -v u-boot.img  /media/boot/
 <span class="nv">$ </span>sudo cp -v ./uEnv.txt /media/boot/
 <span class="nv">$ </span>sudo cp -v uImage  /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/boot/dtbs/          
 <span class="nv">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 <span class="nv">bs</span><span class="o">=</span>128k
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
 <span class="nv">$ </span>sync
 <span class="nv">$ </span>sudo umount /media/boot
 <span class="nv">$ </span>sudo umount /media/rootfs
@@ -215,7 +215,7 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 <p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：
 <code>uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
 
-<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12.04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
+<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12-04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
 
 <p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="s">&lt;&lt;EOF</span>
@@ -250,24 +250,23 @@ sudo udevadm control --reload-rules
 
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

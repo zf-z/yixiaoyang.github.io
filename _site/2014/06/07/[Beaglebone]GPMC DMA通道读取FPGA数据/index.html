@@ -68,11 +68,10 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">[Beaglebone]GPMC DMA通道读取FPGA数据</h1>
-    <p class="post-meta">2014-06-07 • leon</p>
   </header>
 
 
@@ -88,8 +87,9 @@
 	  <span class="tags_span">编程</span>
 	
   
+  <span class="post-meta">2014-06-07 • leon</span>
  </div>
- 
+
 
   <article class="post-content">
     <p>为了实现FPGA和Beaglebone数据互通，且保证50Mbps的高速传输速率，我选择了AM3355x的GPMC（一般内存控制器）接口，当然数据搬运工作使用DMA能有效地节省CPU时间。小结一下，需要解决的问题有：</p>
@@ -147,24 +147,23 @@
 
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

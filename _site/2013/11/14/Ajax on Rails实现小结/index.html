@@ -68,11 +68,10 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">Ajax on Rails实现小结</h1>
-    <p class="post-meta">2013-11-14 • leon</p>
   </header>
 
 
@@ -86,8 +85,9 @@
 	  <span class="tags_span">Ruby</span>
 	
   
+  <span class="post-meta">2013-11-14 • leon</span>
  </div>
- 
+
 
   <article class="post-content">
     <p>今天终于使用Ajax on Rails（服务器端ajax）实现了的关注/取消关注按钮，中间由于共享模板，出现了好多次的模板变量丢失的情况，花了一番力气重新整合局部视图及其模板才得以最终实现。</p>
@@ -137,24 +137,23 @@
 
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

@@ -68,11 +68,10 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">[Beaglebone] Linux kernel for Beaglebone</h1>
-    <p class="post-meta">2014-01-09 • leon</p>
   </header>
 
 
@@ -88,8 +87,9 @@
 	  <span class="tags_span">嵌入式</span>
 	
   
+  <span class="post-meta">2014-01-09 • leon</span>
  </div>
- 
+
 
   <article class="post-content">
     <h3 id="introduction">Introduction</h3>
@@ -98,13 +98,13 @@
 
 <p>The original beaglebone was shipped with a 3.2 kernel with a lot of patches and custom interfaces from Texas Instruments’s (TI) own kernel trees. Since this was based on a TI supported kernel, hardware compatibility was generally good and the capes worked. They were developed against it after all! </p>
 
-<h4 id="linux-3.2-or-linux-3.8">Linux 3.2 or linux 3.8</h4>
+<h4 id="linux-3-2-or-linux-3-8">Linux 3.2 or linux 3.8</h4>
 
 <blockquote>
 <p>之前在制作uboot时使用的linux 3.8内核由于device tree支持的问题，导致打印starting kernel启动内核失败。Linus Torvalds在2011年3月17日的ARM Linux邮件列表宣称“this whole ARM thing is a f*cking pain in the ass”，引发ARM Linux社区的地震，随后ARM社区进行了一系列的重大修正。在过去的ARM Linux中，arch/arm/plat-xxx和arch/arm/mach-xxx中充斥着大量的垃圾代码，相当多数的代码只是在描述板级细节，而 这些板级细节对于内核来讲，不过是垃圾，如板上的platform设备、resource、<code>i2c_board_info</code>、<code>spi_board_info</code> 以及各种硬件的<code>platform_data</code>。读者有兴趣可以统计下常见的s3c2410、s3c6410等板级目录，代码量在数万行。社区必须改变这种局面，于是PowerPC等其他体系架构下已经使用的Flattened Device Tree（FDT）进入ARM社区的视野。Device Tree是一种描述硬件的数据结构，它起源于 OpenFirmware (OF)。在Linux 2.6中，ARM架构的板极硬件细节过多地被硬编码在arch/arm/plat-xxx和arch/arm/mach-xxx，采用Device Tree后，许多硬件的细节可以直接透过它传递给Linux，而不再需要在kernel中进行大量的冗余编码。</p>
 </blockquote>
 
-<h4 id="q&amp;a">Q&amp;A</h4>
+<h4 id="q-amp-a">Q&amp;A</h4>
 
 <p><strong>(1)ERROR:unrecognized/unsupported machine ID (r1 = 0x00000e05).</strong>  </p>
 
@@ -160,7 +160,7 @@ udhcpd: Disabled. Edit /etc/default/udhcpd to enable it.
  * 
 </pre>
 
-<h3 id="linux-3.8-from-elinux.org">linux 3.8 from elinux.org</h3>
+<h3 id="linux-3-8-from-elinux-org">linux 3.8 from elinux.org</h3>
 
 <p>The modern BeagleBone kernels are Maintained by Koen Kooi and are available on the 3.8 branch at <a href="https://github.com/beagleboard/kernel/tree/3.8">https://github.com/beagleboard/kernel/tree/3.8</a> . This repo contains a set of patches and a script which downloads a mainline kernel and then patches it appropriately. Exact steps for building it are in the README. </p>
 
@@ -179,24 +179,23 @@ udhcpd: Disabled. Edit /etc/default/udhcpd to enable it.
 
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

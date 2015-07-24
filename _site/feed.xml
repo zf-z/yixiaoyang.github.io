@@ -5,12 +5,496 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 23 Jul 2015 21:05:53 +0000</pubDate>
-    <lastBuildDate>Thu, 23 Jul 2015 21:05:53 +0000</lastBuildDate>
+    <pubDate>Fri, 24 Jul 2015 13:34:38 +0000</pubDate>
+    <lastBuildDate>Fri, 24 Jul 2015 13:34:38 +0000</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>[转载] 如何成为一名黑客</title>
+        <title>[搬运] SED单行脚本快速参考</title>
+        <description>&lt;p&gt;英文标题：&lt;code&gt;USEFUL ONE-LINE SCRIPTS FOR SED (Unix stream editor)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;原标题：&lt;code&gt;HANDY ONE-LINERS FOR SED (Unix stream editor)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;整理：Eric Pement  - 电邮：&lt;code&gt;pemente[at]northpark.edu&lt;/code&gt;         版本5.5&lt;/p&gt;
+
+&lt;p&gt;译者：Joe Hong     - 电邮：&lt;code&gt;hq00e@126.com&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;在以下地址可找到本文档的最新（英文）版本：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line.txt&quot;&gt;http://sed.sourceforge.net/sed1line.txt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.pement.org/sed/sed1line.txt&quot;&gt;http://www.pement.org/sed/sed1line.txt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其他语言版本：&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Lang&lt;/th&gt;
+&lt;th&gt;link&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;中文&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_zh-CN.html&quot;&gt;http://sed.sourceforge.net/sed1line_zh-CN.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;捷克语&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_cz.html&quot;&gt;http://sed.sourceforge.net/sed1line_cz.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;荷语&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_nl.html&quot;&gt;http://sed.sourceforge.net/sed1line_nl.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;法语&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_fr.html&quot;&gt;http://sed.sourceforge.net/sed1line_fr.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;德语&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_de.html&quot;&gt;http://sed.sourceforge.net/sed1line_de.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;葡语&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://sed.sourceforge.net/sed1line_pt-BR.html&quot;&gt;http://sed.sourceforge.net/sed1line_pt-BR.html&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id=&quot;文本间隔&quot;&gt;文本间隔&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# 在每一行后面增加一空行&lt;/span&gt;
+ sed G
+
+ &lt;span class=&quot;c&quot;&gt;# 将原来的所有空行删除并在每一行后面增加一空行。&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 这样在输出的文本中每一行后面将有且只有一空行。&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/d;G&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在每一行后面增加两行空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;G;G&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将第一个脚本所产生的所有空行删除（即删除所有偶数行）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;n;d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在匹配式样“regex”的行之前插入一空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regex/{x;p;x;}&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在匹配式样“regex”的行之后插入一空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regex/G&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在匹配式样“regex”的行之前和之后各插入一空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regex/{x;p;x;G;}&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;编号&quot;&gt;编号&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# 为文件中的每一行进行编号（简单的左对齐方式）。这里使用了“制表符”&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# （tab，见本文末尾关于&amp;#39;\t&amp;#39;的用法的描述）而不是空格来对齐边缘。&lt;/span&gt;
+ &lt;span class=&quot;nv&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; filename &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;N;s/\n/\t/&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 对文件中的所有行编号（行号在左，文字右端对齐）。&lt;/span&gt;
+ &lt;span class=&quot;nv&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; filename &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;N; s/^/     /; s/ *\(.\{6,\}\)\n/\1  /&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 对文件中的所有行编号，但只显示非空白行的行号。&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./=&amp;#39;&lt;/span&gt; filename &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./N; s/\n/ /&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 计算行数 （模拟 &amp;quot;wc -l&amp;quot;）&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;$=&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;文本转换和替代&quot;&gt;文本转换和替代&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# Unix环境：转换DOS的新行符（CR/LF）为Unix格式。&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/.$//&amp;#39;&lt;/span&gt;                     &lt;span class=&quot;c&quot;&gt;# 假设所有行以CR/LF结束&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^M$//&amp;#39;&lt;/span&gt;                    &lt;span class=&quot;c&quot;&gt;# 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/\x0D$//&amp;#39;&lt;/span&gt;                  &lt;span class=&quot;c&quot;&gt;# ssed、gsed 3.02.80，及更高版本&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# Unix环境：转换Unix的新行符（LF）为DOS格式。&lt;/span&gt;
+ sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/$/`echo -e \\\r`/&amp;quot;&lt;/span&gt;        &lt;span class=&quot;c&quot;&gt;# 在ksh下所使用的命令&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/$&amp;#39;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/`echo \\\r`/&amp;quot;&lt;/span&gt;         &lt;span class=&quot;c&quot;&gt;# 在bash下所使用的命令&lt;/span&gt;
+ sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/$/`echo \\\r`/&amp;quot;&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# 在zsh下所使用的命令&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/$/\r/&amp;#39;&lt;/span&gt;                    &lt;span class=&quot;c&quot;&gt;# gsed 3.02.80 及更高版本&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# DOS环境：转换Unix新行符（LF）为DOS格式。&lt;/span&gt;
+ sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/$//&amp;quot;&lt;/span&gt;                      &lt;span class=&quot;c&quot;&gt;# 方法 1&lt;/span&gt;
+ sed -n p                         &lt;span class=&quot;c&quot;&gt;# 方法 2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# DOS环境：转换DOS新行符（CR/LF）为Unix格式。&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 下面的脚本只对UnxUtils sed 4.0.7 及更高版本有效。要识别UnxUtils版本的&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;#  sed可以通过其特有的“--text”选项。你可以使用帮助选项（“--help”）看&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 其中有无一个“--text”项以此来判断所使用的是否是UnxUtils版本。其它DOS&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 版本的的sed则无法进行这一转换。但可以用“tr”来实现这一转换。&lt;/span&gt;
+ sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/\r//&amp;quot;&lt;/span&gt; infile &amp;gt;outfile     &lt;span class=&quot;c&quot;&gt;# UnxUtils sed v4.0.7 或更高版本&lt;/span&gt;
+ tr -d &lt;span class=&quot;se&quot;&gt;\r&lt;/span&gt; &amp;lt;infile &amp;gt;outfile        &lt;span class=&quot;c&quot;&gt;# GNU tr 1.22 或更高版本&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将每一行前导的“空白字符”（空格，制表符）删除&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 使之左对齐&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^[ \t]*//&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 见本文末尾关于&amp;#39;\t&amp;#39;用法的描述&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将每一行拖尾的“空白字符”（空格，制表符）删除&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/[ \t]*$//&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 见本文末尾关于&amp;#39;\t&amp;#39;用法的描述&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将每一行中的前导和拖尾的空白字符删除&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^[ \t]*//;s/[ \t]*$//&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在每一行开头处插入5个空格（使全文向右移动5个字符的位置）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^/     /&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 以79个字符为宽度，将所有文本右对齐&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^.\{1,78\}$/ &amp;amp;/;ta&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 78个字符外加最后的一个空格&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 以79个字符为宽度，使所有文本居中。在方法1中，为了让文本居中每一行的前&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 头和后头都填充了空格。 在方法2中，在居中文本的过程中只在文本的前面填充&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 空格，并且最终这些空格将有一半会被删除。此外每一行的后头并未填充空格。&lt;/span&gt;
+ sed  -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^.\{1,77\}$/ &amp;amp; /;ta&amp;#39;&lt;/span&gt;                     &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed  -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^.\{1,77\}$/ &amp;amp;/;ta&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/\( *\)\1/\1/&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在每一行中查找字串“foo”，并将找到的“foo”替换为“bar”&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/foo/bar/&amp;#39;&lt;/span&gt;                 &lt;span class=&quot;c&quot;&gt;# 只替换每一行中的第一个“foo”字串&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/foo/bar/4&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 只替换每一行中的第四个“foo”字串&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/foo/bar/g&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 将每一行中的所有“foo”都换成“bar”&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/\(.*\)foo\(.*foo\)/\1bar\2/&amp;#39;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 替换倒数第二个“foo”&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/\(.*\)foo/\1bar/&amp;#39;&lt;/span&gt;            &lt;span class=&quot;c&quot;&gt;# 替换最后一个“foo”&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 只在行中出现字串“baz”的情况下将“foo”替换成“bar”&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/baz/s/foo/bar/g&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将“foo”替换成“bar”，并且只在行中未出现字串“baz”的情况下替换&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/baz/!s/foo/bar/g&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 不管是“scarlet”“ruby”还是“puce”，一律换成“red”&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/scarlet/red/g;s/ruby/red/g;s/puce/red/g&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;#对多数的sed都有效&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/scarlet\|ruby\|puce/red/g&amp;#39;&lt;/span&gt;               &lt;span class=&quot;c&quot;&gt;# 只对GNU sed有效&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 倒置所有行，第一行成为最后一行，依次类推（模拟“tac”）。&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 由于某些原因，使用下面命令时HHsed v1.5会将文件中的空行删除&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;1!G;h;$!d&amp;#39;&lt;/span&gt;               &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;1!G;h;$p&amp;#39;&lt;/span&gt;             &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将行中的字符逆序排列，第一个字成为最后一字，……（模拟“rev”）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/\n/!G;s/\(.\)\(.*\n\)/&amp;amp;\2\1/;//D;s/.//&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将每两行连接成一行（类似“paste”）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!N;s/\n/ /&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 如果当前行以反斜杠“\”结束，则将下一行并到当前行末尾&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 并去掉原来行尾的反斜杠&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/\\$/N; s/\\\n//; ta&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 如果当前行以等号开头，将当前行并到上一行末尾&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 并以单个空格代替原来行头的“=”&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!N;s/\n=/ /;ta&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;P;D&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 为数字字串增加逗号分隔符号，将“1234567”改为“1,234,567”&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;:a;s/\B[0-9]\{3\}\&amp;gt;/,&amp;amp;/;ta&amp;#39;&lt;/span&gt;                     &lt;span class=&quot;c&quot;&gt;# GNU sed&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/;ta&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 其他sed&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 为带有小数点和负号的数值增加逗号分隔符（GNU sed）&lt;/span&gt;
+ gsed -r &lt;span class=&quot;s1&quot;&gt;&amp;#39;:a;s/(^|[^0-9.])([0-9]+)([0-9]{3})/\1\2,\3/g;ta&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在每5行后增加一空白行 （在第5，10，15，20，等行后增加一空白行）&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;0~5G&amp;#39;&lt;/span&gt;                      &lt;span class=&quot;c&quot;&gt;# 只对GNU sed有效&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;n;n;n;n;G;&amp;#39;&lt;/span&gt;                 &lt;span class=&quot;c&quot;&gt;# 其他sed&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;选择性地显示特定行&quot;&gt;选择性地显示特定行&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# 显示文件中的前10行 （模拟“head”的行为）&lt;/span&gt;
+ sed 10q
+
+ &lt;span class=&quot;c&quot;&gt;# 显示文件中的第一行 （模拟“head -1”命令）&lt;/span&gt;
+ sed q
+
+ &lt;span class=&quot;c&quot;&gt;# 显示文件中的最后10行 （模拟“tail”）&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$q;N;11,$D;ba&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示文件中的最后2行（模拟“tail -2”命令）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!N;$!D&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示文件中的最后一行（模拟“tail -1”）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!d&amp;#39;&lt;/span&gt;                        &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;$p&amp;#39;&lt;/span&gt;                      &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示文件中的倒数第二行&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!{h;d;}&amp;#39;&lt;/span&gt; -e x              &lt;span class=&quot;c&quot;&gt;# 当文件中只有一行时，输入空行&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;1{$q;}&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!{h;d;}&amp;#39;&lt;/span&gt; -e x  &lt;span class=&quot;c&quot;&gt;# 当文件中只有一行时，显示该行&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;1{$d;}&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!{h;d;}&amp;#39;&lt;/span&gt; -e x  &lt;span class=&quot;c&quot;&gt;# 当文件中只有一行时，不输出&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 只显示匹配正则表达式的行（模拟“grep”）&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/p&amp;#39;&lt;/span&gt;               &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/!d&amp;#39;&lt;/span&gt;                 &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 只显示“不”匹配正则表达式的行（模拟“grep -v”）&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/!p&amp;#39;&lt;/span&gt;              &lt;span class=&quot;c&quot;&gt;# 方法1，与前面的命令相对应&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/d&amp;#39;&lt;/span&gt;                  &lt;span class=&quot;c&quot;&gt;# 方法2，类似的语法&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 查找“regexp”并将匹配行的上一行显示出来，但并不显示匹配行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/{g;1!p;};h&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 查找“regexp”并将匹配行的下一行显示出来，但并不显示匹配行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/{n;p;}&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“regexp”的行及其前后行，并在第一行之前加上“regexp”所&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 在行的行号 （类似“grep -A1 -B1”）&lt;/span&gt;
+ sed -n -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/{=;x;1!p;g;$!N;p;D;}&amp;#39;&lt;/span&gt; -e h
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”、“BBB”或“CCC”的行（任意次序）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA/!d; /BBB/!d; /CCC/!d&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 字串的次序不影响结果&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”、“BBB”和“CCC”的行（固定次序）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA.*BBB.*CCC/!d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”“BBB”或“CCC”的行 （模拟“egrep”）&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/BBB/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/CCC/b&amp;#39;&lt;/span&gt; -e d    &lt;span class=&quot;c&quot;&gt;# 多数sed&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA\|BBB\|CCC/!d&amp;#39;&lt;/span&gt;                        &lt;span class=&quot;c&quot;&gt;# 对GNU sed有效&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”的段落 （段落间以空行分隔）&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# HHsed v1.5 必须在“x;”后加入“G;”，接下来的3个脚本都是这样&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;$!d;}&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;x;/AAA/!d;&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”“BBB”和“CCC”三个字串的段落 （任意次序）&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;$!d;}&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;x;/AAA/!d;/BBB/!d;/CCC/!d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含“AAA”、“BBB”、“CCC”三者中任一字串的段落 （任意次序）&lt;/span&gt;
+ sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;$!d;}&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;x;/AAA/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/BBB/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/CCC/b&amp;#39;&lt;/span&gt; -e d
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;$!d;};x;/AAA\|BBB\|CCC/b;d&amp;#39;&lt;/span&gt;         &lt;span class=&quot;c&quot;&gt;# 只对GNU sed有效&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含65个或以上字符的行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^.\{65\}/p&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示包含65个以下字符的行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^.\{65\}/!p&amp;#39;&lt;/span&gt;            &lt;span class=&quot;c&quot;&gt;# 方法1，与上面的脚本相对应&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^.\{65\}/d&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 方法2，更简便一点的方法&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示部分文本——从包含正则表达式的行开始到最后一行结束&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/regexp/,$p&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示部分文本——指定行号范围（从第8至第12行，含8和12行）&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;8,12p&amp;#39;&lt;/span&gt;                   &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;8,12!d&amp;#39;&lt;/span&gt;                     &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示第52行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;52p&amp;#39;&lt;/span&gt;                     &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;52!d&amp;#39;&lt;/span&gt;                       &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;52q;d&amp;#39;&lt;/span&gt;                      &lt;span class=&quot;c&quot;&gt;# 方法3, 处理大文件时更有效率&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 从第3行开始，每7行显示一次    &lt;/span&gt;
+ gsed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;3~7p&amp;#39;&lt;/span&gt;                   &lt;span class=&quot;c&quot;&gt;# 只对GNU sed有效&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;3,${p;n;n;n;n;n;n;}&amp;#39;&lt;/span&gt;     &lt;span class=&quot;c&quot;&gt;# 其他sed&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 显示两个正则表达式之间的文本（包含）&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/Iowa/,/Montana/p&amp;#39;&lt;/span&gt;       &lt;span class=&quot;c&quot;&gt;# 区分大小写方式&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;选择性地删除特定行&quot;&gt;选择性地删除特定行&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# 显示通篇文档，除了两个正则表达式之间的内容&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/Iowa/,/Montana/d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中相邻的重复行（模拟“uniq”）&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 只保留重复行中的第一行，其他行删除&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!N; /^\(.*\)\n\1$/!P; D&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中的重复行，不管有无相邻。注意hold space所能支持的缓存&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 大小，或者使用GNU sed。&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;G; s/\n/&amp;amp;&amp;amp;/; /^\([ -~]*\n\).*\n\1/d; s/\n//; h; P&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除除重复行外的所有行（模拟“uniq -d”）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$!N; s/^\(.*\)\n\1$/\1/; t; D&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中开头的10行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;1,10d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中的最后一行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;$d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中的最后两行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;N;$!P;$!D;$d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中的最后10行&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;$d;N;2,10ba&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;P;D&amp;#39;&lt;/span&gt;   &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed -n -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;1,10!{P;N;D;};N;ba&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除8的倍数行&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;0~8d&amp;#39;&lt;/span&gt;                           &lt;span class=&quot;c&quot;&gt;# 只对GNU sed有效&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;n;n;n;n;n;n;n;d;&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 其他sed&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除匹配式样的行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/pattern/d&amp;#39;&lt;/span&gt;                      &lt;span class=&quot;c&quot;&gt;# 删除含pattern的行。当然pattern&lt;/span&gt;
+                                       &lt;span class=&quot;c&quot;&gt;# 可以换成任何有效的正则表达式&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件中的所有空行（与“grep &amp;#39;.&amp;#39; ”效果相同）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/d&amp;#39;&lt;/span&gt;                           &lt;span class=&quot;c&quot;&gt;# 方法1&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./!d&amp;#39;&lt;/span&gt;                           &lt;span class=&quot;c&quot;&gt;# 方法2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 只保留多个相邻空行的第一行。并且删除文件顶部和尾部的空行。&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# （模拟“cat -s”）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./,/^$/!d&amp;#39;&lt;/span&gt;        &lt;span class=&quot;c&quot;&gt;#方法1，删除文件顶部的空行，允许尾部保留一空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/N;/\n$/D&amp;#39;&lt;/span&gt;      &lt;span class=&quot;c&quot;&gt;#方法2，允许顶部保留一空行，尾部不留空行&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 只保留多个相邻空行的前两行。&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/N;/\n$/N;//D&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件顶部的所有空行&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./,$!d&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除文件尾部的所有空行&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^\n*$/{$d;N;ba&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;}&amp;#39;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 对所有sed有效&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^\n*$/N;/\n$/ba&amp;#39;&lt;/span&gt;        &lt;span class=&quot;c&quot;&gt;# 同上，但只对 gsed 3.02.*有效&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 删除每个段落的最后一行&lt;/span&gt;
+ sed -n &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/{p;h;};/./{x;/./p;}&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;特殊应用&quot;&gt;特殊应用&lt;/h3&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; &lt;span class=&quot;c&quot;&gt;# 移除手册页（man page）中的nroff标记。在Unix System V或bash shell下使&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 用&amp;#39;echo&amp;#39;命令时可能需要加上 -e 选项。&lt;/span&gt;
+ sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/.`echo \\\b`//g&amp;quot;&lt;/span&gt;    &lt;span class=&quot;c&quot;&gt;# 外层的双括号是必须的（Unix环境）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/.^H//g&amp;#39;&lt;/span&gt;             &lt;span class=&quot;c&quot;&gt;# 在bash或tcsh中, 按 Ctrl-V 再按 Ctrl-H&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/.\x08//g&amp;#39;&lt;/span&gt;           &lt;span class=&quot;c&quot;&gt;# sed 1.5，GNU sed，ssed所使用的十六进制的表示方法&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 提取新闻组或 e-mail 的邮件头&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^$/q&amp;#39;&lt;/span&gt;                &lt;span class=&quot;c&quot;&gt;# 删除第一行空行后的所有内容&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 提取新闻组或 e-mail 的正文部分&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;1,/^$/d&amp;#39;&lt;/span&gt;              &lt;span class=&quot;c&quot;&gt;# 删除第一行空行之前的所有内容&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 从邮件头提取“Subject”（标题栏字段），并移除开头的“Subject:”字样&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^Subject: */!d; s///;q&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 从邮件头获得回复地址&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^Reply-To:/q; /^From:/h; /./d;g;q&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 获取邮件地址。在上一个脚本所产生的那一行邮件头的基础上进一步的将非电邮&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 地址的部分剃除。（见上一脚本）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/ *(.*)//; s/&amp;gt;.*//; s/.*[:&amp;lt;] *//&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 在每一行开头加上一个尖括号和空格（引用信息）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^/&amp;gt; /&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将每一行开头处的尖括号和空格删除（解除引用）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/^&amp;gt; //&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 移除大部分的HTML标签（包括跨行标签）&lt;/span&gt;
+ sed -e :a -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/&amp;lt;[^&amp;gt;]*&amp;gt;//g;/&amp;lt;/N;//ba&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将分成多卷的uuencode文件解码。移除文件头信息，只保留uuencode编码部分。&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 文件必须以特定顺序传给sed。下面第一种版本的脚本可以直接在命令行下输入；&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 第二种版本则可以放入一个带执行权限的shell脚本中。（由Rahul Dhesi的一&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 个脚本修改而来。）&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^end/,/^begin/d&amp;#39;&lt;/span&gt; file1 file2 ... fileX &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; uudecode   &lt;span class=&quot;c&quot;&gt;# vers. 1&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/^end/,/^begin/d&amp;#39;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$@&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; uudecode                    &lt;span class=&quot;c&quot;&gt;# vers. 2&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 将文件中的段落以字母顺序排序。段落间以（一行或多行）空行分隔。GNU sed使用&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 字元“\v”来表示垂直制表符，这里用它来作为换行符的占位符——当然你也可以&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 用其他未在文件中使用的字符来代替它。&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;d;};x;s/\n/={NL}=/g&amp;#39;&lt;/span&gt; file &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;1s/={NL}=//;s/={NL}=/\n/g&amp;#39;&lt;/span&gt;
+ gsed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/./{H;d};x;y/\n/\v/&amp;#39;&lt;/span&gt; file &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sort &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;1s/\v//;y/\v/\n/&amp;#39;&lt;/span&gt;
+
+ &lt;span class=&quot;c&quot;&gt;# 分别压缩每个.TXT文件，压缩后删除原来的文件并将压缩后的.ZIP文件&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 命名为与原来相同的名字（只是扩展名不同）。（DOS环境：“dir /b”&lt;/span&gt;
+ &lt;span class=&quot;c&quot;&gt;# 显示不带路径的文件名）。&lt;/span&gt;
+ &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; @echo off &amp;gt;zipup.bat
+ dir /b *.txt &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s2&quot;&gt;&amp;quot;s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt;zipup.bat
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;使用SED：Sed接受一个或多个编辑命令，并且每读入一行后就依次应用这些命令。
+当读入第一行输入后，sed对其应用所有的命令，然后将结果输出。接着再读入第二
+行输入，对其应用所有的命令……并重复这个过程。上一个例子中sed由标准输入设
+备（即命令解释器，通常是以管道输入的形式）获得输入。在命令行给出一个或多
+个文件名作为参数时，这些文件取代标准输入设备成为sed的输入。sed的输出将被
+送到标准输出（显示器）。因此：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt; cat filename &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;10q&amp;#39;&lt;/span&gt;         &lt;span class=&quot;c&quot;&gt;# 使用管道输入&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;10q&amp;#39;&lt;/span&gt; filename               &lt;span class=&quot;c&quot;&gt;# 同样效果，但不使用管道输入&lt;/span&gt;
+ sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;10q&amp;#39;&lt;/span&gt; filename &amp;gt; newfile     &lt;span class=&quot;c&quot;&gt;# 将输出转移（重定向）到磁盘上&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;要了解sed命令的使用说明，包括如何通过脚本文件（而非从命令行）来使用这些命
+令，请参阅《sed &amp;amp; awk》第二版，作者Dale Dougherty和Arnold Robbins
+（O&amp;#39;Reilly，1997；&lt;a href=&quot;http://www.ora.com&quot;&gt;http://www.ora.com&lt;/a&gt;） ，
+&lt;code&gt;《UNIX Text Processing》&lt;/code&gt;，作者Dale Dougherty和Tim O&amp;#39;Reilly
+（Hayden Books，1987）或者是Mike Arst写的教程——压缩包的名称是“U-SEDIT2.ZIP”
+（在许多站点上都找得到）。要发掘sed的潜力，则必须对“正则表达式”有足够的理解。
+正则表达式的资料可以看《Mastering Regular Expressions》作
+者Jeffrey Friedl（O&amp;#39;reilly 1997）。Unix系统所提供的手册页（“man”）
+也会有所帮助（试一下这些命令“man sed”、“man regexp”，或者看“man ed”中关于
+正则表达式的部分），但手册提供的信息比较“抽象”——这也是它一直为人所诟病的。
+不过，它本来就不是用来教初学者如何使用sed或正则表达式的教材，而只是为那些
+熟悉这些工具的人提供的一些文本参考。&lt;/p&gt;
+
+&lt;p&gt;括号语法：前面的例子对sed命令基本上都使用单引号（&amp;#39;...&amp;#39;）而非双引号
+（&amp;quot;...&amp;quot;）这是因为sed通常是在Unix平台上使用。单引号下，Unix的shell（命令
+解释器）不会对美元符（$）和后引号（`...`）进行解释和执行。而在双引号下
+美元符会被展开为变量或参数的值，后引号中的命令被执行并以输出的结果代替
+后引号中的内容。而在“csh”及其衍生的shell中使用感叹号（!）时需要在其前
+面加上转义用的反斜杠（就像这样：!）以保证上面所使用的例子能正常运行
+（包括使用单引号的情况下）。DOS版本的Sed则一律使用双引号（&amp;quot;...&amp;quot;）而不是
+引号来圈起命令。&lt;/p&gt;
+
+&lt;p&gt;&amp;#39;\t&amp;#39;的用法：为了使本文保持行文简洁，我们在脚本中使用&amp;#39;\t&amp;#39;来表示一个制表
+符。但是现在大部分版本的sed还不能识别&amp;#39;\t&amp;#39;的简写方式，因此当在命令行中为
+脚本输入制表符时，你应该直接按TAB键来输入制表符而不是输入&amp;#39;\t&amp;#39;。下列的工
+具软件都支持&amp;#39;\t&amp;#39;做为一个正则表达式的字元来表示制表符：awk、perl、HHsed、
+sedmod以及GNU sed v3.02.80。&lt;/p&gt;
+
+&lt;p&gt;不同版本的SED：不同的版本间的sed会有些不同之处，可以想象它们之间在语法上
+会有差异。具体而言，它们中大部分不支持在编辑命令中间使用标签（:name）或分
+支命令（b,t），除非是放在那些的末尾。这篇文档中我们尽量选用了可移植性较高
+的语法，以使大多数版本的sed的用户都能使用这些脚本。不过GNU版本的sed允许使
+用更简洁的语法。想像一下当读者看到一个很长的命令时的心情：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;   sed -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/BBB/b&amp;#39;&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;/CCC/b&amp;#39;&lt;/span&gt; -e d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;好消息是GNU sed能让命令更紧凑：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;   sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA/b;/BBB/b;/CCC/b;d&amp;#39;&lt;/span&gt;      &lt;span class=&quot;c&quot;&gt;# 甚至可以写成&lt;/span&gt;
+   sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/AAA\|BBB\|CCC/b;d&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;此外，请注意虽然许多版本的sed接受象“/one/ s/RE1/RE2/”这种在&amp;#39;s&amp;#39;前带有空
+格的命令，但这些版本中有些却不接受这样的命令:“/one/! s/RE1/RE2/”。这时
+只需要把中间的空格去掉就行了。&lt;/p&gt;
+
+&lt;p&gt;速度优化：当由于某种原因（比如输入文件较大、处理器或硬盘较慢等）需要提高
+命令执行速度时，可以考虑在替换命令（“s/.../.../”）前面加上地址表达式来
+提高速度。举例来说：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;   sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/foo/bar/g&amp;#39;&lt;/span&gt; filename         &lt;span class=&quot;c&quot;&gt;# 标准替换命令&lt;/span&gt;
+   sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/foo/ s/foo/bar/g&amp;#39;&lt;/span&gt; filename   &lt;span class=&quot;c&quot;&gt;# 速度更快&lt;/span&gt;
+   sed &lt;span class=&quot;s1&quot;&gt;&amp;#39;/foo/ s//bar/g&amp;#39;&lt;/span&gt; filename      &lt;span class=&quot;c&quot;&gt;# 简写形式&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;当只需要显示文件的前面的部分或需要删除后面的内容时，可以在脚本中使用“q”
+命令（退出命令）。在处理大的文件时，这会节省大量时间。因此：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;   sed -n &amp;#39;45,50p&amp;#39; filename           # 显示第45到50行
+   sed -n &amp;#39;51q;45,50p&amp;#39; filename       # 一样，但快得多
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果你有其他的单行脚本想与大家分享或者你发现了本文档中错误的地方，请发电
+子邮件给本文档的作者（Eric Pement）。邮件中请记得提供你所使用的sed版本、 
+该sed所运行的操作系统及对问题的适当描述。本文所指的单行脚本指命令行的长
+度在65个字符或65个以下的sed脚本〔译注1〕。本文档的各种脚本是由以下所列作
+者所写或提供：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Al Aab                                建立了“seders”邮件列表&lt;/li&gt;
+&lt;li&gt;Edgar Allen                           许多方面&lt;/li&gt;
+&lt;li&gt;Yiorgos Adamopoulos                   许多方面&lt;/li&gt;
+&lt;li&gt;Dale Dougherty                        《sed &amp;amp; awk》作者&lt;/li&gt;
+&lt;li&gt;Carlos Duarte                         《do it with sed》作者&lt;/li&gt;
+&lt;li&gt;Eric Pement                           本文档的作者&lt;/li&gt;
+&lt;li&gt;Ken Pizzini                           GNU sed v3.02 的作者&lt;/li&gt;
+&lt;li&gt;S.G. Ravenhall                        去html标签脚本&lt;/li&gt;
+&lt;li&gt;Greg Ubben                            有诸多贡献并提供了许多帮助&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;译注1：大部分情况下，sed脚本无论多长都能写成单行的形式（通过&amp;#39;-e&amp;#39;选项和&amp;#39;;&amp;#39;
+号）——只要命令解释器支持，所以这里说的单行脚本除了能写成一行还对长度有
+所限制。因为这些单行脚本的意义不在于它们是以单行的形式出现。而是让用户能
+方便地在命令行中使用这些紧凑的脚本才是其意义所在。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Valid XHTML 1.0 Strict&lt;/p&gt;
+</description>
+        <pubDate>Fri, 24 Jul 2015 11:11:20 +0000</pubDate>
+        <link>/2015/07/24/sed-quick-guide/</link>
+        <guid isPermaLink="true">/2015/07/24/sed-quick-guide/</guid>
+        
+        <category>Shell</category>
+        
+        <category>搬运</category>
+        
+        
+        <category>shell</category>
+        
+        <category>搬运</category>
+        
+      </item>
+    
+      <item>
+        <title>[搬运] 如何成为一名黑客</title>
         <description>&lt;p&gt;原文文档：&lt;a href=&quot;http://catb.org/%7Eesr/faqs/hacker-howto.html&quot;&gt;http://catb.org/~esr/faqs/hacker-howto.html&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;为什么会有这份文档？&quot;&gt;为什么会有这份文档？&lt;/h3&gt;
@@ -21,8 +505,27 @@
 
 &lt;p&gt;注意：文档的结尾有一份 [&lt;a href=&quot;http://translations.readthedocs.org/en/latest/hacker_howto.html#faq&quot;&gt;http://translations.readthedocs.org/en/latest/hacker_howto.html#faq&lt;/a&gt; FAQ（常见问题解答）]。如果你想通过邮件询问我关于这份文档的问题，请先读这份 FAQ 看看能否找到答案——一遍不行就读两遍。&lt;/p&gt;
 
-&lt;p&gt;目前这份文档有很多翻译版本：[&lt;a href=&quot;http://www.slashproc.net/doc/howto-ar.html&quot;&gt;http://www.slashproc.net/doc/howto-ar.html&lt;/a&gt; 阿拉伯语]、[&lt;a href=&quot;http://moneyaisle.com/worldwide/how-to-become-a-hacker-be&quot;&gt;http://moneyaisle.com/worldwide/how-to-become-a-hacker-be&lt;/a&gt; 白俄罗斯语]、[&lt;a href=&quot;http://www.olemichaelsen.dk/hacker-howto.html&quot;&gt;http://www.olemichaelsen.dk/hacker-howto.html&lt;/a&gt; 丹麦语]、
-[&lt;a href=&quot;http://www.knudde.be/index.php?page_name=hacker_howto&quot;&gt;http://www.knudde.be/index.php?page_name=hacker_howto&lt;/a&gt; 荷兰语] 、[&lt;a href=&quot;http://www.kakupesa.net/hacker&quot;&gt;http://www.kakupesa.net/hacker&lt;/a&gt; 爱沙尼亚语]、[&lt;a href=&quot;http://www.linuxtaskforce.de/hacker-howto-ger.html&quot;&gt;http://www.linuxtaskforce.de/hacker-howto-ger.html&lt;/a&gt; 德语]、[&lt;a href=&quot;http://users.otenet.gr/%7Eindy90/hacker-howto-gr/&quot;&gt;http://users.otenet.gr/%7Eindy90/hacker-howto-gr/&lt;/a&gt; 希腊语]、[&lt;a href=&quot;http://www.victorfleur.com/documents/hacker.html&quot;&gt;http://www.victorfleur.com/documents/hacker.html&lt;/a&gt; 意大利语] 、[&lt;a href=&quot;http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8&quot;&gt;http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8&lt;/a&gt; 希伯来语]、 [&lt;a href=&quot;http://stian.atlantiscrew.net/doc/hacker-howto.html&quot;&gt;http://stian.atlantiscrew.net/doc/hacker-howto.html&lt;/a&gt; 挪威语] 、[&lt;a href=&quot;http://jvdm.sdf1.org/pt/raquer-howto/&quot;&gt;http://jvdm.sdf1.org/pt/raquer-howto/&lt;/a&gt; 葡萄牙语（巴西）]、[&lt;a href=&quot;http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm&quot;&gt;http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm&lt;/a&gt; 罗马尼亚语] 、[&lt;a href=&quot;http://www.sindominio.net/biblioweb/telematica/hacker-como.html&quot;&gt;http://www.sindominio.net/biblioweb/telematica/hacker-como.html&lt;/a&gt; 西班牙语]、[&lt;a href=&quot;http://www.belgeler.org/howto/hacker-howto/hacker-howto.html&quot;&gt;http://www.belgeler.org/howto/hacker-howto/hacker-howto.html&lt;/a&gt; 土耳其语]、[&lt;a href=&quot;http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html&quot;&gt;http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html&lt;/a&gt; 瑞典语] 。注意由于这份文档时有修正，所以以上翻译版本可能有不同程度的过时。&lt;/p&gt;
+&lt;p&gt;目前这份文档有很多翻译版本：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.slashproc.net/doc/howto-ar.html&quot;&gt;http://www.slashproc.net/doc/howto-ar.html&lt;/a&gt; 阿拉伯语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://moneyaisle.com/worldwide/how-to-become-a-hacker-be&quot;&gt;http://moneyaisle.com/worldwide/how-to-become-a-hacker-be&lt;/a&gt; 白俄罗斯语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.olemichaelsen.dk/hacker-howto.html&quot;&gt;http://www.olemichaelsen.dk/hacker-howto.html&lt;/a&gt; 丹麦语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.knudde.be/index.php?page_name=hacker_howto&quot;&gt;http://www.knudde.be/index.php?page_name=hacker_howto&lt;/a&gt; 荷兰语] &lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.kakupesa.net/hacker&quot;&gt;http://www.kakupesa.net/hacker&lt;/a&gt; 爱沙尼亚语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.linuxtaskforce.de/hacker-howto-ger.html&quot;&gt;http://www.linuxtaskforce.de/hacker-howto-ger.html&lt;/a&gt; 德语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://users.otenet.gr/%7Eindy90/hacker-howto-gr/&quot;&gt;http://users.otenet.gr/%7Eindy90/hacker-howto-gr/&lt;/a&gt; 希腊语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.victorfleur.com/documents/hacker.html&quot;&gt;http://www.victorfleur.com/documents/hacker.html&lt;/a&gt; 意大利语] &lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8&quot;&gt;http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8&lt;/a&gt; 希伯来语]&lt;/li&gt;
+&lt;li&gt; [&lt;a href=&quot;http://stian.atlantiscrew.net/doc/hacker-howto.html&quot;&gt;http://stian.atlantiscrew.net/doc/hacker-howto.html&lt;/a&gt; 挪威语] &lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://jvdm.sdf1.org/pt/raquer-howto/&quot;&gt;http://jvdm.sdf1.org/pt/raquer-howto/&lt;/a&gt; 葡萄牙语（巴西）]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm&quot;&gt;http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm&lt;/a&gt; 罗马尼亚语] &lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.sindominio.net/biblioweb/telematica/hacker-como.html&quot;&gt;http://www.sindominio.net/biblioweb/telematica/hacker-como.html&lt;/a&gt; 西班牙语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www.belgeler.org/howto/hacker-howto/hacker-howto.html&quot;&gt;http://www.belgeler.org/howto/hacker-howto/hacker-howto.html&lt;/a&gt; 土耳其语]&lt;/li&gt;
+&lt;li&gt;[&lt;a href=&quot;http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html&quot;&gt;http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html&lt;/a&gt; 瑞典语] &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意由于这份文档时有修正，所以以上翻译版本可能有不同程度的过时。&lt;/p&gt;
 
 &lt;p&gt;装饰本文的“五点九宫格”图像被称作“glider”，在一种叫做[&lt;a href=&quot;http://dmoz.org/Computers/Artificial_Life/Cellular_Automata/&quot;&gt;http://dmoz.org/Computers/Artificial_Life/Cellular_Automata/&lt;/a&gt; Life]的数学模型中，这个简单的样本有一些异乎寻常的属性，多年以来 Hacker 们都为此着迷。我认为这个图像是一个很好的黑客徽标：它显得抽象而且神秘，而且像是一扇大门，通向一个截然不同的有其内在逻辑的世界。你可以阅读更多关于[&lt;a href=&quot;http://www.catb.org/%7Eesr/hacker-emblem/&quot;&gt;http://www.catb.org/~esr/hacker-emblem/&lt;/a&gt; Glider 徽标] 的内容。&lt;/p&gt;
 
@@ -220,7 +723,7 @@
 
 &lt;p&gt;黑客文化没有领袖，这点是确认无疑的。但黑客圈里确实有些文化英雄、部落长者、史学家、还有发言人。如果你在这圈里呆足够长时间，你也许也能成为其中之一。 记住：黑客们不相信他们的部落长者的自夸，因此过分追求这种名誉是危险的。与其奋力追求，不如先摆正自己的位置，等它自己落到你的手中——那时则要做到谦虚和优雅。&lt;/p&gt;
 
-&lt;h3 id=&quot;黑客和书呆子(nerd)的联系&quot;&gt;黑客和书呆子(Nerd)的联系&lt;/h3&gt;
+&lt;h3 id=&quot;黑客和书呆子-nerd-的联系&quot;&gt;黑客和书呆子(Nerd)的联系&lt;/h3&gt;
 
 &lt;p&gt;和大家普遍认为的相反，并不是只有书呆子才能成为一名黑客。但它确实有帮助，而且许多黑客事实上是书呆子。做一个深居简出的人有助于你集中精力进行十分重要的事情，如思考和编程。&lt;/p&gt;
 
@@ -359,7 +862,7 @@
 
 &lt;p&gt;这是骇客行为。滚得远远的，白痴。&lt;/p&gt;
 
-&lt;h4 id=&quot;我如何入侵/查看/监视别人的-email？&quot;&gt;我如何入侵/查看/监视别人的 Email？&lt;/h4&gt;
+&lt;h4 id=&quot;我如何入侵-查看-监视别人的-email？&quot;&gt;我如何入侵/查看/监视别人的 Email？&lt;/h4&gt;
 
 &lt;p&gt;这是骇客行为。在我面前消失，智障。&lt;/p&gt;
 
@@ -441,6 +944,8 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
         
         
         <category>计算机文化</category>
+        
+        <category>搬运</category>
         
       </item>
     
@@ -961,7 +1466,7 @@ Symbol: MTD_M25P80 [=y]
 };
 &lt;/pre&gt;
 
-&lt;h4 id=&quot;buildroot-&amp;amp;-busybox-&amp;amp;-kernel加入mtd支持&quot;&gt;buildroot &amp;amp; busybox &amp;amp; kernel加入mtd支持&lt;/h4&gt;
+&lt;h4 id=&quot;buildroot-amp-busybox-amp-kernel加入mtd支持&quot;&gt;buildroot &amp;amp; busybox &amp;amp; kernel加入mtd支持&lt;/h4&gt;
 
 &lt;p&gt;首先加入mtd基本工具和flash&lt;em&gt;erase的支持，叫交叉编译出flash&lt;/em&gt;erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。&lt;/p&gt;
 
@@ -1049,7 +1554,7 @@ flash0.0x1000_0x10000.img
 16+0 records in
 16+0 records out
 &lt;span class=&quot;c&quot;&gt;# mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;  362.309070&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; jffs2: notice: &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;198&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jffs2_build_xattr_subsystem: &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;building xattr subsystem, 0 of xdatum &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 unchecked, 0 orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and 0 of xref &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 dead, 0 orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; found.
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;  362.309070&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; jffs2: notice: &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;198&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; jffs2_build_xattr_subsystem: &lt;span class=&quot;nb&quot;&gt;complete &lt;/span&gt;building xattr subsystem, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; of xdatum &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; unchecked, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; of xref &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; dead, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; orphan&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; found.
 &lt;span class=&quot;c&quot;&gt;# &lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;至此，flash设备成功挂载到用户空间的文件系统中去了。&lt;/p&gt;
@@ -1213,7 +1718,7 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 
 &lt;p&gt;3.2-Standard迁移到3.8-RT内核需要变化的驱动包括LCD7和GPMC驱动（包括DMA），两块驱动都以Device Tree Overlay的方法加载。此外，配套Device tree的U-Boot需要升级，老版本U-boot不支持Device Tree &amp;amp; Overlay。&lt;/p&gt;
 
-&lt;h4 id=&quot;3.8内核实时性的检验&quot;&gt;3.8内核实时性的检验&lt;/h4&gt;
+&lt;h4 id=&quot;3-8内核实时性的检验&quot;&gt;3.8内核实时性的检验&lt;/h4&gt;
 
 &lt;p&gt;因为正好有FPGA端需要处理的中断源，因此使用示波器跑一下脉宽就可以检验。&lt;/p&gt;
 
@@ -1254,7 +1759,7 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 &lt;li&gt;生成器send函数理解&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;可迭代对象/迭代器&quot;&gt;可迭代对象/迭代器&lt;/h3&gt;
+&lt;h3 id=&quot;可迭代对象-迭代器&quot;&gt;可迭代对象/迭代器&lt;/h3&gt;
 
 &lt;p&gt;当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象。他基于两个方法:
 1. &lt;code&gt;next()&lt;/code&gt; 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常
@@ -1696,390 +2201,6 @@ This itertool may require significant auxiliary storage (depending on how much t
         
         
         <category>工具</category>
-        
-      </item>
-    
-      <item>
-        <title>[Beaglebone] AM3359芯片GPIO外部中断</title>
-        <description>&lt;p&gt;AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的&lt;code&gt;gpio_omap.c&lt;/code&gt;中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&amp;gt;设置input方向-&amp;gt;使能中断-&amp;gt;填写中断处理函数槽-&amp;gt;清中断标记位等几个步骤。需要理解的异步通知fasync的使用，这是中断等信号传递到用户空间的常用方法。&lt;/p&gt;
-
-&lt;h4 id=&quot;驱动方面&quot;&gt;驱动方面&lt;/h4&gt;
-
-&lt;ol&gt;
-&lt;li&gt;在设备抽象的数据结构中增加一个&lt;code&gt;struct fasync_struct&lt;/code&gt;的指针&lt;/li&gt;
-&lt;li&gt;实现设备操作中的fasync函数，主体就是调用内核的&lt;code&gt;fasync_helper&lt;/code&gt;函数。&lt;/li&gt;
-&lt;li&gt;在需要向用户空间通知的地方(例如中断中)调用内核的&lt;code&gt;kill_fasync&lt;/code&gt;函数发送信号。&lt;/li&gt;
-&lt;li&gt;在驱动的release方法中调用前面定义的fasync函数fasync(-1, fd, 0)以删除释放通知。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;应用层方面&quot;&gt;应用层方面&lt;/h4&gt;
-
-&lt;ol&gt;
-&lt;li&gt;利用signal或者sigaction设置SIGIO信号的处理函数&lt;/li&gt;
-&lt;li&gt;fcntl的&lt;code&gt;F_SETOWN&lt;/code&gt;指令设置当前进程为设备文件owner&lt;/li&gt;
-&lt;li&gt;fcntl的&lt;code&gt;F_SETFL&lt;/code&gt;指令设置FASYNC标志&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;为测试外部驱动，我让硬件工程师接了一个下拉电阻，但是拨上开关后出现了外部中断一直触发的现象，之后用示波器抓了GPIO端口的波形发现噪声太大，有时都能超过2v，遂使用一般按键的方法外接电容处理减少噪声，中断才一次按键一次中断响应。&lt;/p&gt;
-
-&lt;p&gt;驱动和应用层代码如下。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/kernel.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/module.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/cdev.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/fs.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/device.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/syscalls.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/interrupt.h&amp;gt; &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/gpio.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/of_gpio.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/of_platform.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/uaccess.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;linux/string.h&amp;gt; &lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;mach/gpio.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;mach/irqs.h&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;plat/gpio.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;plat/am33xx.h&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#define GPIO_TO_PIN(bank, gpio)     (32 * (bank) + (gpio))&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define IRQ_GPIO_PIN                GPIO_TO_PIN(1, 13)&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#define   TRIGGERD_FLAG_IRQ_DISABLED        (1&amp;lt;&amp;lt;0)&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define   TRIGGERD_FLAG_IRQ_ENABLED         (1&amp;lt;&amp;lt;1)&lt;/span&gt;
-
-&lt;span class=&quot;cm&quot;&gt;/* cmd definations shouled be same with that in user space */&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#define MAGIC_NUM   &amp;#39;k&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMDS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_NONE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_IO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAGIC_NUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_IO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAGIC_NUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;kt&quot;&gt;dev_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fasync_struct&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;async_queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message_cdev_open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-    &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;irq_enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;enable irq&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;enable_irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_DISABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_ENABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-      &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;disable irq&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;disable_irq_nosync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_ENABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TRIGGERD_FLAG_IRQ_DISABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-      &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;default:&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;irq_enable finished&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;irqreturn_t&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;irq_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irqno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga int triggered&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;async_queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kill_fasync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;async_queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SIGIO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;POLL_IN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IRQ_HANDLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;container_of&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i_cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message_cdev_open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message_cdev_open&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;private_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EFAULT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;   
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ssize_t&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;loff_t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ssize_t&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;size_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;loff_t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ptr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;private_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;read length too small&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EFAULT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;copy_to_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;buf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EFAULT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_fasync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;private_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fasync_helper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;async_queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_release&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;private_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message_cdev_open&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fpga_key_fasync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; 
-
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_ioctl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;private_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;dev data null&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EINVAL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_NONE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;  
-          &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;  
-          &lt;span class=&quot;n&quot;&gt;irq_enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;irq_enable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;nl&quot;&gt;default:&lt;/span&gt;  
-          &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ENOTTY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-          &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file_operations&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;meassage_operatons&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;owner&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;THIS_MODULE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;open&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fasync&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_fasync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;release&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_release&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unlocked_ioctl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_ioctl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;  
-
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__init&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpio_lable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_msg_irq_key&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;triggered_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;alloc_chrdev_region&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_msg_irq&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;cdev_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;meassage_operatons&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;cdev_add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class_create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;THIS_MODULE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_msg_irq_class&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IS_ERR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-         &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;failed in creating class./n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-         &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fail1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;   
-     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;device_create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_msg_irq_dev&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-    &lt;span class=&quot;cm&quot;&gt;/* gpio interrupt request */&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpio_request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpio_lable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;gpio_request() failed !&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fail1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpio_direction_input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;gpio_direction_input() failed !&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fail2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;irq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpio_to_irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;gpio_to_irq() failed !&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fail2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#if 0&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;   ret = request_irq(dev-&amp;gt;irq_no, &lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;                    irq_handler, &lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;                    IRQF_TRIGGER_RISING | IRQF_SHARED, &lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;                    gpio_lable, &lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;                    &amp;amp;dev-&amp;gt;devno); &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#else&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request_irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-                    &lt;span class=&quot;n&quot;&gt;irq_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-                    &lt;span class=&quot;n&quot;&gt;IRQF_TRIGGER_RISING&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IRQF_DISABLED&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-                    &lt;span class=&quot;n&quot;&gt;gpio_lable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
-                    &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-&lt;span class=&quot;cp&quot;&gt;#endif&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_ERR&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;request_irq() failed ! %d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fail2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_key_to_app_init&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;      
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-
-&lt;span class=&quot;nl&quot;&gt;fail2:&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;gpio_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;nl&quot;&gt;fail1:&lt;/span&gt;    
-    &lt;span class=&quot;n&quot;&gt;device_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;class_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;   
-    &lt;span class=&quot;n&quot;&gt;cdev_del&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;unregister_chrdev_region&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ret&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-&lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__exit&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fpga_key_exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_dev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-
-    &lt;span class=&quot;n&quot;&gt;free_irq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;irq_no&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;gpio_free&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IRQ_GPIO_PIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;device_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;class_destroy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;   
-    &lt;span class=&quot;n&quot;&gt;cdev_del&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;unregister_chrdev_region&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;devno&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-    &lt;span class=&quot;n&quot;&gt;printk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;KERN_INFO&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;fpga_key_to_app_exit&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-&lt;span class=&quot;n&quot;&gt;module_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;n&quot;&gt;module_exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpga_key_exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-&lt;span class=&quot;n&quot;&gt;MODULE_LICENSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;GPL&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;n&quot;&gt;MODULE_AUTHOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hityixiaoyang@gmail.com&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;n&quot;&gt;MODULE_DESCRIPTION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;AM335x GPIO IQR for FPGA&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-
-
-
-
-
-&lt;span class=&quot;cm&quot;&gt;/*&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * linux异步通知类似于中断，程序开始做的就是将想监测的文件设置为异步通知，然后程序就去做别的事情了，&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 当这些文件上面有数据可读时候，就发送一个信号，程序接受到这个信号就去处理这个文件的数据。&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 这样程序不再是主动去读文件了，而是以类型于中断的方式，这样程序更加灵活。&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * &lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 要弄清linux异步通知必须要弄明白一下几件事:&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 1.谁发信号&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 2.发给谁&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; * 3.接受到信号怎么办&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt; */&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;stdio.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;sys/types.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;sys/stat.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;fcntl.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;sys/select.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;unistd.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;signal.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;string.h&amp;gt;  &lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include&amp;lt;linux/ioctl.h&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#define FPIO_IRQ_DEV_NAME   &amp;quot;/dev/fpga_msg_irq_dev&amp;quot;&lt;/span&gt;
-
-&lt;span class=&quot;cp&quot;&gt;#define MAGIC_NUM   &amp;#39;k&amp;#39;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOCTL_CMDS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_NONE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_DISABLE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_IO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAGIC_NUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;IOCTL_CMD_IRQ_ENABLE&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_IO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MAGIC_NUM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sig_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-  &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;[pid %d] %s recieved signal&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getpid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__FUNCTION__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-    &lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-
-    &lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FPIO_IRQ_DEV_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;O_RDWR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;  
-        &lt;span class=&quot;n&quot;&gt;perror&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;open gpio irq device failed&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-
-    &lt;span class=&quot;n&quot;&gt;signal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SIGIO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sig_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;fcntl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;F_SETOWN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getpid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
-
-   &lt;span class=&quot;cm&quot;&gt;/* &lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;    * 设置该文件的标志为FASYNC,设置文件的标志为FASYNC将导致驱动程序的fasync被调用&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;    * 这样文件就开始处于异步通知状态了&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;    */&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;f_flags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fcntl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;F_GETFL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;waiting for signal &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;n&quot;&gt;fcntl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;F_SETFL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FASYNC&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-
-    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;sizeof&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;key count=%d&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
-
-    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;main exit&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Mon, 13 Oct 2014 07:49:12 +0000</pubDate>
-        <link>/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</link>
-        <guid isPermaLink="true">/2014/10/13/%5BBeaglebone%5DAM3359%E8%8A%AF%E7%89%87GPIO%E5%A4%96%E9%83%A8%E4%B8%AD%E6%96%AD/</guid>
-        
-        <category>Beaglebone</category>
-        
-        <category>C</category>
-        
-        <category>嵌入式</category>
-        
-        <category>编程</category>
-        
-        
-        <category>beaglebone</category>
         
       </item>
     

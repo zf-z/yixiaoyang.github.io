@@ -3,9 +3,10 @@ author: leon
 comments: true
 date: 2015-07-23 19:10:25+00:00
 layout: post
-title: '[转载] 如何成为一名黑客' 
+title: '[搬运] 如何成为一名黑客' 
 categories:
 - 计算机文化
+- 搬运
 
 tags:
 - 计算机文化
@@ -21,8 +22,25 @@ tags:
 
 注意：文档的结尾有一份 [http://translations.readthedocs.org/en/latest/hacker_howto.html#faq FAQ（常见问题解答）]。如果你想通过邮件询问我关于这份文档的问题，请先读这份 FAQ 看看能否找到答案——一遍不行就读两遍。
 
-目前这份文档有很多翻译版本：[http://www.slashproc.net/doc/howto-ar.html 阿拉伯语]、[http://moneyaisle.com/worldwide/how-to-become-a-hacker-be 白俄罗斯语]、[http://www.olemichaelsen.dk/hacker-howto.html 丹麦语]、
-[http://www.knudde.be/index.php?page_name=hacker_howto 荷兰语] 、[http://www.kakupesa.net/hacker 爱沙尼亚语]、[http://www.linuxtaskforce.de/hacker-howto-ger.html 德语]、[http://users.otenet.gr/%7Eindy90/hacker-howto-gr/ 希腊语]、[http://www.victorfleur.com/documents/hacker.html 意大利语] 、[http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8 希伯来语]、 [http://stian.atlantiscrew.net/doc/hacker-howto.html 挪威语] 、[http://jvdm.sdf1.org/pt/raquer-howto/ 葡萄牙语（巴西）]、[http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm 罗马尼亚语] 、[http://www.sindominio.net/biblioweb/telematica/hacker-como.html 西班牙语]、[http://www.belgeler.org/howto/hacker-howto/hacker-howto.html 土耳其语]、[http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html 瑞典语] 。注意由于这份文档时有修正，所以以上翻译版本可能有不同程度的过时。
+目前这份文档有很多翻译版本：
+
+- [http://www.slashproc.net/doc/howto-ar.html 阿拉伯语]
+- [http://moneyaisle.com/worldwide/how-to-become-a-hacker-be 白俄罗斯语]
+- [http://www.olemichaelsen.dk/hacker-howto.html 丹麦语]
+- [http://www.knudde.be/index.php?page_name=hacker_howto 荷兰语] 
+- [http://www.kakupesa.net/hacker 爱沙尼亚语]
+- [http://www.linuxtaskforce.de/hacker-howto-ger.html 德语]
+- [http://users.otenet.gr/%7Eindy90/hacker-howto-gr/ 希腊语]
+- [http://www.victorfleur.com/documents/hacker.html 意大利语] 
+- [http://he.wikisource.org/wiki/%D7%90%D7%99%D7%9A_%D7%9C%D7%94%D7%99%D7%95%D7%AA_%D7%94%D7%90%D7%A7%D7%A8 希伯来语]
+-  [http://stian.atlantiscrew.net/doc/hacker-howto.html 挪威语] 
+- [http://jvdm.sdf1.org/pt/raquer-howto/ 葡萄牙语（巴西）]
+- [http://garaj.xhost.ro/hacker-howto/hacker-howto.ro.htm 罗马尼亚语] 
+- [http://www.sindominio.net/biblioweb/telematica/hacker-como.html 西班牙语]
+- [http://www.belgeler.org/howto/hacker-howto/hacker-howto.html 土耳其语]
+- [http://www1.tripnet.se/%7Emly/open/faqs/hacker-howto.se.html 瑞典语] 
+
+注意由于这份文档时有修正，所以以上翻译版本可能有不同程度的过时。
 
 装饰本文的“五点九宫格”图像被称作“glider”，在一种叫做[http://dmoz.org/Computers/Artificial_Life/Cellular_Automata/ Life]的数学模型中，这个简单的样本有一些异乎寻常的属性，多年以来 Hacker 们都为此着迷。我认为这个图像是一个很好的黑客徽标：它显得抽象而且神秘，而且像是一扇大门，通向一个截然不同的有其内在逻辑的世界。你可以阅读更多关于[http://www.catb.org/~esr/hacker-emblem/ Glider 徽标] 的内容。
 

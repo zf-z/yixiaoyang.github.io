@@ -68,11 +68,10 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">[Beaglebone] AM3359芯片GPIO外部中断</h1>
-    <p class="post-meta">2014-10-13 • leon_e@163.com</p>
   </header>
 
 
@@ -88,8 +87,9 @@
 	  <span class="tags_span">编程</span>
 	
   
+  <span class="post-meta">2014-10-13 • leon_e@163.com</span>
  </div>
- 
+
 
   <article class="post-content">
     <p>AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的<code>gpio_omap.c</code>中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&gt;设置input方向-&gt;使能中断-&gt;填写中断处理函数槽-&gt;清中断标记位等几个步骤。需要理解的异步通知fasync的使用，这是中断等信号传递到用户空间的常用方法。</p>
@@ -168,19 +168,19 @@
     <span class="k">return</span> <span class="p">;</span>
 
   <span class="k">switch</span><span class="p">(</span><span class="n">enable</span><span class="p">){</span>
-    <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="o">:</span>
+    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
       <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;enable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
       <span class="n">enable_irq</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">;</span>  
       <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="o">:</span>
+    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>
       <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;disable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
       <span class="n">disable_irq_nosync</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">);</span>
       <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">;</span>  
       <span class="k">break</span><span class="p">;</span>
-    <span class="nl">default:</span>
+    <span class="k">default</span><span class="o">:</span>
       <span class="k">break</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;irq_enable finished</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
@@ -260,15 +260,15 @@
     <span class="p">}</span>
     <span class="k">switch</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  
     <span class="p">{</span>  
-        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_NONE</span><span class="o">:</span>  
+        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_NONE</span><span class="p">:</span>  
           <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="o">:</span>  
+        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>  
           <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="p">);</span>
           <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="o">:</span>
+        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
           <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="p">);</span>
           <span class="k">break</span><span class="p">;</span>
-        <span class="nl">default:</span>  
+        <span class="k">default</span><span class="o">:</span>  
           <span class="k">return</span> <span class="o">-</span><span class="n">ENOTTY</span><span class="p">;</span>  
           <span class="k">break</span><span class="p">;</span>  
     <span class="p">}</span>  
@@ -349,9 +349,9 @@
     <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;fpga_key_to_app_init</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>      
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
 
-<span class="nl">fail2:</span>  
+<span class="nl">fail2</span><span class="p">:</span>  
     <span class="n">gpio_free</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>  
-<span class="nl">fail1:</span>    
+<span class="nl">fail1</span><span class="p">:</span>    
     <span class="n">device_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span>  
     <span class="n">class_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">);</span>   
     <span class="n">cdev_del</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">);</span>  
@@ -459,24 +459,23 @@
 </code></pre></div>
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

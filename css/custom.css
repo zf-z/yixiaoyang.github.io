@@ -1,4 +1,14 @@
 /* commom */
+h1{
+    font-size: 28px;
+    line-height: 28px;
+    margin: 0px 0px 28px;
+    background-color: #E00;
+    color: #FFF;
+    display: inline-block;
+    padding: 12px;
+}
+
 body {
 	/*background-image: url(/css/img/body_bg.jpg);*/
     font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
@@ -67,6 +77,17 @@ ul, ol {
 .main_index{
    border-top: 6px solid #E00;
    box-shadow: 0px 0px 10px 0px #CFCFCF;
+   padding: 2px 0px;
+}
+
+.main_post{
+   border-top: 6px solid #E00;
+   padding-bottom:10px;
+   box-shadow: 1px 1px 10px 1px #CFCFCF;
+}
+
+.post-meta{
+    margin-left:10px;
 }
 
 .date{
@@ -84,6 +105,18 @@ ul, ol {
    padding-right: 2px;
    padding-left: 8px;
 }
+
+.post-content{
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.post-header{
+    margin-bottom:0px;
+    
+}
+
 .post-area{
 	/*box-shadow:0px 0px 10px 0px #CFCFCF;*/
 	/*background-color:#F0F0FF;*/
@@ -169,8 +202,11 @@ ul, ol {
 }
 
 .tags_div{
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
+    padding-left: 20px;
 }
+
+
 .tags_span{
   font-size: 12px;
   font-weight: bold;
@@ -269,10 +305,10 @@ footer .point{
  * post articles area
  */
 .post{
-	padding:10px 00px;
+	/*padding:20px 20px;*/
 	font-size: 16px;
-	line-height: 1.5;
-	/* -webkit-text-size-adjust: 100%; */
+	line-height: 1.6;
+	 -webkit-text-size-adjust: 100%; 
 }
 
 .post h4{

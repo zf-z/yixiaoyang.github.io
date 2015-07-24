@@ -68,11 +68,10 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="post">
+        <div class="post main_post">
 
   <header class="post-header">
     <h1 class="post-title">[Beaglebone] Linux 3.8添加SPi Flash及文件系统支持</h1>
-    <p class="post-meta">2015-07-15 • leon</p>
   </header>
 
 
@@ -88,8 +87,9 @@
 	  <span class="tags_span">嵌入式</span>
 	
   
+  <span class="post-meta">2015-07-15 • leon</span>
  </div>
- 
+
 
   <article class="post-content">
     <h4 id="spi-flash芯片">Spi Flash芯片</h4>
@@ -225,7 +225,7 @@ Symbol: MTD_M25P80 [=y]
 };
 </pre>
 
-<h4 id="buildroot-&amp;-busybox-&amp;-kernel加入mtd支持">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
+<h4 id="buildroot-amp-busybox-amp-kernel加入mtd支持">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
 
 <p>首先加入mtd基本工具和flash<em>erase的支持，叫交叉编译出flash</em>erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。</p>
 
@@ -313,7 +313,7 @@ flash0.0x1000_0x10000.img
 16+0 records in
 16+0 records out
 <span class="c"># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/</span>
-<span class="o">[</span>  362.309070<span class="o">]</span> jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, 0 of xdatum <span class="o">(</span>0 unchecked, 0 orphan<span class="o">)</span> and 0 of xref <span class="o">(</span>0 dead, 0 orphan<span class="o">)</span> found.
+<span class="o">[</span>  362.309070<span class="o">]</span> jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, <span class="m">0</span> of xdatum <span class="o">(</span><span class="m">0</span> unchecked, <span class="m">0</span> orphan<span class="o">)</span> and <span class="m">0</span> of xref <span class="o">(</span><span class="m">0</span> dead, <span class="m">0</span> orphan<span class="o">)</span> found.
 <span class="c"># </span>
 </code></pre></div>
 <p>至此，flash设备成功挂载到用户空间的文件系统中去了。</p>
@@ -325,24 +325,23 @@ flash0.0x1000_0x10000.img
 
   </article>
 
-
-  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-	 /* * * CONFIGURATION VARIABLES * * */
-  var disqus_shortname = 'leon-blog';
-
-  /* * * DON'T EDIT BELOW THIS LINE * * */
-  (function() {
-   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-   })();
-  </script>
-
-
 </div>
 
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
       </div>
     </div>
 

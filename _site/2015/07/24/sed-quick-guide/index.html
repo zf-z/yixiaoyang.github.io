@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[搬运] SED单行脚本快速参考</title>
+  <meta name="description" content="英文标题：USEFUL ONE-LINE SCRIPTS FOR SED (Unix stream editor)">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/07/24/sed-quick-guide/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">[搬运] SED单行脚本快速参考</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">Shell</span>
+	
+	  <span class="tags_span">搬运</span>
+	
+  
+  <span class="post-meta">2015-07-24 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <p>英文标题：<code>USEFUL ONE-LINE SCRIPTS FOR SED (Unix stream editor)</code></p>
+
+<p>原标题：<code>HANDY ONE-LINERS FOR SED (Unix stream editor)</code></p>
+
+<p>整理：Eric Pement  - 电邮：<code>pemente[at]northpark.edu</code>         版本5.5</p>
+
+<p>译者：Joe Hong     - 电邮：<code>hq00e@126.com</code></p>
+
+<p>在以下地址可找到本文档的最新（英文）版本：</p>
+
+<ul>
+<li><a href="http://sed.sourceforge.net/sed1line.txt">http://sed.sourceforge.net/sed1line.txt</a></li>
+<li><a href="http://www.pement.org/sed/sed1line.txt">http://www.pement.org/sed/sed1line.txt</a></li>
+</ul>
+
+<p>其他语言版本：</p>
+
+<table><thead>
+<tr>
+<th>Lang</th>
+<th>link</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>中文</td>
+<td><a href="http://sed.sourceforge.net/sed1line_zh-CN.html">http://sed.sourceforge.net/sed1line_zh-CN.html</a></td>
+</tr>
+<tr>
+<td>捷克语</td>
+<td><a href="http://sed.sourceforge.net/sed1line_cz.html">http://sed.sourceforge.net/sed1line_cz.html</a></td>
+</tr>
+<tr>
+<td>荷语</td>
+<td><a href="http://sed.sourceforge.net/sed1line_nl.html">http://sed.sourceforge.net/sed1line_nl.html</a></td>
+</tr>
+<tr>
+<td>法语</td>
+<td><a href="http://sed.sourceforge.net/sed1line_fr.html">http://sed.sourceforge.net/sed1line_fr.html</a></td>
+</tr>
+<tr>
+<td>德语</td>
+<td><a href="http://sed.sourceforge.net/sed1line_de.html">http://sed.sourceforge.net/sed1line_de.html</a></td>
+</tr>
+<tr>
+<td>葡语</td>
+<td><a href="http://sed.sourceforge.net/sed1line_pt-BR.html">http://sed.sourceforge.net/sed1line_pt-BR.html</a></td>
+</tr>
+</tbody></table>
+
+<h3 id="文本间隔">文本间隔</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 在每一行后面增加一空行</span>
+ sed G
+
+ <span class="c"># 将原来的所有空行删除并在每一行后面增加一空行。</span>
+ <span class="c"># 这样在输出的文本中每一行后面将有且只有一空行。</span>
+ sed <span class="s1">&#39;/^$/d;G&#39;</span>
+
+ <span class="c"># 在每一行后面增加两行空行</span>
+ sed <span class="s1">&#39;G;G&#39;</span>
+
+ <span class="c"># 将第一个脚本所产生的所有空行删除（即删除所有偶数行）</span>
+ sed <span class="s1">&#39;n;d&#39;</span>
+
+ <span class="c"># 在匹配式样“regex”的行之前插入一空行</span>
+ sed <span class="s1">&#39;/regex/{x;p;x;}&#39;</span>
+
+ <span class="c"># 在匹配式样“regex”的行之后插入一空行</span>
+ sed <span class="s1">&#39;/regex/G&#39;</span>
+
+ <span class="c"># 在匹配式样“regex”的行之前和之后各插入一空行</span>
+ sed <span class="s1">&#39;/regex/{x;p;x;G;}&#39;</span>
+</code></pre></div>
+<h3 id="编号">编号</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 为文件中的每一行进行编号（简单的左对齐方式）。这里使用了“制表符”</span>
+ <span class="c"># （tab，见本文末尾关于&#39;\t&#39;的用法的描述）而不是空格来对齐边缘。</span>
+ <span class="nv">sed</span> <span class="o">=</span> filename <span class="p">|</span> sed <span class="s1">&#39;N;s/\n/\t/&#39;</span>
+
+ <span class="c"># 对文件中的所有行编号（行号在左，文字右端对齐）。</span>
+ <span class="nv">sed</span> <span class="o">=</span> filename <span class="p">|</span> sed <span class="s1">&#39;N; s/^/     /; s/ *\(.\{6,\}\)\n/\1  /&#39;</span>
+
+ <span class="c"># 对文件中的所有行编号，但只显示非空白行的行号。</span>
+ sed <span class="s1">&#39;/./=&#39;</span> filename <span class="p">|</span> sed <span class="s1">&#39;/./N; s/\n/ /&#39;</span>
+
+ <span class="c"># 计算行数 （模拟 &quot;wc -l&quot;）</span>
+ sed -n <span class="s1">&#39;$=&#39;</span>
+</code></pre></div>
+<h3 id="文本转换和替代">文本转换和替代</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># Unix环境：转换DOS的新行符（CR/LF）为Unix格式。</span>
+ sed <span class="s1">&#39;s/.$//&#39;</span>                     <span class="c"># 假设所有行以CR/LF结束</span>
+ sed <span class="s1">&#39;s/^M$//&#39;</span>                    <span class="c"># 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V</span>
+ sed <span class="s1">&#39;s/\x0D$//&#39;</span>                  <span class="c"># ssed、gsed 3.02.80，及更高版本</span>
+
+ <span class="c"># Unix环境：转换Unix的新行符（LF）为DOS格式。</span>
+ sed <span class="s2">&quot;s/$/`echo -e \\\r`/&quot;</span>        <span class="c"># 在ksh下所使用的命令</span>
+ sed <span class="s1">&#39;s/$&#39;</span><span class="s2">&quot;/`echo \\\r`/&quot;</span>         <span class="c"># 在bash下所使用的命令</span>
+ sed <span class="s2">&quot;s/$/`echo \\\r`/&quot;</span>           <span class="c"># 在zsh下所使用的命令</span>
+ sed <span class="s1">&#39;s/$/\r/&#39;</span>                    <span class="c"># gsed 3.02.80 及更高版本</span>
+
+ <span class="c"># DOS环境：转换Unix新行符（LF）为DOS格式。</span>
+ sed <span class="s2">&quot;s/$//&quot;</span>                      <span class="c"># 方法 1</span>
+ sed -n p                         <span class="c"># 方法 2</span>
+
+ <span class="c"># DOS环境：转换DOS新行符（CR/LF）为Unix格式。</span>
+ <span class="c"># 下面的脚本只对UnxUtils sed 4.0.7 及更高版本有效。要识别UnxUtils版本的</span>
+ <span class="c">#  sed可以通过其特有的“--text”选项。你可以使用帮助选项（“--help”）看</span>
+ <span class="c"># 其中有无一个“--text”项以此来判断所使用的是否是UnxUtils版本。其它DOS</span>
+ <span class="c"># 版本的的sed则无法进行这一转换。但可以用“tr”来实现这一转换。</span>
+ sed <span class="s2">&quot;s/\r//&quot;</span> infile &gt;outfile     <span class="c"># UnxUtils sed v4.0.7 或更高版本</span>
+ tr -d <span class="se">\r</span> &lt;infile &gt;outfile        <span class="c"># GNU tr 1.22 或更高版本</span>
+
+ <span class="c"># 将每一行前导的“空白字符”（空格，制表符）删除</span>
+ <span class="c"># 使之左对齐</span>
+ sed <span class="s1">&#39;s/^[ \t]*//&#39;</span>                <span class="c"># 见本文末尾关于&#39;\t&#39;用法的描述</span>
+
+ <span class="c"># 将每一行拖尾的“空白字符”（空格，制表符）删除</span>
+ sed <span class="s1">&#39;s/[ \t]*$//&#39;</span>                <span class="c"># 见本文末尾关于&#39;\t&#39;用法的描述</span>
+
+ <span class="c"># 将每一行中的前导和拖尾的空白字符删除</span>
+ sed <span class="s1">&#39;s/^[ \t]*//;s/[ \t]*$//&#39;</span>
+
+ <span class="c"># 在每一行开头处插入5个空格（使全文向右移动5个字符的位置）</span>
+ sed <span class="s1">&#39;s/^/     /&#39;</span>
+
+ <span class="c"># 以79个字符为宽度，将所有文本右对齐</span>
+ sed -e :a -e <span class="s1">&#39;s/^.\{1,78\}$/ &amp;/;ta&#39;</span>  <span class="c"># 78个字符外加最后的一个空格</span>
+
+ <span class="c"># 以79个字符为宽度，使所有文本居中。在方法1中，为了让文本居中每一行的前</span>
+ <span class="c"># 头和后头都填充了空格。 在方法2中，在居中文本的过程中只在文本的前面填充</span>
+ <span class="c"># 空格，并且最终这些空格将有一半会被删除。此外每一行的后头并未填充空格。</span>
+ sed  -e :a -e <span class="s1">&#39;s/^.\{1,77\}$/ &amp; /;ta&#39;</span>                     <span class="c"># 方法1</span>
+ sed  -e :a -e <span class="s1">&#39;s/^.\{1,77\}$/ &amp;/;ta&#39;</span> -e <span class="s1">&#39;s/\( *\)\1/\1/&#39;</span>  <span class="c"># 方法2</span>
+
+ <span class="c"># 在每一行中查找字串“foo”，并将找到的“foo”替换为“bar”</span>
+ sed <span class="s1">&#39;s/foo/bar/&#39;</span>                 <span class="c"># 只替换每一行中的第一个“foo”字串</span>
+ sed <span class="s1">&#39;s/foo/bar/4&#39;</span>                <span class="c"># 只替换每一行中的第四个“foo”字串</span>
+ sed <span class="s1">&#39;s/foo/bar/g&#39;</span>                <span class="c"># 将每一行中的所有“foo”都换成“bar”</span>
+ sed <span class="s1">&#39;s/\(.*\)foo\(.*foo\)/\1bar\2/&#39;</span> <span class="c"># 替换倒数第二个“foo”</span>
+ sed <span class="s1">&#39;s/\(.*\)foo/\1bar/&#39;</span>            <span class="c"># 替换最后一个“foo”</span>
+
+ <span class="c"># 只在行中出现字串“baz”的情况下将“foo”替换成“bar”</span>
+ sed <span class="s1">&#39;/baz/s/foo/bar/g&#39;</span>
+
+ <span class="c"># 将“foo”替换成“bar”，并且只在行中未出现字串“baz”的情况下替换</span>
+ sed <span class="s1">&#39;/baz/!s/foo/bar/g&#39;</span>
+
+ <span class="c"># 不管是“scarlet”“ruby”还是“puce”，一律换成“red”</span>
+ sed <span class="s1">&#39;s/scarlet/red/g;s/ruby/red/g;s/puce/red/g&#39;</span>  <span class="c">#对多数的sed都有效</span>
+ gsed <span class="s1">&#39;s/scarlet\|ruby\|puce/red/g&#39;</span>               <span class="c"># 只对GNU sed有效</span>
+
+ <span class="c"># 倒置所有行，第一行成为最后一行，依次类推（模拟“tac”）。</span>
+ <span class="c"># 由于某些原因，使用下面命令时HHsed v1.5会将文件中的空行删除</span>
+ sed <span class="s1">&#39;1!G;h;$!d&#39;</span>               <span class="c"># 方法1</span>
+ sed -n <span class="s1">&#39;1!G;h;$p&#39;</span>             <span class="c"># 方法2</span>
+
+ <span class="c"># 将行中的字符逆序排列，第一个字成为最后一字，……（模拟“rev”）</span>
+ sed <span class="s1">&#39;/\n/!G;s/\(.\)\(.*\n\)/&amp;\2\1/;//D;s/.//&#39;</span>
+
+ <span class="c"># 将每两行连接成一行（类似“paste”）</span>
+ sed <span class="s1">&#39;$!N;s/\n/ /&#39;</span>
+
+ <span class="c"># 如果当前行以反斜杠“\”结束，则将下一行并到当前行末尾</span>
+ <span class="c"># 并去掉原来行尾的反斜杠</span>
+ sed -e :a -e <span class="s1">&#39;/\\$/N; s/\\\n//; ta&#39;</span>
+
+ <span class="c"># 如果当前行以等号开头，将当前行并到上一行末尾</span>
+ <span class="c"># 并以单个空格代替原来行头的“=”</span>
+ sed -e :a -e <span class="s1">&#39;$!N;s/\n=/ /;ta&#39;</span> -e <span class="s1">&#39;P;D&#39;</span>
+
+ <span class="c"># 为数字字串增加逗号分隔符号，将“1234567”改为“1,234,567”</span>
+ gsed <span class="s1">&#39;:a;s/\B[0-9]\{3\}\&gt;/,&amp;/;ta&#39;</span>                     <span class="c"># GNU sed</span>
+ sed -e :a -e <span class="s1">&#39;s/\(.*[0-9]\)\([0-9]\{3\}\)/\1,\2/;ta&#39;</span>  <span class="c"># 其他sed</span>
+
+ <span class="c"># 为带有小数点和负号的数值增加逗号分隔符（GNU sed）</span>
+ gsed -r <span class="s1">&#39;:a;s/(^|[^0-9.])([0-9]+)([0-9]{3})/\1\2,\3/g;ta&#39;</span>
+
+ <span class="c"># 在每5行后增加一空白行 （在第5，10，15，20，等行后增加一空白行）</span>
+ gsed <span class="s1">&#39;0~5G&#39;</span>                      <span class="c"># 只对GNU sed有效</span>
+ sed <span class="s1">&#39;n;n;n;n;G;&#39;</span>                 <span class="c"># 其他sed</span>
+</code></pre></div>
+<h3 id="选择性地显示特定行">选择性地显示特定行</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 显示文件中的前10行 （模拟“head”的行为）</span>
+ sed 10q
+
+ <span class="c"># 显示文件中的第一行 （模拟“head -1”命令）</span>
+ sed q
+
+ <span class="c"># 显示文件中的最后10行 （模拟“tail”）</span>
+ sed -e :a -e <span class="s1">&#39;$q;N;11,$D;ba&#39;</span>
+
+ <span class="c"># 显示文件中的最后2行（模拟“tail -2”命令）</span>
+ sed <span class="s1">&#39;$!N;$!D&#39;</span>
+
+ <span class="c"># 显示文件中的最后一行（模拟“tail -1”）</span>
+ sed <span class="s1">&#39;$!d&#39;</span>                        <span class="c"># 方法1</span>
+ sed -n <span class="s1">&#39;$p&#39;</span>                      <span class="c"># 方法2</span>
+
+ <span class="c"># 显示文件中的倒数第二行</span>
+ sed -e <span class="s1">&#39;$!{h;d;}&#39;</span> -e x              <span class="c"># 当文件中只有一行时，输入空行</span>
+ sed -e <span class="s1">&#39;1{$q;}&#39;</span> -e <span class="s1">&#39;$!{h;d;}&#39;</span> -e x  <span class="c"># 当文件中只有一行时，显示该行</span>
+ sed -e <span class="s1">&#39;1{$d;}&#39;</span> -e <span class="s1">&#39;$!{h;d;}&#39;</span> -e x  <span class="c"># 当文件中只有一行时，不输出</span>
+
+ <span class="c"># 只显示匹配正则表达式的行（模拟“grep”）</span>
+ sed -n <span class="s1">&#39;/regexp/p&#39;</span>               <span class="c"># 方法1</span>
+ sed <span class="s1">&#39;/regexp/!d&#39;</span>                 <span class="c"># 方法2</span>
+
+ <span class="c"># 只显示“不”匹配正则表达式的行（模拟“grep -v”）</span>
+ sed -n <span class="s1">&#39;/regexp/!p&#39;</span>              <span class="c"># 方法1，与前面的命令相对应</span>
+ sed <span class="s1">&#39;/regexp/d&#39;</span>                  <span class="c"># 方法2，类似的语法</span>
+
+ <span class="c"># 查找“regexp”并将匹配行的上一行显示出来，但并不显示匹配行</span>
+ sed -n <span class="s1">&#39;/regexp/{g;1!p;};h&#39;</span>
+
+ <span class="c"># 查找“regexp”并将匹配行的下一行显示出来，但并不显示匹配行</span>
+ sed -n <span class="s1">&#39;/regexp/{n;p;}&#39;</span>
+
+ <span class="c"># 显示包含“regexp”的行及其前后行，并在第一行之前加上“regexp”所</span>
+ <span class="c"># 在行的行号 （类似“grep -A1 -B1”）</span>
+ sed -n -e <span class="s1">&#39;/regexp/{=;x;1!p;g;$!N;p;D;}&#39;</span> -e h
+
+ <span class="c"># 显示包含“AAA”、“BBB”或“CCC”的行（任意次序）</span>
+ sed <span class="s1">&#39;/AAA/!d; /BBB/!d; /CCC/!d&#39;</span>  <span class="c"># 字串的次序不影响结果</span>
+
+ <span class="c"># 显示包含“AAA”、“BBB”和“CCC”的行（固定次序）</span>
+ sed <span class="s1">&#39;/AAA.*BBB.*CCC/!d&#39;</span>
+
+ <span class="c"># 显示包含“AAA”“BBB”或“CCC”的行 （模拟“egrep”）</span>
+ sed -e <span class="s1">&#39;/AAA/b&#39;</span> -e <span class="s1">&#39;/BBB/b&#39;</span> -e <span class="s1">&#39;/CCC/b&#39;</span> -e d    <span class="c"># 多数sed</span>
+ gsed <span class="s1">&#39;/AAA\|BBB\|CCC/!d&#39;</span>                        <span class="c"># 对GNU sed有效</span>
+
+ <span class="c"># 显示包含“AAA”的段落 （段落间以空行分隔）</span>
+ <span class="c"># HHsed v1.5 必须在“x;”后加入“G;”，接下来的3个脚本都是这样</span>
+ sed -e <span class="s1">&#39;/./{H;$!d;}&#39;</span> -e <span class="s1">&#39;x;/AAA/!d;&#39;</span>
+
+ <span class="c"># 显示包含“AAA”“BBB”和“CCC”三个字串的段落 （任意次序）</span>
+ sed -e <span class="s1">&#39;/./{H;$!d;}&#39;</span> -e <span class="s1">&#39;x;/AAA/!d;/BBB/!d;/CCC/!d&#39;</span>
+
+ <span class="c"># 显示包含“AAA”、“BBB”、“CCC”三者中任一字串的段落 （任意次序）</span>
+ sed -e <span class="s1">&#39;/./{H;$!d;}&#39;</span> -e <span class="s1">&#39;x;/AAA/b&#39;</span> -e <span class="s1">&#39;/BBB/b&#39;</span> -e <span class="s1">&#39;/CCC/b&#39;</span> -e d
+ gsed <span class="s1">&#39;/./{H;$!d;};x;/AAA\|BBB\|CCC/b;d&#39;</span>         <span class="c"># 只对GNU sed有效</span>
+
+ <span class="c"># 显示包含65个或以上字符的行</span>
+ sed -n <span class="s1">&#39;/^.\{65\}/p&#39;</span>
+
+ <span class="c"># 显示包含65个以下字符的行</span>
+ sed -n <span class="s1">&#39;/^.\{65\}/!p&#39;</span>            <span class="c"># 方法1，与上面的脚本相对应</span>
+ sed <span class="s1">&#39;/^.\{65\}/d&#39;</span>                <span class="c"># 方法2，更简便一点的方法</span>
+
+ <span class="c"># 显示部分文本——从包含正则表达式的行开始到最后一行结束</span>
+ sed -n <span class="s1">&#39;/regexp/,$p&#39;</span>
+
+ <span class="c"># 显示部分文本——指定行号范围（从第8至第12行，含8和12行）</span>
+ sed -n <span class="s1">&#39;8,12p&#39;</span>                   <span class="c"># 方法1</span>
+ sed <span class="s1">&#39;8,12!d&#39;</span>                     <span class="c"># 方法2</span>
+
+ <span class="c"># 显示第52行</span>
+ sed -n <span class="s1">&#39;52p&#39;</span>                     <span class="c"># 方法1</span>
+ sed <span class="s1">&#39;52!d&#39;</span>                       <span class="c"># 方法2</span>
+ sed <span class="s1">&#39;52q;d&#39;</span>                      <span class="c"># 方法3, 处理大文件时更有效率</span>
+
+ <span class="c"># 从第3行开始，每7行显示一次    </span>
+ gsed -n <span class="s1">&#39;3~7p&#39;</span>                   <span class="c"># 只对GNU sed有效</span>
+ sed -n <span class="s1">&#39;3,${p;n;n;n;n;n;n;}&#39;</span>     <span class="c"># 其他sed</span>
+
+ <span class="c"># 显示两个正则表达式之间的文本（包含）</span>
+ sed -n <span class="s1">&#39;/Iowa/,/Montana/p&#39;</span>       <span class="c"># 区分大小写方式</span>
+</code></pre></div>
+<h3 id="选择性地删除特定行">选择性地删除特定行</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 显示通篇文档，除了两个正则表达式之间的内容</span>
+ sed <span class="s1">&#39;/Iowa/,/Montana/d&#39;</span>
+
+ <span class="c"># 删除文件中相邻的重复行（模拟“uniq”）</span>
+ <span class="c"># 只保留重复行中的第一行，其他行删除</span>
+ sed <span class="s1">&#39;$!N; /^\(.*\)\n\1$/!P; D&#39;</span>
+
+ <span class="c"># 删除文件中的重复行，不管有无相邻。注意hold space所能支持的缓存</span>
+ <span class="c"># 大小，或者使用GNU sed。</span>
+ sed -n <span class="s1">&#39;G; s/\n/&amp;&amp;/; /^\([ -~]*\n\).*\n\1/d; s/\n//; h; P&#39;</span>
+
+ <span class="c"># 删除除重复行外的所有行（模拟“uniq -d”）</span>
+ sed <span class="s1">&#39;$!N; s/^\(.*\)\n\1$/\1/; t; D&#39;</span>
+
+ <span class="c"># 删除文件中开头的10行</span>
+ sed <span class="s1">&#39;1,10d&#39;</span>
+
+ <span class="c"># 删除文件中的最后一行</span>
+ sed <span class="s1">&#39;$d&#39;</span>
+
+ <span class="c"># 删除文件中的最后两行</span>
+ sed <span class="s1">&#39;N;$!P;$!D;$d&#39;</span>
+
+ <span class="c"># 删除文件中的最后10行</span>
+ sed -e :a -e <span class="s1">&#39;$d;N;2,10ba&#39;</span> -e <span class="s1">&#39;P;D&#39;</span>   <span class="c"># 方法1</span>
+ sed -n -e :a -e <span class="s1">&#39;1,10!{P;N;D;};N;ba&#39;</span>  <span class="c"># 方法2</span>
+
+ <span class="c"># 删除8的倍数行</span>
+ gsed <span class="s1">&#39;0~8d&#39;</span>                           <span class="c"># 只对GNU sed有效</span>
+ sed <span class="s1">&#39;n;n;n;n;n;n;n;d;&#39;</span>                <span class="c"># 其他sed</span>
+
+ <span class="c"># 删除匹配式样的行</span>
+ sed <span class="s1">&#39;/pattern/d&#39;</span>                      <span class="c"># 删除含pattern的行。当然pattern</span>
+                                       <span class="c"># 可以换成任何有效的正则表达式</span>
+
+ <span class="c"># 删除文件中的所有空行（与“grep &#39;.&#39; ”效果相同）</span>
+ sed <span class="s1">&#39;/^$/d&#39;</span>                           <span class="c"># 方法1</span>
+ sed <span class="s1">&#39;/./!d&#39;</span>                           <span class="c"># 方法2</span>
+
+ <span class="c"># 只保留多个相邻空行的第一行。并且删除文件顶部和尾部的空行。</span>
+ <span class="c"># （模拟“cat -s”）</span>
+ sed <span class="s1">&#39;/./,/^$/!d&#39;</span>        <span class="c">#方法1，删除文件顶部的空行，允许尾部保留一空行</span>
+ sed <span class="s1">&#39;/^$/N;/\n$/D&#39;</span>      <span class="c">#方法2，允许顶部保留一空行，尾部不留空行</span>
+
+ <span class="c"># 只保留多个相邻空行的前两行。</span>
+ sed <span class="s1">&#39;/^$/N;/\n$/N;//D&#39;</span>
+
+ <span class="c"># 删除文件顶部的所有空行</span>
+ sed <span class="s1">&#39;/./,$!d&#39;</span>
+
+ <span class="c"># 删除文件尾部的所有空行</span>
+ sed -e :a -e <span class="s1">&#39;/^\n*$/{$d;N;ba&#39;</span> -e <span class="s1">&#39;}&#39;</span>  <span class="c"># 对所有sed有效</span>
+ sed -e :a -e <span class="s1">&#39;/^\n*$/N;/\n$/ba&#39;</span>        <span class="c"># 同上，但只对 gsed 3.02.*有效</span>
+
+ <span class="c"># 删除每个段落的最后一行</span>
+ sed -n <span class="s1">&#39;/^$/{p;h;};/./{x;/./p;}&#39;</span>
+</code></pre></div>
+<h3 id="特殊应用">特殊应用</h3>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 移除手册页（man page）中的nroff标记。在Unix System V或bash shell下使</span>
+ <span class="c"># 用&#39;echo&#39;命令时可能需要加上 -e 选项。</span>
+ sed <span class="s2">&quot;s/.`echo \\\b`//g&quot;</span>    <span class="c"># 外层的双括号是必须的（Unix环境）</span>
+ sed <span class="s1">&#39;s/.^H//g&#39;</span>             <span class="c"># 在bash或tcsh中, 按 Ctrl-V 再按 Ctrl-H</span>
+ sed <span class="s1">&#39;s/.\x08//g&#39;</span>           <span class="c"># sed 1.5，GNU sed，ssed所使用的十六进制的表示方法</span>
+
+ <span class="c"># 提取新闻组或 e-mail 的邮件头</span>
+ sed <span class="s1">&#39;/^$/q&#39;</span>                <span class="c"># 删除第一行空行后的所有内容</span>
+
+ <span class="c"># 提取新闻组或 e-mail 的正文部分</span>
+ sed <span class="s1">&#39;1,/^$/d&#39;</span>              <span class="c"># 删除第一行空行之前的所有内容</span>
+
+ <span class="c"># 从邮件头提取“Subject”（标题栏字段），并移除开头的“Subject:”字样</span>
+ sed <span class="s1">&#39;/^Subject: */!d; s///;q&#39;</span>
+
+ <span class="c"># 从邮件头获得回复地址</span>
+ sed <span class="s1">&#39;/^Reply-To:/q; /^From:/h; /./d;g;q&#39;</span>
+
+ <span class="c"># 获取邮件地址。在上一个脚本所产生的那一行邮件头的基础上进一步的将非电邮</span>
+ <span class="c"># 地址的部分剃除。（见上一脚本）</span>
+ sed <span class="s1">&#39;s/ *(.*)//; s/&gt;.*//; s/.*[:&lt;] *//&#39;</span>
+
+ <span class="c"># 在每一行开头加上一个尖括号和空格（引用信息）</span>
+ sed <span class="s1">&#39;s/^/&gt; /&#39;</span>
+
+ <span class="c"># 将每一行开头处的尖括号和空格删除（解除引用）</span>
+ sed <span class="s1">&#39;s/^&gt; //&#39;</span>
+
+ <span class="c"># 移除大部分的HTML标签（包括跨行标签）</span>
+ sed -e :a -e <span class="s1">&#39;s/&lt;[^&gt;]*&gt;//g;/&lt;/N;//ba&#39;</span>
+
+ <span class="c"># 将分成多卷的uuencode文件解码。移除文件头信息，只保留uuencode编码部分。</span>
+ <span class="c"># 文件必须以特定顺序传给sed。下面第一种版本的脚本可以直接在命令行下输入；</span>
+ <span class="c"># 第二种版本则可以放入一个带执行权限的shell脚本中。（由Rahul Dhesi的一</span>
+ <span class="c"># 个脚本修改而来。）</span>
+ sed <span class="s1">&#39;/^end/,/^begin/d&#39;</span> file1 file2 ... fileX <span class="p">|</span> uudecode   <span class="c"># vers. 1</span>
+ sed <span class="s1">&#39;/^end/,/^begin/d&#39;</span> <span class="s2">&quot;$@&quot;</span> <span class="p">|</span> uudecode                    <span class="c"># vers. 2</span>
+
+ <span class="c"># 将文件中的段落以字母顺序排序。段落间以（一行或多行）空行分隔。GNU sed使用</span>
+ <span class="c"># 字元“\v”来表示垂直制表符，这里用它来作为换行符的占位符——当然你也可以</span>
+ <span class="c"># 用其他未在文件中使用的字符来代替它。</span>
+ sed <span class="s1">&#39;/./{H;d;};x;s/\n/={NL}=/g&#39;</span> file <span class="p">|</span> sort <span class="p">|</span> sed <span class="s1">&#39;1s/={NL}=//;s/={NL}=/\n/g&#39;</span>
+ gsed <span class="s1">&#39;/./{H;d};x;y/\n/\v/&#39;</span> file <span class="p">|</span> sort <span class="p">|</span> sed <span class="s1">&#39;1s/\v//;y/\v/\n/&#39;</span>
+
+ <span class="c"># 分别压缩每个.TXT文件，压缩后删除原来的文件并将压缩后的.ZIP文件</span>
+ <span class="c"># 命名为与原来相同的名字（只是扩展名不同）。（DOS环境：“dir /b”</span>
+ <span class="c"># 显示不带路径的文件名）。</span>
+ <span class="nb">echo</span> @echo off &gt;zipup.bat
+ dir /b *.txt <span class="p">|</span> sed <span class="s2">&quot;s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/&quot;</span> &gt;&gt;zipup.bat
+</code></pre></div>
+<p>使用SED：Sed接受一个或多个编辑命令，并且每读入一行后就依次应用这些命令。
+当读入第一行输入后，sed对其应用所有的命令，然后将结果输出。接着再读入第二
+行输入，对其应用所有的命令……并重复这个过程。上一个例子中sed由标准输入设
+备（即命令解释器，通常是以管道输入的形式）获得输入。在命令行给出一个或多
+个文件名作为参数时，这些文件取代标准输入设备成为sed的输入。sed的输出将被
+送到标准输出（显示器）。因此：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"> cat filename <span class="p">|</span> sed <span class="s1">&#39;10q&#39;</span>         <span class="c"># 使用管道输入</span>
+ sed <span class="s1">&#39;10q&#39;</span> filename               <span class="c"># 同样效果，但不使用管道输入</span>
+ sed <span class="s1">&#39;10q&#39;</span> filename &gt; newfile     <span class="c"># 将输出转移（重定向）到磁盘上</span>
+</code></pre></div>
+<p>要了解sed命令的使用说明，包括如何通过脚本文件（而非从命令行）来使用这些命
+令，请参阅《sed &amp; awk》第二版，作者Dale Dougherty和Arnold Robbins
+（O&#39;Reilly，1997；<a href="http://www.ora.com">http://www.ora.com</a>） ，
+<code>《UNIX Text Processing》</code>，作者Dale Dougherty和Tim O&#39;Reilly
+（Hayden Books，1987）或者是Mike Arst写的教程——压缩包的名称是“U-SEDIT2.ZIP”
+（在许多站点上都找得到）。要发掘sed的潜力，则必须对“正则表达式”有足够的理解。
+正则表达式的资料可以看《Mastering Regular Expressions》作
+者Jeffrey Friedl（O&#39;reilly 1997）。Unix系统所提供的手册页（“man”）
+也会有所帮助（试一下这些命令“man sed”、“man regexp”，或者看“man ed”中关于
+正则表达式的部分），但手册提供的信息比较“抽象”——这也是它一直为人所诟病的。
+不过，它本来就不是用来教初学者如何使用sed或正则表达式的教材，而只是为那些
+熟悉这些工具的人提供的一些文本参考。</p>
+
+<p>括号语法：前面的例子对sed命令基本上都使用单引号（&#39;...&#39;）而非双引号
+（&quot;...&quot;）这是因为sed通常是在Unix平台上使用。单引号下，Unix的shell（命令
+解释器）不会对美元符（$）和后引号（`...`）进行解释和执行。而在双引号下
+美元符会被展开为变量或参数的值，后引号中的命令被执行并以输出的结果代替
+后引号中的内容。而在“csh”及其衍生的shell中使用感叹号（!）时需要在其前
+面加上转义用的反斜杠（就像这样：!）以保证上面所使用的例子能正常运行
+（包括使用单引号的情况下）。DOS版本的Sed则一律使用双引号（&quot;...&quot;）而不是
+引号来圈起命令。</p>
+
+<p>&#39;\t&#39;的用法：为了使本文保持行文简洁，我们在脚本中使用&#39;\t&#39;来表示一个制表
+符。但是现在大部分版本的sed还不能识别&#39;\t&#39;的简写方式，因此当在命令行中为
+脚本输入制表符时，你应该直接按TAB键来输入制表符而不是输入&#39;\t&#39;。下列的工
+具软件都支持&#39;\t&#39;做为一个正则表达式的字元来表示制表符：awk、perl、HHsed、
+sedmod以及GNU sed v3.02.80。</p>
+
+<p>不同版本的SED：不同的版本间的sed会有些不同之处，可以想象它们之间在语法上
+会有差异。具体而言，它们中大部分不支持在编辑命令中间使用标签（:name）或分
+支命令（b,t），除非是放在那些的末尾。这篇文档中我们尽量选用了可移植性较高
+的语法，以使大多数版本的sed的用户都能使用这些脚本。不过GNU版本的sed允许使
+用更简洁的语法。想像一下当读者看到一个很长的命令时的心情：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">   sed -e <span class="s1">&#39;/AAA/b&#39;</span> -e <span class="s1">&#39;/BBB/b&#39;</span> -e <span class="s1">&#39;/CCC/b&#39;</span> -e d
+</code></pre></div>
+<p>好消息是GNU sed能让命令更紧凑：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">   sed <span class="s1">&#39;/AAA/b;/BBB/b;/CCC/b;d&#39;</span>      <span class="c"># 甚至可以写成</span>
+   sed <span class="s1">&#39;/AAA\|BBB\|CCC/b;d&#39;</span>
+</code></pre></div>
+<p>此外，请注意虽然许多版本的sed接受象“/one/ s/RE1/RE2/”这种在&#39;s&#39;前带有空
+格的命令，但这些版本中有些却不接受这样的命令:“/one/! s/RE1/RE2/”。这时
+只需要把中间的空格去掉就行了。</p>
+
+<p>速度优化：当由于某种原因（比如输入文件较大、处理器或硬盘较慢等）需要提高
+命令执行速度时，可以考虑在替换命令（“s/.../.../”）前面加上地址表达式来
+提高速度。举例来说：</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">   sed <span class="s1">&#39;s/foo/bar/g&#39;</span> filename         <span class="c"># 标准替换命令</span>
+   sed <span class="s1">&#39;/foo/ s/foo/bar/g&#39;</span> filename   <span class="c"># 速度更快</span>
+   sed <span class="s1">&#39;/foo/ s//bar/g&#39;</span> filename      <span class="c"># 简写形式</span>
+</code></pre></div>
+<p>当只需要显示文件的前面的部分或需要删除后面的内容时，可以在脚本中使用“q”
+命令（退出命令）。在处理大的文件时，这会节省大量时间。因此：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">   sed -n &#39;45,50p&#39; filename           # 显示第45到50行
+   sed -n &#39;51q;45,50p&#39; filename       # 一样，但快得多
+</code></pre></div>
+<p>如果你有其他的单行脚本想与大家分享或者你发现了本文档中错误的地方，请发电
+子邮件给本文档的作者（Eric Pement）。邮件中请记得提供你所使用的sed版本、 
+该sed所运行的操作系统及对问题的适当描述。本文所指的单行脚本指命令行的长
+度在65个字符或65个以下的sed脚本〔译注1〕。本文档的各种脚本是由以下所列作
+者所写或提供：</p>
+
+<ul>
+<li>Al Aab                                建立了“seders”邮件列表</li>
+<li>Edgar Allen                           许多方面</li>
+<li>Yiorgos Adamopoulos                   许多方面</li>
+<li>Dale Dougherty                        《sed &amp; awk》作者</li>
+<li>Carlos Duarte                         《do it with sed》作者</li>
+<li>Eric Pement                           本文档的作者</li>
+<li>Ken Pizzini                           GNU sed v3.02 的作者</li>
+<li>S.G. Ravenhall                        去html标签脚本</li>
+<li>Greg Ubben                            有诸多贡献并提供了许多帮助</li>
+</ul>
+
+<blockquote>
+<p>译注1：大部分情况下，sed脚本无论多长都能写成单行的形式（通过&#39;-e&#39;选项和&#39;;&#39;
+号）——只要命令解释器支持，所以这里说的单行脚本除了能写成一行还对长度有
+所限制。因为这些单行脚本的意义不在于它们是以单行的形式出现。而是让用户能
+方便地在命令行中使用这些紧凑的脚本才是其意义所在。</p>
+</blockquote>
+
+<p>Valid XHTML 1.0 Strict</p>
+
+  </article>
+
+</div>
+
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>
