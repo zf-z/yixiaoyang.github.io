@@ -5,9 +5,72 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 24 Jul 2015 13:34:38 +0000</pubDate>
-    <lastBuildDate>Fri, 24 Jul 2015 13:34:38 +0000</lastBuildDate>
+    <pubDate>Tue, 28 Jul 2015 17:28:10 +0000</pubDate>
+    <lastBuildDate>Tue, 28 Jul 2015 17:28:10 +0000</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>[Python] 小型爬虫uSpider实现</title>
+        <description>&lt;p&gt;最近用python实现了一个小型爬虫，爬个博客没问题。
+github地址： &lt;a href=&quot;https://github.com/yixiaoyang/pyScripts/tree/master/uSpider&quot;&gt;https://github.com/yixiaoyang/pyScripts/tree/master/uSpider&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;爬虫主要由三部分构成：&lt;/p&gt;
+
+&lt;h3 id=&quot;分析器（parser）&quot;&gt;分析器（parser）&lt;/h3&gt;
+
+&lt;p&gt;作为url生产者角色和doc的消费者角色，通过正则表达式解析下载文件中的链接产生url。由于解析速度较快，建议单线程。&lt;/p&gt;
+
+&lt;h3 id=&quot;下载器（downloader）&quot;&gt;下载器（downloader）&lt;/h3&gt;
+
+&lt;p&gt;作为url消费者角色和doc的生产者角色。从网络下载文件时间不可预知，速度较慢，建议使用多进程&lt;/p&gt;
+
+&lt;h3 id=&quot;控制台（console）&quot;&gt;控制台（console）&lt;/h3&gt;
+
+&lt;p&gt;报告当前的抓取情况，并维护url资源和doc资源。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;url资源&lt;/p&gt;
+
+&lt;p&gt;url资源由parser解析已经下载的文件内容后提取站点链接产生。如果url对应的文件已经存在，则表示此url已经下载过了，不再将其加入urls集合。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;document资源&lt;/p&gt;
+
+&lt;p&gt;downloader获取一条url后开始下载资源，下载完毕即在本地生成对应文件，每个站点文件为一个doc资源，parser将对每个未解析的doc文件资源进行链接提取。资源的同步使用两把资源锁。每个线程获取一条资源后需要将woker引用计数＋1表示仍有线程在对资源进行工作，当线程使用完资源后worker引用计数-1。当所有资源为空且资源计数为0（没有工作线程在引用资源）时，说明整个站点的解析和下载工作完成，此时线程可以此检测done状态退出，主进程随后join退出。&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;其他&quot;&gt;其他&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;资源缓冲大小&lt;/p&gt;
+
+&lt;p&gt;暂未设置资源缓冲大小，必要时需要加以限制防止在抓取大型站点时内存耗尽运行速率下降。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;相关站点抓取&lt;/p&gt;
+
+&lt;p&gt;现有的程序仅广度优先遍历抓取一个站点内容，对其他站点的资源并没有抓取。后期对其他站点需要抓取一个深度的资源（直接引用资源）。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;robots协议&lt;/p&gt;
+
+&lt;p&gt;暂未考虑robots协议相关内容，是一只并不十分友好的spider。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;大名鼎鼎scrapy&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;大型网站爬取过程中的问题&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;去重问题，如果内存上的set不够用？&lt;/li&gt;
+&lt;li&gt;集群化，如何进行分布式爬取&lt;/li&gt;
+&lt;li&gt;爬取深度和权重，如何对资源的过滤&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Tue, 28 Jul 2015 17:16:00 +0000</pubDate>
+        <link>/2015/07/28/python-spider/</link>
+        <guid isPermaLink="true">/2015/07/28/python-spider/</guid>
+        
+        <category>python</category>
+        
+        <category>爬虫</category>
+        
+        
+        <category>python</category>
+        
+      </item>
     
       <item>
         <title>[搬运] SED单行脚本快速参考</title>
@@ -1161,7 +1224,7 @@ No size specified (using byte-data access)
       </item>
     
       <item>
-        <title>Raspberry Pi检测PM2.5并同步到Yeelink</title>
+        <title>[Python] Raspberry Pi检测PM2.5并同步到Yeelink</title>
         <description>&lt;p&gt;几年前买的树莓派几乎没动，相对于Beaglebone太弱了，不过Rpi社区比Beaglebone活跃很多。&lt;/p&gt;
 
 &lt;ol&gt;
@@ -1479,7 +1542,8 @@ Symbol: BR2_PACKAGE_MTD [=y]
   │     -&gt; Target packages                
   │       -&gt; Filesystem and flash utilities
 
-Symbol: BR2_PACKAGE_MTD_FLASH_ERASE [=y]                                                                                                                                                                                          │  
+Symbol: BR2_PACKAGE_MTD_FLASH_ERASE [=y]
+  │
   │ Type  : boolean
   │ Prompt: flash_erase
   │   Location:        
@@ -1559,10 +1623,13 @@ flash0.0x1000_0x10000.img
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;至此，flash设备成功挂载到用户空间的文件系统中去了。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;参考&lt;/strong&gt;
-- &lt;a href=&quot;http://processors.wiki.ti.com/index.php/MTD_Utilities&quot;&gt;http://processors.wiki.ti.com/index.php/MTD_Utilities&lt;/a&gt;
-- &lt;a href=&quot;http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration&quot;&gt;http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration&lt;/a&gt;
-- &lt;a href=&quot;http://www.linux-mtd.infradead.org/doc&quot;&gt;http://www.linux-mtd.infradead.org/doc&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参考&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://processors.wiki.ti.com/index.php/MTD_Utilities&quot;&gt;http://processors.wiki.ti.com/index.php/MTD_Utilities&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration&quot;&gt;http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.linux-mtd.infradead.org/doc&quot;&gt;http://www.linux-mtd.infradead.org/doc&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         <pubDate>Wed, 15 Jul 2015 10:37:52 +0000</pubDate>
         <link>/2015/07/15/bbb-3.8-spi-flash/</link>
@@ -2170,37 +2237,6 @@ This itertool may require significant auxiliary storage (depending on how much t
         
         
         <category>fpga</category>
-        
-      </item>
-    
-      <item>
-        <title>[工具] 跨平台GUI小工具整理</title>
-        <description>&lt;p&gt;平时找一些小软件时可选择的不是很多，可用的用起来又不方便，所以偶尔会写点GUI的小工具，在此共享出来。&lt;/p&gt;
-
-&lt;p&gt;1）简单四象限Todo程序&lt;/p&gt;
-
-&lt;p&gt;2）简单股价报表监控和历史分析程序&lt;/p&gt;
-
-&lt;p&gt;现仅编译出了gentoo X86和Win7 X64程序，其他平台的自己编译去吧。&lt;/p&gt;
-
-&lt;p&gt;百度盘： &lt;a href=&quot;http://pan.baidu.com/share/link?shareid=2863041641&amp;amp;uk=1477349933&quot;&gt;http://pan.baidu.com/share/link?shareid=2863041641&amp;amp;uk=1477349933&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;源码：&lt;a href=&quot;https://github.com/yixiaoyang/QTodo&quot;&gt;https://github.com/yixiaoyang/QTodo.git &lt;/a&gt;，&lt;a href=&quot;https://github.com/yixiaoyang/QStock&quot;&gt;https://github.com/yixiaoyang/QStock.git&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;预览：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/QStock.png&quot;&gt;&lt;img src=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/QStock.png&quot; alt=&quot;QStock截图&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/Qtodo.png&quot;&gt;&lt;img src=&quot;http://cdn2.snapgram.co/imgs/2015/07/20/Qtodo.png&quot; alt=&quot;Qtodo截图&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 07 Jan 2015 12:10:58 +0000</pubDate>
-        <link>/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</link>
-        <guid isPermaLink="true">/2015/01/07/%5B%E5%B7%A5%E5%85%B7%5D%E8%B7%A8%E5%B9%B3%E5%8F%B0GUI%E5%B0%8F%E5%B7%A5%E5%85%B7%E6%95%B4%E7%90%86/</guid>
-        
-        <category>工具</category>
-        
-        
-        <category>工具</category>
         
       </item>
     

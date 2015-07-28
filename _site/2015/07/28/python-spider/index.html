@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Rails工程实战记录</title>
-  <meta name="description" content="项目git：https://github.com/yixiaoyang/ruby为熟悉Rails的基本特性创建的工程，本博文仅作更新记录。">
+  <title>[Python] 小型爬虫uSpider实现</title>
+  <meta name="description" content="最近用python实现了一个小型爬虫，爬个博客没问题。github地址： https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2013/10/20/Rails%E5%B7%A5%E7%A8%8B%E5%AE%9E%E6%88%98%E8%AE%B0%E5%BD%95/">
+  <link rel="canonical" href="/2015/07/28/python-spider/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -71,136 +71,70 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">Rails工程实战记录</h1>
+    <h1 class="post-title">[Python] 小型爬虫uSpider实现</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">Rails</span>
+	  <span class="tags_span">python</span>
 	
-	  <span class="tags_span">Ruby</span>
-	
-	  <span class="tags_span">Web</span>
+	  <span class="tags_span">爬虫</span>
 	
   
-  <span class="post-meta">2013-10-20 • leon</span>
+  <span class="post-meta">2015-07-28 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <p>项目git：<a href="https://github.com/yixiaoyang/ruby">https://github.com/yixiaoyang/ruby</a>
-为熟悉Rails的基本特性创建的工程，本博文仅作更新记录。</p>
+    <p>最近用python实现了一个小型爬虫，爬个博客没问题。
+github地址： <a href="https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">https://github.com/yixiaoyang/pyScripts/tree/master/uSpider</a></p>
 
-<h3 id="（1）2013-10-1-2013-10-5">（1）2013.10.1-2013.10.5</h3>
+<p>爬虫主要由三部分构成：</p>
 
-<ol>
-<li>Ruby基本语法demo若干</li>
-<li>创建rails Demo/First工程，了解基本的REST操作及MVC架构。</li>
-<li>创建demo工程的数据资源间的多重关联</li>
-<li>创建rails Sample工程</li>
-<li>创建Sample工程的rspec自动化测试</li>
-<li>instant &#39;@title&#39; virible with Embedded Ruby method.</li>
-<li>pass title check test using spec-rails</li>
-<li>Eliminating duplication with layouts for Home/Contact/About pages</li>
-</ol>
+<h3 id="分析器（parser）">分析器（parser）</h3>
 
-<h3 id="（2）2013-10-19-2013-10-20">（2）2013.10.19-2013.10.20</h3>
+<p>作为url生产者角色和doc的消费者角色，通过正则表达式解析下载文件中的链接产生url。由于解析速度较快，建议单线程。</p>
 
-<ol>
-<li>添加bootstrap风格并进行分层现实，自定义基本样式表</li>
-<li>添加users控制器和相关测试脚本。</li>
-<li>添加用户密码验证</li>
-<li>添加user资源：遵从 Rails 使用的 REST 架构，将数据视为资源</li>
-<li>添加user show控制及视图</li>
-<li>添加统一Gravatar头像</li>
-<li>修正具名路由错误：在user/id视图下header的链接路由出错，系具名路由功能没有完善造成</li>
-<li>添加user create功能：添加完成后使用flash提示，ssl需要服务器配置支持暂未部署</li>
-<li>使用更加健壮的数据查找参数：防止用户篡改user中的其他字段，提高安全性</li>
-</ol>
+<h3 id="下载器（downloader）">下载器（downloader）</h3>
 
-<h3 id="（3）2013-10-22">（3）2013.10.22</h3>
+<p>作为url消费者角色和doc的生产者角色。从网络下载文件时间不可预知，速度较慢，建议使用多进程</p>
+
+<h3 id="控制台（console）">控制台（console）</h3>
+
+<p>报告当前的抓取情况，并维护url资源和doc资源。</p>
 
 <ol>
-<li>添加登录功能：添加登录页面及其控制器session。</li>
+<li><p>url资源</p>
+
+<p>url资源由parser解析已经下载的文件内容后提取站点链接产生。如果url对应的文件已经存在，则表示此url已经下载过了，不再将其加入urls集合。</p></li>
+<li><p>document资源</p>
+
+<p>downloader获取一条url后开始下载资源，下载完毕即在本地生成对应文件，每个站点文件为一个doc资源，parser将对每个未解析的doc文件资源进行链接提取。资源的同步使用两把资源锁。每个线程获取一条资源后需要将woker引用计数＋1表示仍有线程在对资源进行工作，当线程使用完资源后worker引用计数-1。当所有资源为空且资源计数为0（没有工作线程在引用资源）时，说明整个站点的解析和下载工作完成，此时线程可以此检测done状态退出，主进程随后join退出。</p></li>
 </ol>
 
-<h3 id="4-2013-10-26">(4)2013.10.26</h3>
-
-<p>尼马从早上十点一直就在编程（中间午饭）到下午三点钟，周末阿周末， 残念...无妹纸陪伴的程序猿你伤不起。。。</p>
+<h3 id="其他">其他</h3>
 
 <ol>
-<li>完成简单的session管理实现登录、注销、注册。</li>
-<li>使用cookie完成记住我功能：session、cookie安全相关技术实现。</li>
+<li><p>资源缓冲大小</p>
+
+<p>暂未设置资源缓冲大小，必要时需要加以限制防止在抓取大型站点时内存耗尽运行速率下降。</p></li>
+<li><p>相关站点抓取</p>
+
+<p>现有的程序仅广度优先遍历抓取一个站点内容，对其他站点的资源并没有抓取。后期对其他站点需要抓取一个深度的资源（直接引用资源）。</p></li>
+<li><p>robots协议</p>
+
+<p>暂未考虑robots协议相关内容，是一只并不十分友好的spider。</p></li>
+<li><p>大名鼎鼎scrapy</p></li>
+<li><p>大型网站爬取过程中的问题</p>
+
+<ul>
+<li>去重问题，如果内存上的set不够用？</li>
+<li>集群化，如何进行分布式爬取</li>
+<li>爬取深度和权重，如何对资源的过滤</li>
+</ul></li>
 </ol>
-
-<h3 id="（5）2013-10-29">（5）2013.10.29</h3>
-
-<ol>
-<li>添加用户资料的edit操作：资源users更新方法的实现。</li>
-<li>用户权限限制及登录检测：一般用户仅能编辑自己的资料，使用事前过滤器检测用户登录状态和编辑的对象</li>
-<li>更加友好的重定向：在show/edit/update事件执行前使用rails的session记录当前url，在登录后再跳转回来，而不是直接跳转到用户资料show界面。</li>
-</ol>
-
-<h3 id="（6）2013-11-02">（6）2013.11.02</h3>
-
-<ol>
-<li>添加user 404错误定向。</li>
-<li>添加users index现实所有用户的功能：使用will-paginate分页。</li>
-<li>修复edit定向时find_by参数错误导致无法edit的问题。</li>
-<li>添加raker批量添加测试用户数据。</li>
-</ol>
-
-<h3 id="（7）2013-11-03">（7）2013.11.03</h3>
-
-<ol>
-<li>完成micropost REST发送操作：增加一条推文。</li>
-<li>修复页面@title无法生效bug。</li>
-<li>使用新的home布局：整合个人信息和推文feed</li>
-<li>优化页面结构：大量使用局部视图技术替换之前的实现，以完成视图模块分割。</li>
-</ol>
-
-<h3 id="8-2013-11-06">(8)2013-11-06</h3>
-
-<ol>
-<li>添加follow relationship model：专门用于表示关注和被关注的关系，及展现following-user,follwed-user,relationship之间的复杂模型关系。</li>
-<li>实现关注和被关注人数的计数。
-当然，之前那个数字是假的，现在从真实的relationship中读取关注者和被关注者的数据。</li>
-</ol>
-
-<h3 id="9-2013-11-08">(9)2013-11-08</h3>
-
-<ol>
-<li>路由修复：修复路由冗余，添加users的following和listener路由</li>
-<li>Follow关系功能完善：显示用户的粉丝和关注列表。</li>
-</ol>
-
-<h3 id="a-2013-11-11">(a)2013-11-11</h3>
-
-<ol>
-<li>follow模块更新：添加follow/unfollow按钮。</li>
-</ol>
-
-<h3 id="b-2013-11-15">(b)2013-11-15</h3>
-
-<ol>
-<li>ajax实现关注按钮</li>
-</ol>
-
-<h3 id="c-2013-11-16">(c)2013-11-16</h3>
-
-<ol>
-<li>micropost更新：添加feed数据关系，取出一个用户的所有关注者的推文，实现动态推文列表。</li>
-</ol>
-
-<p>贴图:</p>
-
-<p><img src="http://cdn1.snapgram.co/imgs/2015/07/20/060.png" alt="http://cdn1.snapgram.co/imgs/2015/07/20/060.png"> </p>
-
-<p><img src="http://cdn2.snapgram.co/imgs/2015/07/20/055.png" alt="http://cdn2.snapgram.co/imgs/2015/07/20/055.png"> </p>
-
-<p><img src="http://cdn1.snapgram.co/imgs/2015/07/20/035.png" alt="http://cdn1.snapgram.co/imgs/2015/07/20/035.png"> </p>
 
   </article>
 

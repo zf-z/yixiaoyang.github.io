@@ -3,7 +3,7 @@ author: leon
 comments: true
 date: 2015-07-20 12:37:52+00:00
 layout: post
-title: 'Raspberry Pi检测PM2.5并同步到Yeelink' 
+title: '[Python] Raspberry Pi检测PM2.5并同步到Yeelink' 
 categories:
 - Python
 - 树莓派
