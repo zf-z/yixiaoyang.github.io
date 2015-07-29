@@ -41,6 +41,10 @@ table thead{
 }
 table th{
 	padding: 2px 10px;
+    vertical-align: top;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #D0D0D0;
 }
 table tr:nth-child(2n){
 	background-color: #E5EAED;
@@ -48,6 +52,9 @@ table tr:nth-child(2n){
 table td{
 	padding: 2px 10px;
 	vertical-align: top;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #D0D0D0;
 }
 
 /* navbar */
