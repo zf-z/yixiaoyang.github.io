@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>[Rails] Ruby & Rails常用技巧集锦</title>
-  <meta name="description" content="Rails使用环境变量">
+  <title>草稿纸</title>
+  <meta name="description" content="前端电压调节">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2015/08/27/Rails-Tips/">
+  <link rel="canonical" href="/1999/01/09/draft/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -71,66 +71,184 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">[Rails] Ruby & Rails常用技巧集锦</h1>
+    <h1 class="post-title">草稿纸</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">Shell</span>
-	
-	  <span class="tags_span">Ruby</span>
+	  <span class="tags_span">草稿</span>
 	
   
-  <span class="post-meta">2015-08-27 • leon</span>
+  <span class="post-meta">1999-01-09 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <h3 id="rails使用环境变量">Rails使用环境变量</h3>
+    <h3 id="前端电压调节">前端电压调节</h3>
 
-<p>Many applications require configuration of settings such as email account credentials or API keys for external services. You can pass local configuration settings to an application using environment variables.</p>
+<table><thead>
+<tr>
+<th>10*400pxl</th>
+<th>档位(vdiv)</th>
+<th>增益(gain)</th>
+<th>衰减(atten)</th>
+<th>偏置输入(adc_input)</th>
+<th>偏置输出(adc_output)</th>
+<th>偏置衰减(adc_atten)</th>
+<th>DAC输入</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>±40mv</td>
+<td>1  mv/div</td>
+<td>100</td>
+<td>1</td>
+<td></td>
+<td>±40mv</td>
+<td>10</td>
+<td>±40mv</td>
+</tr>
+<tr>
+<td>±80mv</td>
+<td>2  mv/div</td>
+<td>50</td>
+<td>1</td>
+<td></td>
+<td>±80mv</td>
+<td>10</td>
+<td>±80mv</td>
+</tr>
+<tr>
+<td>±200mv</td>
+<td>5  mv/div</td>
+<td>20</td>
+<td>1</td>
+<td></td>
+<td>±200mv</td>
+<td>10</td>
+<td>±200mv</td>
+</tr>
+<tr>
+<td>±400mv</td>
+<td>10 mv/div</td>
+<td>10</td>
+<td>1</td>
+<td></td>
+<td>±400mv</td>
+<td>10</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±800mv</td>
+<td>20 mv/div</td>
+<td>5</td>
+<td>1</td>
+<td></td>
+<td>±80mv</td>
+<td>1</td>
+<td>±80mv</td>
+</tr>
+<tr>
+<td>±2v</td>
+<td>50 mv/div</td>
+<td>2</td>
+<td>1</td>
+<td></td>
+<td>±200mv</td>
+<td>1</td>
+<td>±200mv</td>
+</tr>
+<tr>
+<td>±4v</td>
+<td>0.1V /div</td>
+<td>1</td>
+<td>1</td>
+<td></td>
+<td>±400mv</td>
+<td>1</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±8v</td>
+<td>0.2V /div</td>
+<td>50</td>
+<td>100</td>
+<td></td>
+<td>±80mv</td>
+<td>10</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±20v</td>
+<td>0.5V /div</td>
+<td>20</td>
+<td>100</td>
+<td></td>
+<td>±200mv</td>
+<td>10</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±40v</td>
+<td>1  V /div</td>
+<td>10</td>
+<td>100</td>
+<td></td>
+<td>±400mv</td>
+<td>10</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±80v</td>
+<td>2  V /div</td>
+<td>5</td>
+<td>100</td>
+<td></td>
+<td>±80mv</td>
+<td>1</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±200v</td>
+<td>5  V /div</td>
+<td>2</td>
+<td>100</td>
+<td></td>
+<td>±200mv</td>
+<td>1</td>
+<td>±400mv</td>
+</tr>
+<tr>
+<td>±400v</td>
+<td>10 V /div</td>
+<td>1</td>
+<td>100</td>
+<td></td>
+<td>±400mv</td>
+<td>1</td>
+<td>±400mv</td>
+</tr>
+</tbody></table>
 
-<p><strong>Gmail Example</strong></p>
+<p>计算方法：</p>
 
-<p>Consider an application that uses Gmail to send email messages. Access to Gmail requires a username and password for access to your Gmail account. In your Rails application, you will need to configure these credentials in the file config/environments/production.rb. A portion of the file might look like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">config.action_mailer.smtp_settings = {
-  address: &quot;smtp.gmail.com&quot;,
-  port: 587,
-  domain: &quot;example.com&quot;,
-  authentication: &quot;plain&quot;,
-  enable_starttls_auto: true,
-  user_name: ENV[&quot;GMAIL_USERNAME&quot;],
-  password: ENV[&quot;GMAIL_PASSWORD&quot;]
-}
-</code></pre></div>
-<p>You could “hardcode” your Gmail username and password into the file but that would expose it to everyone who has access to your git repository. Instead use the Ruby variable <code>ENV[&quot;GMAIL_USERNAME&quot;]</code> to obtain an environment variable. The variable can be used anywhere in a Rails application. Ruby will replace ENV[&quot;GMAIL_USERNAME&quot;] with an environment variable.</p>
+<h4>
+output = (input/atten   + adc_output/adc_atten) * gain
+±400mv = (input/[100~1] + adc_output/[10~1]    ) * [1~100]
+±400mv = [ adc_output / adc_atten ] * gain 
+</h4>
 
-<p>Let’s consider how to set local environment variables.</p>
+<ol>
+<li><p>vdiv调节</p>
 
-<h3 id="ruby提取切片">Ruby提取切片</h3>
+<p>增益、衰减、偏置衰减变化</p></li>
+<li><p>yoffset调节</p>
 
-<p>You can get the result you want using collect! or map! to modify the array in-place:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 1. collect</span>
-<span class="n">x</span> <span class="o">=</span> <span class="sx">%w(hello there world)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">collect!</span> <span class="p">{</span> <span class="o">|</span><span class="n">element</span><span class="o">|</span>
-  <span class="p">(</span><span class="n">element</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span> <span class="p">?</span> <span class="s2">&quot;hi&quot;</span> <span class="p">:</span> <span class="n">element</span>
-<span class="p">}</span>
-<span class="nb">puts</span> <span class="n">x</span>
-
-<span class="c1"># 2. map</span>
-<span class="n">x</span> <span class="o">=</span> <span class="sx">%w(hello there world)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">map!</span> <span class="p">{</span> <span class="o">|</span><span class="n">element</span><span class="o">|</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">element</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span>
-      <span class="s2">&quot;hi&quot;</span> <span class="c1"># change &quot;hello&quot; to &quot;hi&quot;</span>
-  <span class="k">else</span>
-      <span class="n">element</span>
-  <span class="k">end</span>
-<span class="p">}</span>
-<span class="nb">puts</span> <span class="n">x</span> <span class="c1"># output: [hi there world]</span>
-</code></pre></div>
-<p>At each iteration, the element is replaced into the array by the value returned by the block.</p>
+<p>偏置输入变化
+用户最多可产生的偏置输出见<code>偏置输出(adc_output)</code>栏</p></li>
+</ol>
 
   </article>
 
