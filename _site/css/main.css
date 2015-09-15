@@ -27,7 +27,7 @@ p, blockquote,
 ul, ol, dl, figure,
 .highlight {
   margin-bottom: 2.5px;
-  text-shadow: 1px 1px 3px rgba(50, 50, 50, 0.3); }
+  text-shadow: 1px 1px 3px rgba(50, 50, 50, 0.2); }
 
 /**
  * Images
