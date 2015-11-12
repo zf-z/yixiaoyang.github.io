@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>2015年7月书单</title>
-  <meta name="description" content="《三体》">
+  <title>了解你的IDE</title>
+  <meta name="description" content="早上又浏览了一下《程序员必须知道的97件事》，有一条说道，了解你的编译器。糟糕的程序员的一般步骤是：">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2015/07/22/books/">
+  <link rel="canonical" href="/2013/10/23/%E4%BA%86%E8%A7%A3%E4%BD%A0%E7%9A%84IDE/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -71,58 +71,50 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">2015年7月书单</h1>
+    <h1 class="post-title">了解你的IDE</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">books</span>
+	  <span class="tags_span">IDE</span>
+	
+	  <span class="tags_span">编程</span>
 	
   
-  <span class="post-meta">2015-07-22 • leon</span>
+  <span class="post-meta">2013-10-23 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <h3 id="《三体》">《三体》</h3>
+    <p>早上又浏览了一下《<code>程序员必须知道的97件事</code>》，有一条说道，了解你的编译器。糟糕的程序员的一般步骤是：</p>
 
-<p>二刷，刘大成名作。讲述两个女人毁掉宇宙的故事。书的副名<code>地球往事</code>，地球君跪了。</p>
+<ul>
+<li><p>Edit code</p></li>
+<li><p>Compile it</p></li>
+<li><p>Check errors and warnings</p></li>
+<li><p>Compile again</p></li>
+<li><p>Something magical happened</p></li>
+<li><p>Download/use the binary</p></li>
+</ul>
 
-<p><strong>关键词1：黑暗森林法则</strong></p>
+<p>哈哈，好一个something magical happened，在学习编译原理和不熟悉使用的IDE之前，我也是这么想的，然后觉得程序最后好用就行了。直到有一天，在 使用一个类Eclipse IDE环境修改一个pppoe sessionID生成引起的bug时，问题来了。</p>
 
-<p>《三体II 黑暗森林》中由叶文洁（毁灭宇宙二人组之一）提出：宇宙社会学的核心理论。
-宇宙就是一座黑暗森林，每个文明都是带枪的猎人，像幽灵般潜行于林间，轻轻拨开挡路的树枝，竭力不让脚步发出一点儿声音，连呼吸都必须小心翼翼：他必须小心，因为林中到处都有与他一样潜行的猎人，如果他发现了别的生命，能做的只有一件事：开枪消灭之。
-在这片森林中，他人就是地狱，就是永恒的威胁，任何暴露自己存在的生命都将很快被消灭，这就是宇宙文明的图景，这就是对费米悖论的解释。<code>被发现，总有一方被消灭！</code></p>
+<p>原本版本的<code>sessinID</code>哈希查找函数为<code>get_SessionByID（hash_head，id，src_eth）</code>,
+根据RFC3315还是多少这个是确定方式少了一个确定元素即本机mac地址，于是相应添加三元组确定，这个函数改成了这样<code>get_SessionByID（hash_
+h ead，id，src_eth，dst_eth)</code>，然后我非常相信IDE和编译器，使用IDE的<code>Open Call 
+Hierarchy</code>功能查找并修改了“所有”引用这个接口的地方，编译无error无warning，链接，测试。然后“修正版”软件被发给了焦急等待的用户更新使用。</p>
 
-<blockquote>
-<p>宇宙社会学基本公理：</p>
+<p>当天下午，一个同事在测试ddns时，无意发现pppoe client在连接后，只要一点击断开，整个协议栈内核进程便会挂掉。也就是说产品不可用状态。如此重大的bug把组长G哥吓了一跳，急急忙忙跟他去测试房确认bug，回来用栈回溯工具dump，招呼我过去说，我确定而且肯定的说是你昨天修正的bug出了问题，接着指着dumpy结果给我看。</p>
 
-<ol>
-<li>生存是文明的第一需要</li>
-<li>文明不断增长和扩张,但宇宙中的物质总量保持不变</li>
-</ol>
-</blockquote>
+<p>于是整个下午，我一边搭建测试环境重现现场，一边复查代码，无意中我再用grep查了一下那个接口的引用，发现居然有一处还是老版本的<code>get_SessionByID（
+h ash_head，id，src_eth）</code>引用！于是直接给跪了。按理说，以前用gcc，arm-linux-gcc，sparc-elf-
+gcc都没有出现函数缺少参数而不报警/错的情况，但是，mips64-inux-gnu-gcc工具链却真的没有报警/错(
+也有可能是编译选项没选上，或者编译警告级别过低引起)。其次，要人命的IDE Open Call 
+Hierarchy功能并不能查找到所有的函数引用！于是这种严重的软件错误再度被漏掉。</p>
 
-<p>所以利用黑暗森林法则，罗辑以暴露坐标（地球和三体星的坐标）为要挟成功对三体文明进行了威慑，致使三体文明不能贸然消灭地球文明，直到死神程心（毁灭宇宙二人组之一）成为执剑人。</p>
-
-<blockquote>
-<p>“人类共同的物种、相近的文化、同处一个相互依存的生态圈、近在咫尺的距离，在这样的环境下，猜疑链只能延伸一至两层就会被交流所消解。但在太空中，猜疑链则可能延伸得很长，在被交流所消解之前，黑暗战役那样的事已经发生了。……在真正的宇宙文明中，不同种族之间的生物学差异可能达到门甚至界一级，文化上的差异更是不可想象，且相隔着无比遥远的距离，它们之间猜疑链几乎是坚不可摧的。……不管文明在其内部是善意的还是恶意的，在进入猜疑链构成的网络中后都会变成同一种东西。”——刘慈欣《三体2：黑暗森林》</p>
-</blockquote>
-
-<p><strong>关键词2：死神</strong></p>
-
-<p>死神程心告诉我们：女人的愚蠢加上善良很可怕，分分钟毁宇宙。</p>
-
-<p><strong>关键词3：只送大脑</strong></p>
-
-<p>一语道破圣母婊的本质。
-我相信齐明星已成三体统帅，倒戈了。</p>
-
-<h3 id="《http权威指南》">《Http权威指南》</h3>
-
-<p>一本讲述http协议的必备工具书。内容不难，可以窥见一套应用协议设计成型过程中的各种妥协和进化历程。</p>
+<p>或许这种情况比较少见，但是很多时候我们都过多相信IDE甚至是编译器，或者，一段黑盒子的代码，而不是认真的做<strong>code review</strong>。</p>
 
   </article>
 

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[CPP] Boost库概要</title>
+  <meta name="description" content="Boost和STL库是C++的血肉，C++的语言特性本身则是筋骨。现在在用的Qt库本身大而全，用起来方便，最重要的是跨平台，嵌入式用户交互方面的不二选择。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2015/08/03/boost-learning/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe.html">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message.html">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">[CPP] Boost库概要</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">c++</span>
+	
+	  <span class="tags_span">boost</span>
+	
+  
+  <span class="post-meta">2015-08-03 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <p>Boost和STL库是C++的血肉，C++的语言特性本身则是筋骨。现在在用的Qt库本身大而全，用起来方便，最重要的是跨平台，嵌入式用户交互方面的不二选择。</p>
+
+<p>目前使用Boost库的需求不是很充分，因为Qt在大部分应用上都可以胜任。不过Boost以效率和稳定颇有声誉，作为C++标准化新特性的重要参考，可略作了解。</p>
+
+<h3 id="文本处理">文本处理</h3>
+
+<h4 id="boost-regex">Boost.Regex</h4>
+
+<p>解决大量匹配问题的正则表达式库。不必羡慕perl、awk和sed。</p>
+
+<h4 id="boost-spirit-amp-boost-tokenizer">Boost.Spirit &amp; Boost.Tokenizer</h4>
+
+<p>Spirit是一个语法生成框架，可以使用其构建命令分析器以及简单的语言处理器。想想Bison和flex就明白了。</p>
+
+<h4 id="boost-string_algo">Boost.String_algo</h4>
+
+<p>可以视为String类的扩展算法工具集。提供大小写转换、空格清除、分割、查找替换等扩展算法工具。</p>
+
+<h3 id="容器和算法">容器和算法</h3>
+
+<p>一些比较经典常用的数据结构和算法的实现。</p>
+
+<h4 id="boost-array">Boost.Array</h4>
+
+<p>有了Vector这玩意儿然并卵。除了基本的数组功能，提供类型安全而不牺牲性能，=_=，窃以为C++很多安全性的封装如智能指针，让用它的愚蠢程序员更加愚蠢，让用它的聪明程序员变得愚蠢。</p>
+
+<h4 id="boost-multiarray">Boost.MultiArray</h4>
+
+<p>多维容器。做矩阵计算的一定会喜欢。Vector二维以上数组声明都觉得麻烦。</p>
+
+<h4 id="boost-graph">Boost.Graph</h4>
+
+<p>泛型图算法工具集，包含邻接链表、邻接矩阵和边列表。提供Dijsktra最短路径算法，K最小生成树算法、拓扑逻辑排序等经典算法。</p>
+
+<h4 id="boost-multi-index">Boost.Multi-index</h4>
+
+<p>为底层容器提供多个索引，一个底层的容器可以有不同的排序方法和不同的访问语义。当std::set 和 std::map 不够用时,就可以用Boost.Multi-index,通常是在需要为查找元素而维护多个索引时。
+不太了解，做稍微复杂的数据索引时应该会用到。</p>
+
+<h4 id="boost-range">Boost.Range</h4>
+
+<p>用过Python/Ruby的Rang后秒懂。</p>
+
+<h4 id="boost-tunple">Boost.Tunple</h4>
+
+<p>STL的pair不支持n-tunples，一般用自定义struct或者class实现，这个类模板支持直接声明和使用,如函数返回类型或参数,并提供一个泛型的方法来访问tuple的元素。</p>
+
+<h4 id="boost-variant">Boost.Variant</h4>
+
+<p>泛型类型的操作和转换。Qt中有类似的Qvariant。</p>
+
+<h3 id="函数对象">函数对象</h3>
+
+<h4 id="boost-bind">Boost.bind</h4>
+
+<p><strong>bind简介</strong></p>
+
+<p>这个是重头戏，bind、函数对象、signal/slot等特性经常会用。
+我觉得bind最重要的作用是：<code>改变参数的顺序</code>，这使得我们可以少创建一些类似功能参数不同或者参数冗余的函数对象，减少代码量，使行为局部化。虽然标准库已经提供了一些可用的工具,如 bind1st 和 bind2nd, 但是这不够用，bind由此产生。</p>
+
+<p>Bind是对标准库的绑定器 bind1st和bind2nd的泛化,返回值是一个函数对象。</p>
+
+<p><strong>bind范例</strong></p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="cp">#include &lt;iostream&gt;</span>
+<span class="cp">#include &lt;string&gt;</span>
+<span class="cp">#include &lt;vector&gt;</span>
+<span class="cp">#include &lt;algorithm&gt;</span>
+
+<span class="cp">#include &quot;boost/bind.hpp&quot;</span>
+
+<span class="k">class</span> <span class="nc">status</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">ok</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">status</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span><span class="o">:</span><span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="n">ok</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="kt">void</span> <span class="n">break_it</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">ok</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">is_broken</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">report</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; is &quot;</span> <span class="o">&lt;&lt;</span>
+                    <span class="p">(</span><span class="n">ok</span> <span class="o">?</span> <span class="s">&quot;working nominally&quot;</span><span class="o">:</span><span class="s">&quot;terribly broken&quot;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">bind_test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">status</span><span class="o">&gt;</span> <span class="n">statuses</span><span class="p">;</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">&quot;status 1&quot;</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">&quot;status 2&quot;</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">&quot;status 3&quot;</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">&quot;status 4&quot;</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">break_it</span><span class="p">();</span>
+    <span class="n">statuses</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">break_it</span><span class="p">();</span>
+
+<span class="cp">#if 0</span><span class="c"></span>
+<span class="c">    // 这个循环正确地完成了任务,但它是冗长、低效的(由于要多次调用statuses.end()),并且不象使用标准库算</span>
+<span class="c">    // 法for_each那样清楚地表明意图。为了用for_each 来替换这个循环,我们需要用一个适配器来对vector元素</span>
+<span class="c">    // 调用成员函数report。这时,由于元素是以值的方式保存的,我们需要的是适配器mem_fun_ref</span>
+<span class="c">    for (std::vector&lt;status&gt;::iterator it=statuses.begin();</span>
+<span class="c">        it!=statuses.end();++it) {</span>
+<span class="c">        it-&gt;report();</span>
+<span class="c">    }</span>
+<span class="cp">#else</span>
+    <span class="c1">// for_each(str.begin(), str.end(), (mem_fun(&amp;funtest::doSth),this));</span>
+    <span class="c1">// 把str中的每个元素作为参数送到第三个参数（是个函数的指针）所指向的函数。</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span> <span class="n">statuses</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">statuses</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+                    <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="o">::</span><span class="n">report</span><span class="p">,</span><span class="n">_1</span><span class="p">));</span>
+<span class="cp">#endif</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">bind_test</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>上面<code>std::for_each( statuses.begin(),statuses.end(),boost::bind(&amp;status::report,_1));</code>中的那一个占位符让人很迷惑。
+实际上，类成员函数的绑定不同于匿名函数的绑定，成员函数必须有一个父对象或者指针，才能经过this进行调用，而匿名函数可以直接进行()操作,
+因此bind需要“牺牲”一位占位符要求用户提供类的实例、指针或者引用，用过对象作为第一个参数来调用成员函数。
+即<code>bind(&amp;x::func,x,_1,_2...)</code>最多只能绑定8位参数。</p>
+
+<p>假设我们有一个类</p>
+<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">ClassA</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">){</span><span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>以下三种绑定都是成立的</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ClassA obj, &amp;obj_ref=obj;
+ClassA *obj_ptr = &amp;obj
+
+cout &lt;&lt; bind(&amp;obj::f, obj, _1, 20)(10) &lt;&lt; endl;
+cout &lt;&lt; bind(&amp;obj::f, obj_ref, _1, _2)(10,20) &lt;&lt; endl;
+cout &lt;&lt; bind(&amp;obj::f, obj_ptr, _1, _2)(10,20) &lt;&lt; endl;
+</code></pre></div>
+<p><strong>bind的内部实现</strong></p>
+
+<p>bind的实现主要依靠：</p>
+
+<ol>
+<li>对()运算符的重载</li>
+<li>空间内置占位符变量</li>
+<li>函数对象的调用</li>
+<li>泛型支持</li>
+</ol>
+
+<p>看了实现解析并没有说的那么<code>黑魔法</code>。要说黑魔法，lamba才算是。</p>
+
+<p><strong>其他</strong></p>
+
+<ol>
+<li>boost::bind() 返回的函数对象会保存要绑定的实参. 而且总是拷贝一份以值的方式保存..</li>
+</ol>
+
+<h4 id="boost-signals2">Boost.signals2</h4>
+
+<p>signals2基于signals实现的一个线程安全信号/插槽模型。主要功能类似Qt的信号/插槽模型，对于事件处理系统相当有用。</p>
+
+<h3 id="并发处理">并发处理</h3>
+
+<h4 id="thread">thread</h4>
+
+<p>支持最广泛的windows和posix线程，所以跨平台能力比较好，包含创建销毁等待、线程（组）管理、同步等基本功能，多线程封装的库虽然能够简化编程过程，但是写好并发程序其实是另外一回事。就像一个拿好刀的厨师不一定能做出一手好菜一样。</p>
+
+<h4 id="asio">asio</h4>
+
+<p>asio主要关注网络通信。使用大量的类封装了socket api，提供了一些cpp接口的网络编程接口，支持tcp/icmp/udp等常用协议。总而言之，使用asio可以大量简化、可靠的socket同步/异步编程类，比用C从最小服务器/客户端程序写起要好很多，我们不需要一遍遍造毫无创意的轮子。</p>
+
+<h3 id="其他">其他</h3>
+
+<p>有个支持python的扩展库--写过python的人应该直到python可以用cpp扩展，两者的区别就一个是在cpp程序里调用python程序，一个是使用cpp实现/重写自定义python组件并调用。</p>
+
+<h3 id="关于boost和cpp">关于boost和Cpp</h3>
+
+<p>Boost库给总是给我一种古怪的感觉。cpp是一门糟糕的设计语言，但是在很多系统层应用场合，无法使用更加高级的解释性语言的情况下，cpp比c更有生产力而不输效率。</p>
+
+<p>参考书籍:</p>
+
+<ul>
+<li>Boost documents</li>
+<li>Boost程序库完全开发指南</li>
+<li>Beyond the C++ Standard Library</li>
+</ul>
+
+  </article>
+
+</div>
+
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

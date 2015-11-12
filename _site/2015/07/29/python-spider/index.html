@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>2015年7月书单</title>
-  <meta name="description" content="《三体》">
+  <title>[Python] 小型爬虫uSpider实现</title>
+  <meta name="description" content="最近用python实现了一个小型爬虫，爬个博客没问题。github地址： https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2015/07/22/books/">
+  <link rel="canonical" href="/2015/07/29/python-spider/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -71,58 +71,70 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">2015年7月书单</h1>
+    <h1 class="post-title">[Python] 小型爬虫uSpider实现</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">books</span>
+	  <span class="tags_span">python</span>
+	
+	  <span class="tags_span">爬虫</span>
 	
   
-  <span class="post-meta">2015-07-22 • leon</span>
+  <span class="post-meta">2015-07-29 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <h3 id="《三体》">《三体》</h3>
+    <p>最近用python实现了一个小型爬虫，爬个博客没问题。
+github地址： <a href="https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">https://github.com/yixiaoyang/pyScripts/tree/master/uSpider</a></p>
 
-<p>二刷，刘大成名作。讲述两个女人毁掉宇宙的故事。书的副名<code>地球往事</code>，地球君跪了。</p>
+<p>爬虫主要由三部分构成：</p>
 
-<p><strong>关键词1：黑暗森林法则</strong></p>
+<h3 id="分析器（parser）">分析器（parser）</h3>
 
-<p>《三体II 黑暗森林》中由叶文洁（毁灭宇宙二人组之一）提出：宇宙社会学的核心理论。
-宇宙就是一座黑暗森林，每个文明都是带枪的猎人，像幽灵般潜行于林间，轻轻拨开挡路的树枝，竭力不让脚步发出一点儿声音，连呼吸都必须小心翼翼：他必须小心，因为林中到处都有与他一样潜行的猎人，如果他发现了别的生命，能做的只有一件事：开枪消灭之。
-在这片森林中，他人就是地狱，就是永恒的威胁，任何暴露自己存在的生命都将很快被消灭，这就是宇宙文明的图景，这就是对费米悖论的解释。<code>被发现，总有一方被消灭！</code></p>
+<p>作为url生产者角色和doc的消费者角色，通过正则表达式解析下载文件中的链接产生url。由于解析速度较快，建议单线程。</p>
 
-<blockquote>
-<p>宇宙社会学基本公理：</p>
+<h3 id="下载器（downloader）">下载器（downloader）</h3>
+
+<p>作为url消费者角色和doc的生产者角色。从网络下载文件时间不可预知，速度较慢，建议使用多进程</p>
+
+<h3 id="控制台（console）">控制台（console）</h3>
+
+<p>报告当前的抓取情况，并维护url资源和doc资源。</p>
 
 <ol>
-<li>生存是文明的第一需要</li>
-<li>文明不断增长和扩张,但宇宙中的物质总量保持不变</li>
+<li><p>url资源</p>
+
+<p>url资源由parser解析已经下载的文件内容后提取站点链接产生。如果url对应的文件已经存在，则表示此url已经下载过了，不再将其加入urls集合。</p></li>
+<li><p>document资源</p>
+
+<p>downloader获取一条url后开始下载资源，下载完毕即在本地生成对应文件，每个站点文件为一个doc资源，parser将对每个未解析的doc文件资源进行链接提取。资源的同步使用两把资源锁。每个线程获取一条资源后需要将woker引用计数＋1表示仍有线程在对资源进行工作，当线程使用完资源后worker引用计数-1。当所有资源为空且资源计数为0（没有工作线程在引用资源）时，说明整个站点的解析和下载工作完成，此时线程可以此检测done状态退出，主进程随后join退出。</p></li>
 </ol>
-</blockquote>
 
-<p>所以利用黑暗森林法则，罗辑以暴露坐标（地球和三体星的坐标）为要挟成功对三体文明进行了威慑，致使三体文明不能贸然消灭地球文明，直到死神程心（毁灭宇宙二人组之一）成为执剑人。</p>
+<h3 id="其他">其他</h3>
 
-<blockquote>
-<p>“人类共同的物种、相近的文化、同处一个相互依存的生态圈、近在咫尺的距离，在这样的环境下，猜疑链只能延伸一至两层就会被交流所消解。但在太空中，猜疑链则可能延伸得很长，在被交流所消解之前，黑暗战役那样的事已经发生了。……在真正的宇宙文明中，不同种族之间的生物学差异可能达到门甚至界一级，文化上的差异更是不可想象，且相隔着无比遥远的距离，它们之间猜疑链几乎是坚不可摧的。……不管文明在其内部是善意的还是恶意的，在进入猜疑链构成的网络中后都会变成同一种东西。”——刘慈欣《三体2：黑暗森林》</p>
-</blockquote>
+<ol>
+<li><p>资源缓冲大小</p>
 
-<p><strong>关键词2：死神</strong></p>
+<p>暂未设置资源缓冲大小，必要时需要加以限制防止在抓取大型站点时内存耗尽运行速率下降。</p></li>
+<li><p>相关站点抓取</p>
 
-<p>死神程心告诉我们：女人的愚蠢加上善良很可怕，分分钟毁宇宙。</p>
+<p>现有的程序仅广度优先遍历抓取一个站点内容，对其他站点的资源并没有抓取。后期对其他站点需要抓取一个深度的资源（直接引用资源）。</p></li>
+<li><p>robots协议</p>
 
-<p><strong>关键词3：只送大脑</strong></p>
+<p>暂未考虑robots协议相关内容，是一只并不十分友好的spider。</p></li>
+<li><p>大名鼎鼎scrapy</p></li>
+<li><p>大型网站爬取过程中的问题</p>
 
-<p>一语道破圣母婊的本质。
-我相信齐明星已成三体统帅，倒戈了。</p>
-
-<h3 id="《http权威指南》">《Http权威指南》</h3>
-
-<p>一本讲述http协议的必备工具书。内容不难，可以窥见一套应用协议设计成型过程中的各种妥协和进化历程。</p>
+<ul>
+<li>去重问题，如果内存上的set不够用？</li>
+<li>集群化，如何进行分布式爬取</li>
+<li>爬取深度和权重，如何对资源的过滤</li>
+</ul></li>
+</ol>
 
   </article>
 

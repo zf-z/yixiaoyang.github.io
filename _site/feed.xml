@@ -5,30 +5,92 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 21 Oct 2015 11:56:38 +0000</pubDate>
-    <lastBuildDate>Wed, 21 Oct 2015 11:56:38 +0000</lastBuildDate>
+    <pubDate>Thu, 12 Nov 2015 10:11:59 +0800</pubDate>
+    <lastBuildDate>Thu, 12 Nov 2015 10:11:59 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>[工具] Linux上的常用‘冷门’工具</title>
+        <description>&lt;h3 id=&quot;shell类&quot;&gt;Shell类&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;htop, atop &amp;amp; glances: 更好的top工具&lt;/li&gt;
+&lt;li&gt;screen, dtach, tmux, byobu： Keep your terminal sessions alive. &lt;/li&gt;
+&lt;li&gt;curl：大名鼎鼎curl&lt;/li&gt;
+&lt;li&gt;ack, ag (silver searcher), pt：更好的代码查找工具，grep&lt;/li&gt;
+&lt;li&gt;calcurse &amp;amp; remind + wyrd：比较实用，终端日历+todo&lt;/li&gt;
+&lt;li&gt;qalc：The best calculator. Ever. (For scripts too.) &lt;/li&gt;
+&lt;li&gt;终端：Tilda &amp;amp; Yakuake（F12的那个酸爽） &amp;amp; Terminator&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;类shell&quot;&gt;类Shell&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;vim：nonono，我在说exVim，&lt;a href=&quot;http://exvim.github.io/&quot;&gt;http://exvim.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;gentoo&quot;&gt;Gentoo&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;eix:比emerge简洁&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Wed, 11 Nov 2015 19:11:20 +0800</pubDate>
+        <link>/2015/11/11/linux-shell-tools/</link>
+        <guid isPermaLink="true">/2015/11/11/linux-shell-tools/</guid>
+        
+        <category>Shell</category>
+        
+        <category>工具</category>
+        
+        
+        <category>工具</category>
+        
+      </item>
     
       <item>
         <title>2015年10月书单</title>
         <description>&lt;h3 id=&quot;machine-learning-in-action-机器学习实战&quot;&gt;Machine Learning in Action/机器学习实战&lt;/h3&gt;
 
-&lt;p&gt;机器学习随着大数据搬上台面，本质上和机器、自动化之类的无关，是数据分析的范畴。
-作为一个非算法工程师，了解机器学习可以培养基本的“数据素养”。数据素养有一个过程：
-1. 关心收据
-2. 清洗数据
-3. 分析数据和数据之间的联系
-4. 数据到现实的转换
-本书涵盖机器学习概念的相关分析模型、算法和工具，既然是in action，想必可操作性不错。还没看完，先挖坑。&lt;/p&gt;
+&lt;p&gt;机器学习随着大数据搬上台面，本质上和机器、自动化之类的无关，是数据分析的范畴。&lt;/p&gt;
+
+&lt;p&gt;作为一个非算法工程师，了解机器学习可以培养基本的“数据素养”。数据素养有一个过程：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;关心收据&lt;/li&gt;
+&lt;li&gt;清洗数据&lt;/li&gt;
+&lt;li&gt;分析数据和数据之间的联系&lt;/li&gt;
+&lt;li&gt;数据到现实的转换&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;本书涵盖机器学习概念的相关分析模型、算法和工具，既然是in action，想必可操作性不错。还没看完，先挖坑。&lt;/p&gt;
 
 &lt;h3 id=&quot;embedded-android&quot;&gt;Embedded Android&lt;/h3&gt;
 
-&lt;p&gt;by Karim Yaghmour
-一本从方方面面介绍Android的书籍，面向嵌入式工程师，提供从底层驱动、中间层HAL、服务层和组件层到APP层的深度纵向解析，可以作为从Linux原生转Android开发的读必会入门书。&lt;/p&gt;
+&lt;p&gt;by Karim Yaghmour&lt;/p&gt;
+
+&lt;p&gt;一本从方方面面介绍Android的书籍，面向嵌入式工程师，提供从底层驱动、中间层HAL、服务层和组件层到APP层的深度纵向解析，可以作为从Linux原生转Android开发的读必会入门书。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 21 Oct 2015 12:10:05 +0000</pubDate>
+        <pubDate>Wed, 21 Oct 2015 20:10:05 +0800</pubDate>
         <link>/2015/10/21/books/</link>
         <guid isPermaLink="true">/2015/10/21/books/</guid>
+        
+        <category>books</category>
+        
+        
+        <category>booklist</category>
+        
+      </item>
+    
+      <item>
+        <title>2015年9月书单</title>
+        <description>&lt;h3 id=&quot;ruby文档-web安全&quot;&gt;Ruby文档-Web安全&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://guides.rubyonrails.org/security.html&quot;&gt;http://guides.rubyonrails.org/security.html&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 28 Sep 2015 20:10:05 +0800</pubDate>
+        <link>/2015/09/28/books/</link>
+        <guid isPermaLink="true">/2015/09/28/books/</guid>
         
         <category>books</category>
         
@@ -192,9 +254,9 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;最终测试运行耗时8ms，运行效率超过了72%的答案哈哈。&lt;/p&gt;
 </description>
-        <pubDate>Tue, 15 Sep 2015 16:40:05 +0000</pubDate>
-        <link>/2015/09/15/Leetcode-Longest-Palindromic-Substring/</link>
-        <guid isPermaLink="true">/2015/09/15/Leetcode-Longest-Palindromic-Substring/</guid>
+        <pubDate>Wed, 16 Sep 2015 00:40:05 +0800</pubDate>
+        <link>/2015/09/16/Leetcode-Longest-Palindromic-Substring/</link>
+        <guid isPermaLink="true">/2015/09/16/Leetcode-Longest-Palindromic-Substring/</guid>
         
         <category>leetcode</category>
         
@@ -255,7 +317,7 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;At each iteration, the element is replaced into the array by the value returned by the block.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 27 Aug 2015 10:35:20 +0000</pubDate>
+        <pubDate>Thu, 27 Aug 2015 18:35:20 +0800</pubDate>
         <link>/2015/08/27/Rails-Tips/</link>
         <guid isPermaLink="true">/2015/08/27/Rails-Tips/</guid>
         
@@ -457,9 +519,9 @@ cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj_ptr, _1, _2)(10,20) &amp;lt;&amp
 &lt;li&gt;Beyond the C++ Standard Library&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Sun, 02 Aug 2015 19:30:25 +0000</pubDate>
-        <link>/2015/08/02/boost-learning/</link>
-        <guid isPermaLink="true">/2015/08/02/boost-learning/</guid>
+        <pubDate>Mon, 03 Aug 2015 03:30:25 +0800</pubDate>
+        <link>/2015/08/03/boost-learning/</link>
+        <guid isPermaLink="true">/2015/08/03/boost-learning/</guid>
         
         <category>c++</category>
         
@@ -520,9 +582,9 @@ github地址： &lt;a href=&quot;https://github.com/yixiaoyang/pyScripts/tree/ma
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Tue, 28 Jul 2015 17:16:00 +0000</pubDate>
-        <link>/2015/07/28/python-spider/</link>
-        <guid isPermaLink="true">/2015/07/28/python-spider/</guid>
+        <pubDate>Wed, 29 Jul 2015 01:16:00 +0800</pubDate>
+        <link>/2015/07/29/python-spider/</link>
+        <guid isPermaLink="true">/2015/07/29/python-spider/</guid>
         
         <category>python</category>
         
@@ -1002,7 +1064,7 @@ sedmod以及GNU sed v3.02.80。&lt;/p&gt;
 
 &lt;p&gt;Valid XHTML 1.0 Strict&lt;/p&gt;
 </description>
-        <pubDate>Fri, 24 Jul 2015 11:11:20 +0000</pubDate>
+        <pubDate>Fri, 24 Jul 2015 19:11:20 +0800</pubDate>
         <link>/2015/07/24/sed-quick-guide/</link>
         <guid isPermaLink="true">/2015/07/24/sed-quick-guide/</guid>
         
@@ -1460,9 +1522,9 @@ Copyright © 2001 Eric S. Raymond &lt;a href=&quot;mailto:esr@thyrsus.com&quot;&
 Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwei82@gmail.com&lt;/a&gt; 基于 Barret 的翻译更正而成。转载请注明出处。&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
-        <pubDate>Thu, 23 Jul 2015 19:10:25 +0000</pubDate>
-        <link>/2015/07/23/how-to-become-a-hacker/</link>
-        <guid isPermaLink="true">/2015/07/23/how-to-become-a-hacker/</guid>
+        <pubDate>Fri, 24 Jul 2015 03:10:25 +0800</pubDate>
+        <link>/2015/07/24/how-to-become-a-hacker/</link>
+        <guid isPermaLink="true">/2015/07/24/how-to-become-a-hacker/</guid>
         
         <category>计算机文化</category>
         
@@ -1470,23 +1532,6 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
         <category>计算机文化</category>
         
         <category>搬运</category>
-        
-      </item>
-    
-      <item>
-        <title>2015年9月书单</title>
-        <description>&lt;h3 id=&quot;ruby文档-web安全&quot;&gt;Ruby文档-Web安全&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://guides.rubyonrails.org/security.html&quot;&gt;http://guides.rubyonrails.org/security.html&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 22 Jul 2015 12:10:05 +0000</pubDate>
-        <link>/2015/07/22/books/</link>
-        <guid isPermaLink="true">/2015/07/22/books/</guid>
-        
-        <category>books</category>
-        
-        
-        <category>booklist</category>
         
       </item>
     
@@ -1530,7 +1575,7 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
 
 &lt;p&gt;一本讲述http协议的必备工具书。内容不难，可以窥见一套应用协议设计成型过程中的各种妥协和进化历程。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 22 Jul 2015 12:10:05 +0000</pubDate>
+        <pubDate>Wed, 22 Jul 2015 20:10:05 +0800</pubDate>
         <link>/2015/07/22/books/</link>
         <guid isPermaLink="true">/2015/07/22/books/</guid>
         
@@ -1538,166 +1583,6 @@ Wang Dingwei &lt;a href=&quot;mailto:wangdingwei82@gmail.com&quot;&gt;wangdingwe
         
         
         <category>booklist</category>
-        
-      </item>
-    
-      <item>
-        <title>[Beaglebone] BBB eeprom的擦写</title>
-        <description>&lt;h3 id=&quot;eeprom-on-bbb&quot;&gt;EEPROM on BBB&lt;/h3&gt;
-
-&lt;p&gt;半年前使用BBW（White版本）将eeprom物理损坏或者内容导致无法启动，原因暂不确定，现在使用正常的BBB板用I2C将eeprom重新连接起来进行擦写。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;BBB SRM文档的说明&lt;br&gt;
-A single 4KB EEPROM is provided on I2C0 that holds the board information. This information includes board name, serial number, and revision information. This is the not the same as the one used on the original BeagleBone. The device was changed for cost reduction reasons. It has a test point to allow the device to be programmed and otherwise to provide write protection when not grounded.
-..&lt;/p&gt;
-
-&lt;p&gt;The EEPROM used is the same one as is used on the BeagleBone and the eagleBone Black, a CAT24C256. The &lt;strong&gt;CAT24C256&lt;/strong&gt; is a 256 kb Serial CMOS EEPROM, internally organized as 32,768 words of 8 bits each. It features a 64−byte page write buffer and supports the Standard (100 kHz), Fast (400 kHz) and Fast−Plus (1 MHz) I2 C protocol.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The BeagleBone is equipped with a single 32Kbit(4KB) 24LC32AT-I/OT EEPROM to allow the SW to identify the board. Table 7 below defined the contents of the EERPOM.&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;NAME&lt;/th&gt;
-&lt;th&gt;Size(Bytes)&lt;/th&gt;
-&lt;th&gt;Contents&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;0xAA, 0x55, 0x33, EE&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Board Name&lt;/td&gt;
-&lt;td&gt;8&lt;/td&gt;
-&lt;td&gt;Name for board in ASCII: A335BNLT&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Size(bytes)&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;Hardware version code for board in ASCII: 00A3 for Rev A3, 00A4 for Rev A4, 00A5 for Rev A5, 00A6 for Rev A6,00B0 for Rev B, and 00C0 for Rev C.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Serial Number&lt;/td&gt;
-&lt;td&gt;12&lt;/td&gt;
-&lt;td&gt;Serial number of the board. This is a 12 character string which is:&lt;code&gt;WWYY4P16nnnn&lt;/code&gt; where: WW = 2 digit week of the year of production YY = 2 digit year of production BBBK = BeagleBone Black nnnn = incrementing board number&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Configuration Option&lt;/td&gt;
-&lt;td&gt;32&lt;/td&gt;
-&lt;td&gt;Codes to show the configuration setup on this board.All FF&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RSVD&lt;/td&gt;
-&lt;td&gt;6&lt;/td&gt;
-&lt;td&gt;FF FF FF FF FF FF&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RSVD&lt;/td&gt;
-&lt;td&gt;6&lt;/td&gt;
-&lt;td&gt;FF FF FF FF FF FF&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RSVD&lt;/td&gt;
-&lt;td&gt;6&lt;/td&gt;
-&lt;td&gt;FF FF FF FF FF FF&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Available&lt;/td&gt;
-&lt;td&gt;4018&lt;/td&gt;
-&lt;td&gt;FF FF FF FF FF FF&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;p&gt;从BBW读出来数据如下：  &lt;/p&gt;
-
-&lt;pre&gt;
-U-Boot SPL 2013.01.01 (Jul 20 2015 - 11:39:45)
-Initalize the board header
-header magic:ee3355aa
-header name:A335BONE00A64212BB000394
-header version:00A64212BB000394
-aa 55 33 ee 41 33 33 35 
-42 4f 4e 45 30 30 41 36 
-34 32 31 32 42 42 30 30 
-30 33 39 34 00 00 00 00 
-00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 
-00 00 00 00 00 00 00 00 
-00 00 00 00 ff ff ff ff 
-ff ff ff ff ff ff ff ff 
-ff ff ff ff ff ff ff ff 
-&lt;/pre&gt;
-
-&lt;h3 id=&quot;device-address&quot;&gt;Device Address&lt;/h3&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Address line A2 is always tied high. &lt;strong&gt;This sets the allowable address range for the expansion cards to 0x54 to 0x57&lt;/strong&gt;. All other I2C addresses can be used by the user in the design of their capes. But, these addresses must not be used other than for the board EEPROM information. This also allows for the inclusion of EEPROM devices on the cape if needed without interfering with this EEPROM. It requires that A2 be grounded on the EEPROM not used for cape identification.&lt;/p&gt;
-
-&lt;p&gt;This particular chip has 3 pins used for chip select addressing. However, those 3 pins alone don&amp;#39;t make up the address. They are part of a hard coded binary prefix of &amp;#39;1010&amp;#39;. So, if you ground the three pins, the address really becomes &amp;#39;1010000&amp;#39;, which is address 0x50 in hex. It will be important to know this address later. The chip also has a write protect pin. Because I want to write to it, I need to connect that to ground according to the datasheet. Connect up the chip Vss and Vdd and that covers all 8 pins of the chip. Pretty simple.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;我使用Raspberry Pi作为烧写器，配置内核添加“i2c-dev,i2c-bcm2708”两个模块：&lt;code&gt;CONFIG_I2C_CHARDEV=M&lt;/code&gt;和&lt;code&gt;CONFIG_I2C_BCM2708=M&lt;/code&gt;，并将&lt;code&gt;I2C_BCM2708_BAUDRATE&lt;/code&gt;设置成200k速率。&lt;/p&gt;
-
-&lt;h3 id=&quot;i2c-tools&quot;&gt;I2C Tools&lt;/h3&gt;
-
-&lt;p&gt;使用buildroot工具配置&lt;code&gt;BR2_PACKAGE_I2C_TOOLS=y&lt;/code&gt;，添加i2cget/i2cset等工具支持.&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;# modprobe i2c_bcm2708
-# modprobe i2c_dev
-# ls /dev/i2c*
-/dev/i2c-1
-# lsmod
-Module                  Size  Used by    Not tainted
-i2c_dev                 4536  0 
-i2c_bcm2708             4119  0 
-i2c_core               16380  2 i2c_dev,i2c_bcm2708
-# i2cdetect -y 1
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-     00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     70: -- -- -- -- -- -- -- --                         
-# 
-
-# i2cdump -y 1 0x50
-No size specified (using byte-data access)
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-     00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-# 
-
-# header
-# i2cset -y 1 0x50 0 0xAA
-# i2cset -y 1 0x50 1 0x55
-# i2cset -y 1 0x50 2 0x33
-# i2cset -y 1 0x50 3 0xEE
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        <pubDate>Mon, 20 Jul 2015 12:37:52 +0000</pubDate>
-        <link>/2015/07/20/bbb-eeprom/</link>
-        <guid isPermaLink="true">/2015/07/20/bbb-eeprom/</guid>
-        
-        <category>Beaglebone</category>
-        
-        <category>C</category>
-        
-        <category>Linux</category>
-        
-        <category>嵌入式</category>
-        
-        
-        <category>beaglebone</category>
         
       </item>
     
