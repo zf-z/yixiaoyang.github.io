@@ -51,29 +51,28 @@ tags:
 
 4. 按照设置规则文件抓取目标内容,规则内容如下：
 
-
-    # 目标所在的区域的tag和attrs（属性）
-    self.zone_tag = ''
-    self.zone_attr = {}
-    # 要抓取的目标标签tag
-    self.tag_name = tag_name or ''
-    # 要抓取的目标标签的递归父亲tag列表
-    # <span><p>
-    #   <a>something</a>
-    #  </p></span>
-    # 如<a> tag的父亲列表为["p","span"]
-    self.parents = []
-    
-    # 1. 目标节点属性
-    # {
-    #   'class':true, true或者false表示是否含有此标签
-    #   'width':'21%'，标签为具体值则表示仅当标签=值时抓取
-    #   'class':['class1','class2'], 标签为列表时表示仅当标签值为列表中的值才成立。暂未用到
-    # }
-    self.attrs = {}
-    
-    # 2. 结果筛选，暂未用到
-    self.select = []
+    ```
+        # 目标所在的区域的tag和attrs（属性）
+        self.zone_tag = ''
+        self.zone_attr = {}
+        # 要抓取的目标标签tag
+        self.tag_name = tag_name or ''
+        # 要抓取的目标标签的递归父亲tag列表
+        # <span><p>
+        #   <a>something</a>
+        #  </p></span>
+        # 如<a> tag的父亲列表为["p","span"]
+        self.parents = []    
+        # 1. 目标节点属性
+        # {
+        #   'class':true, true或者false表示是否含有此标签
+        #   'width':'21%'，标签为具体值则表示仅当标签=值时抓取
+        #   'class':['class1','class2'], 标签为列表时表示仅当标签值为列表中的值才成立。暂未用到
+        # }
+        self.attrs = {}
+        # 2. 结果筛选，暂未用到
+        self.select = []
+    ```
 
 一般来说，找到合适的zone、目标的tag、属性就能找到要找的内容。
 
