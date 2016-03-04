@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>[Beaglebone] Linux 3.8添加SPi Flash及文件系统支持</title>
-  <meta name="description" content="Spi Flash芯片">
+  <meta name="description" content="####Spi Flash芯片">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="/2015/07/15/bbb-3.8-spi-flash/">
@@ -92,26 +92,26 @@
 
 
   <article class="post-content">
-    <h4 id="spi-flash">Spi Flash芯片</h4>
+    <p>####Spi Flash芯片</p>
 
 <p>由于制作JFSS2文件系统镜像、初始化需要芯片的详细sector size(page size)、erase size，因此需要详细的芯片类型和数据手册。我使用的SPI Flash芯片是“25Q128A 13E40”，是Micron的N25Q128A13ESE40E。几个重要参数需要弄清楚：</p>
 
-<p><strong>Erase capability</strong>
-– Subsector erase 4KB uniform granularity blocks
-– Sector erase 64KB uniform granularity blocks
+<p><strong>Erase capability</strong><br />
+– Subsector erase 4KB uniform granularity blocks<br />
+– Sector erase 64KB uniform granularity blocks<br />
 – Full-chip erase</p>
 
-<p><strong>Memory Management</strong>
-简而言之是256<em>64KB=256</em>16*4096 bytes的结构。
-- erase size: 64KB
-- sector size: 64kb
+<p><strong>Memory Management</strong><br />
+简而言之是256<em>64KB=256</em>16*4096 bytes的结构。<br />
+- erase size: 64KB<br />
+- sector size: 64kb<br />
 - subsector size: 4096b</p>
 
 <blockquote>
-<p>The memory is organized as 256 (64KB) main sectors that are further divided into 16 subsectors each (4096 subsectors in total). The memory can be erased one 4KB subsector at a time, 64KB sectors at a time, or as a whole.</p>
+  <p>The memory is organized as 256 (64KB) main sectors that are further divided into 16 subsectors each (4096 subsectors in total). The memory can be erased one 4KB subsector at a time, 64KB sectors at a time, or as a whole.</p>
 </blockquote>
 
-<h4 id="f2fs">F2FS</h4>
+<p>####F2FS</p>
 
 <p>linux 3.8内核上默认支持F2FS文件系统，这个新兴的文件系统在Linux 3.8中首次加入其稳定版代码支持，但是使用mkf2fs格式话时发现：</p>
 
@@ -125,33 +125,28 @@ Info: sector size = 512
 Info: total sectors = 32768 (in 512 bytes)
 Error: Min volume size supported is 104857600
 </pre>
-
 <p>F2FS文件系统不支持100M以下的设备。</p>
 
-<h4 id="jffs2">JFFS2简介</h4>
+<p>####JFFS2简介<br />
+JFFS2 provides a filesystem directly on the flash, rather than emulating a block device. For more information, see the (JFFS2 PDF)[http://linux-mtd.infradead.org/~dwmw2/jffs2.pdf].</p>
 
-<p>JFFS2 provides a filesystem directly on the flash, rather than emulating a block device. For more information, see the (JFFS2 PDF)[<a href="http://linux-mtd.infradead.org/%7Edwmw2/jffs2.pdf">http://linux-mtd.infradead.org/~dwmw2/jffs2.pdf</a>].</p>
-
-<h4 id="spi-flash">让内核支持选定的SPI Flash</h4>
-
-<ol>
-<li>添加kernel对jffs2的支持</li>
-</ol>
+<p>####让内核支持选定的SPI Flash<br />
+1. 添加kernel对jffs2的支持</p>
 
 <pre>
 Symbol: JFFS2_FS [=y]     
 │ Type  : tristate     
 │ Prompt: Journalling Flash File System v2 (JFFS2) support
 │   Defined at fs/jffs2/Kconfig:1                         
-│   Depends on: MISC_FILESYSTEMS [=y] && MTD [=y]         
+│   Depends on: MISC_FILESYSTEMS [=y] &amp;&amp; MTD [=y]         
 │   Location:                                             
-│     -> File systems                                     
-│       -> Miscellaneous filesystems (MISC_FILESYSTEMS [=y])
+│     -&gt; File systems                                     
+│       -&gt; Miscellaneous filesystems (MISC_FILESYSTEMS [=y])
 │   Selects: CRC32 [=y]
 </pre>
 
 <ol>
-<li>添加mtd层flash驱动</li>
+  <li>添加mtd层flash驱动</li>
 </ol>
 
 <pre>
@@ -159,16 +154,16 @@ Symbol: MTD_M25P80 [=y]
 │ Type  : tristate  
 │ Prompt: Support most SPI Flash chips (AT26DF, M25P, W25X, ...)
 │   Defined at drivers/mtd/devices/Kconfig:82                   
-│   Depends on: MTD [=y] && HAS_IOMEM [=y] && SPI_MASTER [=y] && EXPERIMENTAL [=y]
+│   Depends on: MTD [=y] &amp;&amp; HAS_IOMEM [=y] &amp;&amp; SPI_MASTER [=y] &amp;&amp; EXPERIMENTAL [=y]
 │   Location:                                                                     
-│     -> Device Drivers                                                           
-│       -> Memory Technology Device (MTD) support (MTD [=y])                      
-│         -> Self-contained MTD device drivers                                    
+│     -&gt; Device Drivers                                                           
+│       -&gt; Memory Technology Device (MTD) support (MTD [=y])                      
+│         -&gt; Self-contained MTD device drivers                                    
 </pre>
 
 <ol>
-<li>添加SPI0 Flash到Device Tree<br>
-设备树不再赘述。SPI设备的cape可参考<code>BB-BONE-SPI0-00A0.dts</code></li>
+  <li>添加SPI0 Flash到Device Tree     <br />
+  设备树不再赘述。SPI设备的cape可参考<code>BB-BONE-SPI0-00A0.dts</code></li>
 </ol>
 
 <pre>
@@ -185,39 +180,39 @@ Symbol: MTD_M25P80 [=y]
     version = "00A0";
 
     fragment@0 {
-        target = <&am33xx_pinmux>;
+        target = &lt;&amp;am33xx_pinmux&gt;;
         __overlay__ {
             spi0_pins_s0: spi0_pins_s0 {
-                pinctrl-single,pins = <
+                pinctrl-single,pins = &lt;
                     0x150 0x30 /* P9_22 = spi0_sclk, INPUT_PULLUP | MODE0 */
                     0x154 0x30 /* P9_21 = spi0_d0, INPUT_PULLUP | MODE0 */
                     0x158 0x10 /* P9_18 = spi0_d1, OUTPUT_PULLUP | MODE0 */
                     0x15c 0x10 /* P9_17 = spi0_cs0, OUTPUT_PULLUP | MODE0 */
-                >;
+                &gt;;
             };
         }; 
     };
 
     fragment@1 {
-        target = <&spi0>;
+        target = &lt;&amp;spi0&gt;;
         __overlay__ {
-            #address-cells = <1>;
-            #size-cells = <0>;
+            #address-cells = &lt;1&gt;;
+            #size-cells = &lt;0&gt;;
 
             status = "okay";
             pinctrl-names = "default";
-            pinctrl-0 = <&spi0_pins_s0>;
+            pinctrl-0 = &lt;&amp;spi0_pins_s0&gt;;
 
             spidev@0 {
-                spi-max-frequency = <100000000>;
-                reg = <0>;
+                spi-max-frequency = &lt;100000000&gt;;
+                reg = &lt;0&gt;;
                 compatible = "n25q128a13";
                 linux,modalias = "m25p80", "n25q128a13";
-                #address-cells = <1>;
-                #size-cells = <1>;
+                #address-cells = &lt;1&gt;;
+                #size-cells = &lt;1&gt;;
                 /*parition@uroot{
                     label = "spi-flash0";
-                    reg = <0x0 0x1000000>;
+                    reg = &lt;0x0 0x1000000&gt;;
                 };*/
             };
         };
@@ -225,9 +220,9 @@ Symbol: MTD_M25P80 [=y]
 };
 </pre>
 
-<h4 id="buildroot-amp-busybox-amp-kernel-mtd">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
+<p>####buildroot &amp; busybox &amp; kernel加入mtd支持</p>
 
-<p>首先加入mtd基本工具和flash<em>erase的支持，叫交叉编译出flash</em>erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。</p>
+<p>首先加入mtd基本工具和flash_erase的支持，叫交叉编译出flash_erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。</p>
 
 <pre>
 
@@ -235,17 +230,17 @@ Symbol: BR2_PACKAGE_MTD [=y]
   │ Type  : boolean        
   │ Prompt: mtd, jffs2 and ubi/ubifs tools
   │   Location:                           
-  │     -> Target packages                
-  │       -> Filesystem and flash utilities
+  │     -&gt; Target packages                
+  │       -&gt; Filesystem and flash utilities
 
 Symbol: BR2_PACKAGE_MTD_FLASH_ERASE [=y]
   │
   │ Type  : boolean
   │ Prompt: flash_erase
   │   Location:        
-  │     -> Target packages
-  │       -> Filesystem and flash utilities
-  │         -> mtd, jffs2 and ubi/ubifs tools (BR2_PACKAGE_MTD [=y]) 
+  │     -&gt; Target packages
+  │       -&gt; Filesystem and flash utilities
+  │         -&gt; mtd, jffs2 and ubi/ubifs tools (BR2_PACKAGE_MTD [=y]) 
   │   Defined at package/mtd/Config.in:21                            
   │   Depends on: BR2_PACKAGE_MTD [=y]
 
@@ -253,78 +248,85 @@ Symbol: BR2_PACKAGE_MTD_MKFSJFFS2 [=y]
   │ Type  : boolean                  
   │ Prompt: mkfs.jffs2               
   │   Location:                      
-  │     -> Target packages           
-  │       -> Filesystem and flash utilities
-  │         -> mtd, jffs2 and ubi/ubifs tools (BR2_PACKAGE_MTD [=y])
+  │     -&gt; Target packages           
+  │       -&gt; Filesystem and flash utilities
+  │         -&gt; mtd, jffs2 and ubi/ubifs tools (BR2_PACKAGE_MTD [=y])
   │   Defined at package/mtd/Config.in:54                           
   │   Depends on: BR2_PACKAGE_MTD [=y]                              
-  │   Selects: BR2_PACKAGE_ZLIB [=y] && BR2_PACKAGE_LZO [=y]        
+  │   Selects: BR2_PACKAGE_ZLIB [=y] &amp;&amp; BR2_PACKAGE_LZO [=y]        
 </pre>
 
-<h4 id="jffs2">制作JFFS2镜像</h4>
-
-<p>可以在Host机器上制作镜像，但一定得弄清楚上面提到的flash的几个特性，否则会出现<code>I cannot mount JFFS2 and see &quot;Magic bitmask 0x1985 not found&quot; messages</code>的常见错误。</p>
-
-<blockquote>
-<p>参考： (<a href="http://www.linux-mtd.infradead.org/faq/jffs2.html)%5Bhttp://www.linux-mtd.infradead.org/faq/jffs2.html%5D">http://www.linux-mtd.infradead.org/faq/jffs2.html)[http://www.linux-mtd.infradead.org/faq/jffs2.html]</a></p>
-
-<p>I cannot mount JFFS2 and see &quot;Magic bitmask 0x1985 not found&quot; messages
-If you cannot mount your JFFS2 file system and you see many messages like
-jffs2<em>scan</em>eraseblock(): Magic bitmask 0x1985 not found at 0x00000024: 0x2b10 instead
-...</p>
-
-<p>Further such events for this erase block will not be printed</p>
-
-<p>this means that the data on your flash device is not a valid JFFS2 file system. There is no single solution for this problem, but we will try to provide you some ideas how to fix this.</p>
-
-<p>The first question you should try to answer is &quot;why the data on my flash device is incorrect so that JFFS2 rejects to deal with it?&quot;. There are may be a plenty of reasons, e.g.:</p>
-
-<p>you flash driver is severely buggy so it reads trash instead of valid data;
-   you flashed some trash instead of a valid JFFS2 image;
-   you did not manage to flash JFFS2 image correctly so that you ended up with garbage on your flash, although the original image was perfectly fine;
-   you forgot to erase your flash before flashing it, etc.</p>
-
-<p>Anyways, JFFS2 wouldn&#39;t complain if it was able to find correct data. As it does complain, there is something wrong with the data it reads.</p>
-
-<p>One common mistake is to use /dev/mtdX or /dev/mtdblockX devices to flash JFFS2 images on NAND flashes. E.g.
-cp jffs2_fs.img /dev/mtd2</p>
-
-<p>This is incorrect because when dealing with NAND flashes one has to skip bad eraseblocks and write only in NAND page size chunks. Please, use the nandwrite utility instead.</p>
-
-<p>Also please, do not forget to erase your flash before flashing the image. You may use the flash_eraseall utility for this. And it makes sense to make sure the erase functionality actually works by reading the erased MTD device back and checking that only 0xFF bytes were read.</p>
-
-<p>You may try to check if your flash driver works correctly and if you flashed the file system image correctly by means of reading the flash back after you have flashed your image, and compare the read image with the original one. Please, use the nandread utility to read from NAND flashes.</p>
-
-<p>You can also do the following experiment to make sure JFFS2 works well. Erase your MTD device and mount it to JFFS2. You will end up with an empty file system. Copy some files to the JFFS2 file system and unmount it. Then mount it again and see if it mounts without problems. If it does, this is most probably not a JFFS2 bug. </p>
-</blockquote>
+<p>####制作JFFS2镜像<br />
+可以在Host机器上制作镜像，但一定得弄清楚上面提到的flash的几个特性，否则会出现<code>I cannot mount JFFS2 and see "Magic bitmask 0x1985 not found" messages</code>的常见错误。<br />
+&gt;参考： (http://www.linux-mtd.infradead.org/faq/jffs2.html)[http://www.linux-mtd.infradead.org/faq/jffs2.html]<br />
+&gt;<br />
+&gt;I cannot mount JFFS2 and see “Magic bitmask 0x1985 not found” messages<br />
+&gt;If you cannot mount your JFFS2 file system and you see many messages like<br />
+&gt;jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00000024: 0x2b10 instead<br />
+&gt;…<br />
+&gt;<br />
+&gt;Further such events for this erase block will not be printed<br />
+&gt;<br />
+&gt;this means that the data on your flash device is not a valid JFFS2 file system. There is no single solution for this problem, but we will try to provide you some ideas how to fix this.<br />
+&gt;<br />
+&gt;The first question you should try to answer is “why the data on my flash device is incorrect so that JFFS2 rejects to deal with it?”. There are may be a plenty of reasons, e.g.:<br />
+&gt;<br />
+&gt;    you flash driver is severely buggy so it reads trash instead of valid data;<br />
+&gt;    you flashed some trash instead of a valid JFFS2 image;<br />
+&gt;    you did not manage to flash JFFS2 image correctly so that you ended up with garbage on your flash, although the original image was perfectly fine;<br />
+&gt;    you forgot to erase your flash before flashing it, etc.<br />
+&gt;<br />
+&gt;Anyways, JFFS2 wouldn’t complain if it was able to find correct data. As it does complain, there is something wrong with the data it reads.<br />
+&gt;<br />
+&gt;One common mistake is to use /dev/mtdX or /dev/mtdblockX devices to flash JFFS2 images on NAND flashes. E.g.<br />
+&gt;cp jffs2_fs.img /dev/mtd2<br />
+&gt;<br />
+&gt;This is incorrect because when dealing with NAND flashes one has to skip bad eraseblocks and write only in NAND page size chunks. Please, use the nandwrite utility instead.<br />
+&gt;<br />
+&gt;Also please, do not forget to erase your flash before flashing the image. You may use the flash_eraseall utility for this. And it makes sense to make sure the erase functionality actually works by reading the erased MTD device back and checking that only 0xFF bytes were read.<br />
+&gt;<br />
+&gt;You may try to check if your flash driver works correctly and if you flashed the file system image correctly by means of reading the flash back after you have flashed your image, and compare the read image with the original one. Please, use the nandread utility to read from NAND flashes.<br />
+&gt;<br />
+&gt;You can also do the following experiment to make sure JFFS2 works well. Erase your MTD device and mount it to JFFS2. You will end up with an empty file system. Copy some files to the JFFS2 file system and unmount it. Then mount it again and see if it mounts without problems. If it does, this is most probably not a JFFS2 bug.</p>
 
 <ol>
-<li><p>制作镜像<br>
-<code>/usr/sbin/mkfs.jffs2  -n -r ./spiflash_128BBits -e 0x10000 -s 0x10000 -l  -p 0x1000000  -o flash0.0x10000_0x10000.img -v</code>
-此处page size为64kb，erase size为4k也是flash支持的最小度量的erase单位。</p></li>
-<li><p>格式化flash<br>
-<code># flash_erase -j /dev/mtd0  0 256</code>
-此处按照256块（每块64k）进行格式化</p></li>
-<li><p>拷贝到目标并dd到flash并挂载目标flash</p></li>
+  <li>
+    <p>制作镜像     <br />
+<code>/usr/sbin/mkfs.jffs2  -n -r ./spiflash_128BBits -e 0x10000 -s 0x10000 -l  -p 0x1000000  -o flash0.0x10000_0x10000.img -v</code><br />
+此处page size为64kb，erase size为4k也是flash支持的最小度量的erase单位。</p>
+  </li>
+  <li>
+    <p>格式化flash     <br />
+<code># flash_erase -j /dev/mtd0  0 256</code><br />
+此处按照256块（每块64k）进行格式化</p>
+  </li>
+  <li>
+    <p>拷贝到目标并dd到flash并挂载目标flash</p>
+  </li>
 </ol>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># dd if= ./flash0.   of=/dev/mtdblock0</span>
-flash0.0x10000_0x10000.img  flash0.jffs2.img
-flash0.0x1000_0x10000.img
-<span class="c"># dd if=./flash0.0x1000_0x10000.img    of=/dev/mtdblock0</span>
-16+0 records in
-16+0 records out
-<span class="c"># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/</span>
-<span class="o">[</span>  362.309070<span class="o">]</span> jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, <span class="m">0</span> of xdatum <span class="o">(</span><span class="m">0</span> unchecked, <span class="m">0</span> orphan<span class="o">)</span> and <span class="m">0</span> of xref <span class="o">(</span><span class="m">0</span> dead, <span class="m">0</span> orphan<span class="o">)</span> found.
-<span class="c"># </span>
-</code></pre></div>
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span># dd if= ./flash0.   of=/dev/mtdblock0
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>flash0.0x10000_0x10000.img  flash0.jffs2.img
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>flash0.0x1000_0x10000.img
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span># dd if=./flash0.0x1000_0x10000.img    of=/dev/mtdblock0
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>16+0 records in
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>16+0 records out
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>[  362.309070] jffs2: notice: (198) jffs2_build_xattr_subsystem: complete building xattr subsystem, 0 of xdatum (0 unchecked, 0 orphan) and 0 of xref (0 dead, 0 orphan) found.
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span># 
+</pre></div>
+</div>
+</div>
+
 <p>至此，flash设备成功挂载到用户空间的文件系统中去了。</p>
 
 <p><strong>参考</strong></p>
 
 <ul>
-<li><a href="http://processors.wiki.ti.com/index.php/MTD_Utilities">http://processors.wiki.ti.com/index.php/MTD_Utilities</a></li>
-<li><a href="http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration">http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration</a></li>
-<li><a href="http://www.linux-mtd.infradead.org/doc">http://www.linux-mtd.infradead.org/doc</a></li>
+  <li>http://processors.wiki.ti.com/index.php/MTD_Utilities</li>
+  <li>http://processors.wiki.ti.com/index.php/JFFS2_kernel_configuration</li>
+  <li>http://www.linux-mtd.infradead.org/doc</li>
 </ul>
 
   </article>

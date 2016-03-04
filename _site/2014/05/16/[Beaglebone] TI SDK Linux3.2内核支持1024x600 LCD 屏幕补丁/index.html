@@ -100,22 +100,27 @@
 
 <p>此处需要参考TI AM335X芯片SRM文档，Table 8-24. Per PLL Typical Frequencies(MHz) 和第8章PRCM模块和13章LCD Controller相关手册内容。对于Display PLL则需要弄清其时钟源和分频比例，以确保输出的LCD时钟在LCD的参考范围内。</p>
 
-<p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/am335-pll.gif"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/am335-pll.gif" alt="am335-pll"></a></p>
+<p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/am335-pll.gif"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/am335-pll.gif" alt="am335-pll" /></a></p>
 
 <p>图1 AM335X Display PLL硬件框图</p>
 
 <p>AM335X LCD PLL的时钟源的选取不是唯一的，如上图所示，<code>LCD_CLK</code>并不一定要使用<code>Display PLL</code> 的CLKOUT，还可以使用<code>CORE_CLKOUTM5</code>或者<code>PER_CLKOUTM2</code>（固定192MHZ）作为时钟。此版内核使用的是系统时钟（CLKOUT）分频。当然，linux内核对时钟和Framebuffer的设置有了很方便的配置框架，很多硬件寄存器细节不需要自己编写了。</p>
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">setup_pin_mux</span><span class="p">(</span><span class="n">lcdc_pin_mux</span><span class="p">);</span> 
 
-<span class="k">if</span> <span class="p">(</span><span class="n">conf_disp_pll</span><span class="p">(</span><span class="mi">500000000</span><span class="p">))</span> <span class="p">{</span>
-  <span class="n">pr_info</span><span class="p">(</span><span class="s">&quot;Failed configure display PLL, not attempting to&quot;</span>
-      <span class="s">&quot;register LCDCn&quot;</span><span class="p">);</span>
-  <span class="k">return</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>setup_pin_mux(lcdc_pin_mux); 
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#080;font-weight:bold">if</span> (conf_disp_pll(<span style="color:#00D">500000000</span>)) {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  pr_info(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Failed configure display PLL, not attempting to</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">register LCDCn</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>  <span style="color:#080;font-weight:bold">return</span>;
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>}
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#080;font-weight:bold">if</span> (am33xx_register_lcdc(&amp;TFC_S9700RTWV35TR_01B_pdata))
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  pr_info(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Failed to register LCDC devicen</span><span style="color:#710">&quot;</span></span>);
+</pre></div>
+</div>
+</div>
 
-<span class="k">if</span> <span class="p">(</span><span class="n">am33xx_register_lcdc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">TFC_S9700RTWV35TR_01B_pdata</span><span class="p">))</span>
-  <span class="n">pr_info</span><span class="p">(</span><span class="s">&quot;Failed to register LCDC devicen&quot;</span><span class="p">);</span>
-</code></pre></div>
 <p>（2）色深参数设置。注意QT、Linux内核对16/24/32 bpp的支持。最开始使用32bpp参数，结果红蓝色 swapped，换成24bpp后恢复正常。为了不对framebuffer大改，就使用了24真彩色，也够用了</p>
 
 <pre>
@@ -132,7 +137,7 @@
 24 @@ -137,7 +137,7 @@ static struct lcd_ctrl_config lcd_cfg =
 25  struct da8xx_lcdc_platform_data TFC_S9700RTWV35TR_01B_pdata = {
 26     .manu_name      = "ThreeFive",
-27     .controller_data    = &lcd_cfg,
+27     .controller_data    = &amp;lcd_cfg,
 28 -   .type           = "TFC_S9700RTWV35TR_01B",
 29 +   .type           = "INNOLUX_TN92",
 30  };
@@ -185,9 +190,10 @@
 
 <pre>
 cd kernel-source
-patch -p1 <../kernel.patch
-patch -R -p1 <../kernel.patch
+patch -p1 &lt;../kernel.patch
+patch -R -p1 &lt;../kernel.patch
 </pre>
+
 
   </article>
 

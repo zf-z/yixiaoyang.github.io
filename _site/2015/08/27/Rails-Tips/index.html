@@ -88,49 +88,57 @@
 
 
   <article class="post-content">
-    <h3 id="rails">Rails使用环境变量</h3>
+    <h3>Rails使用环境变量</h3>
 
 <p>Many applications require configuration of settings such as email account credentials or API keys for external services. You can pass local configuration settings to an application using environment variables.</p>
 
 <p><strong>Gmail Example</strong></p>
 
 <p>Consider an application that uses Gmail to send email messages. Access to Gmail requires a username and password for access to your Gmail account. In your Rails application, you will need to configure these credentials in the file config/environments/production.rb. A portion of the file might look like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">config.action_mailer.smtp_settings = {
-  address: &quot;smtp.gmail.com&quot;,
+
+<pre><code>config.action_mailer.smtp_settings = {
+  address: "smtp.gmail.com",
   port: 587,
-  domain: &quot;example.com&quot;,
-  authentication: &quot;plain&quot;,
+  domain: "example.com",
+  authentication: "plain",
   enable_starttls_auto: true,
-  user_name: ENV[&quot;GMAIL_USERNAME&quot;],
-  password: ENV[&quot;GMAIL_PASSWORD&quot;]
+  user_name: ENV["GMAIL_USERNAME"],
+  password: ENV["GMAIL_PASSWORD"]
 }
-</code></pre></div>
-<p>You could “hardcode” your Gmail username and password into the file but that would expose it to everyone who has access to your git repository. Instead use the Ruby variable <code>ENV[&quot;GMAIL_USERNAME&quot;]</code> to obtain an environment variable. The variable can be used anywhere in a Rails application. Ruby will replace ENV[&quot;GMAIL_USERNAME&quot;] with an environment variable.</p>
+</code></pre>
+
+<p>You could “hardcode” your Gmail username and password into the file but that would expose it to everyone who has access to your git repository. Instead use the Ruby variable <code>ENV["GMAIL_USERNAME"]</code> to obtain an environment variable. The variable can be used anywhere in a Rails application. Ruby will replace ENV[“GMAIL_USERNAME”] with an environment variable.</p>
 
 <p>Let’s consider how to set local environment variables.</p>
 
-<h3 id="ruby">Ruby提取切片</h3>
+<h3>Ruby提取切片</h3>
 
 <p>You can get the result you want using collect! or map! to modify the array in-place:</p>
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 1. collect</span>
-<span class="n">x</span> <span class="o">=</span> <span class="sx">%w(hello there world)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">collect!</span> <span class="p">{</span> <span class="o">|</span><span class="n">element</span><span class="o">|</span>
-  <span class="p">(</span><span class="n">element</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span> <span class="p">?</span> <span class="s2">&quot;hi&quot;</span> <span class="p">:</span> <span class="n">element</span>
-<span class="p">}</span>
-<span class="nb">puts</span> <span class="n">x</span>
 
-<span class="c1"># 2. map</span>
-<span class="n">x</span> <span class="o">=</span> <span class="sx">%w(hello there world)</span>
-<span class="n">x</span><span class="o">.</span><span class="n">map!</span> <span class="p">{</span> <span class="o">|</span><span class="n">element</span><span class="o">|</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">element</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span>
-      <span class="s2">&quot;hi&quot;</span> <span class="c1"># change &quot;hello&quot; to &quot;hi&quot;</span>
-  <span class="k">else</span>
-      <span class="n">element</span>
-  <span class="k">end</span>
-<span class="p">}</span>
-<span class="nb">puts</span> <span class="n">x</span> <span class="c1"># output: [hi there world]</span>
-</code></pre></div>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777"># 1. collect</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>x = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">%w(</span><span style="color:#D20">hello there world</span><span style="color:#710">)</span></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>x.collect! { |element|
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  (element == <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hello</span><span style="color:#710">&quot;</span></span>) ? <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hi</span><span style="color:#710">&quot;</span></span> : element
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>}
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>puts x
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#777"># 2. map</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>x = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">%w(</span><span style="color:#D20">hello there world</span><span style="color:#710">)</span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>x.map! { |element|
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>  <span style="color:#080;font-weight:bold">if</span>(element == <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hello</span><span style="color:#710">&quot;</span></span>)
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>      <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hi</span><span style="color:#710">&quot;</span></span> <span style="color:#777"># change &quot;hello&quot; to &quot;hi&quot;</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>  <span style="color:#080;font-weight:bold">else</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>      element
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>}
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>puts x <span style="color:#777"># output: [hi there world]</span>
+</pre></div>
+</div>
+</div>
+
 <p>At each iteration, the element is replaced into the array by the value returned by the block.</p>
+
 
   </article>
 

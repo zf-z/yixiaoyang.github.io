@@ -93,7 +93,8 @@
 <p><strong>（1）Rails框架工具</strong></p>
 
 <p>model更改字段或者类型：magration搞定，自己写up和down事件。例如：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class ChangeEducationsFieldForDegreeTemplates &lt; ActiveRecord::Migration
+
+<pre><code>class ChangeEducationsFieldForDegreeTemplates &lt; ActiveRecord::Migration
   def up
     change_column :educations, :degree, :integer
     add_column   :educations, :stime,  :datetime
@@ -103,48 +104,60 @@
     change_column :educations, :degree, :string
   end
 end
-</code></pre></div>
-<p>跳过model使用scaffold：rails g scaffold skill --skip以此类推</p>
+</code></pre>
+
+<p>跳过model使用scaffold：rails g scaffold skill –skip以此类推</p>
 
 <p><strong>（2）现场编辑推荐</strong></p>
 
-<p>使用best-in-place editing  ref: <a href="http://railscasts.com/episodes/302-in-place-editing">http://railscasts.com/episodes/302-in-place-editing</a>
-gem &#39;jquery-ui-rails&#39;
-gem &#39;best<em>in</em>place&#39;, github: &#39;bernat/best<em>in</em>place&#39;
+<p>使用best-in-place editing  ref: <a href="http://railscasts.com/episodes/302-in-place-editing">http://railscasts.com/episodes/302-in-place-editing</a><br />
+gem ‘jquery-ui-rails’<br />
+gem ‘best_in_place’, github: ‘bernat/best_in_place’<br />
 /app/assets/javascripts/application.js</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">//= require jquery
+
+<pre><code>//= require jquery
 //= require jquery_ujs
 //= require jquery-ui
 //= require best_in_place
 //= require_tree .
-</code></pre></div>
+</code></pre>
+
 <p>application.css</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">To require all jQuery UI modules, add the following to your application.js:
+
+<pre><code>To require all jQuery UI modules, add the following to your application.js:
 //= require jquery.ui.all
 Also add the jQuery UI CSS to your application.css:
 /*
  *= require jquery.ui.all
  */
-</code></pre></div>
+</code></pre>
+
 <p>/app/assets/javascripts/users.js.coffee</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">jQuery -&gt;
-  $(&#39;.best_in_place&#39;).best_in_place()
-</code></pre></div>
+
+<pre><code>jQuery -&gt;
+  $('.best_in_place').best_in_place()
+</code></pre>
+
 <p>/app/views/users/show.html.erb</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">  &lt;%= best_in_place @user, :name %&gt;
-</code></pre></div>
+
+<pre><code>  &lt;%= best_in_place @user, :name %&gt;
+</code></pre>
+
 <p><strong>（3）model取出时间类字段一直返回2000-01-01的问题</strong></p>
 
 <p>后来上satackoverflow才知道是字段类型的问题，应该使用datetime代替date。</p>
 
 <p><a href="http://stackoverflow.com/questions/7515398/utc-time-resets-to-2000-01-01-ruby-how-do-i-prevent-the-time-from-resetting">http://stackoverflow.com/questions/7515398/utc-time-resets-to-2000-01-01-ruby-how-do-i-prevent-the-time-from-resetting</a></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">You are using the Time class. This class deals with times, not dates. My guess is that your database column is of type time as well.
+
+<pre><code>You are using the Time class. This class deals with times, not dates. My guess is that your database column is of type time as well.
 I recommend you use a datetime (or possibly timestamp) column type.
-</code></pre></div>
+</code></pre>
+
 <p><strong>（4）关于招聘系统的题目</strong></p>
 
 <p>其实是来自Biz的公司招聘，所以用业余时间实现了一下。附招聘信息，可以看看Rails偏前端的一些必备能力</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">公司概况
+
+<pre><code>公司概况
 
 深圳市简单互联网科技有限公司，base深圳福田车公庙。创始人包括全职人员我，兼职人员（分别从事管理软件咨询、产品运营）两位，投资人一位偶尔串门。
 我自认是个非常靠谱而且Nice的主，都说慈不掌兵，但是要我在我自己都还没把握的期间就坑人入伙，我过不了自己那关。现在好多了，最艰难、压力最 大的起步阶段基本都由我一个人消化完。主要产品简单BIZ现在已经进入推广及稳定期间，软件的发展势头良好，用户反馈也还可以。因为我了解深圳的物价水
@@ -230,8 +243,10 @@ PS
 也欢迎有意来深圳发展的Rubyist投，公司可提供住宿。
 该招聘信息 截至2013年12月5日 。
 这篇告示起草、编辑了整整一个下午，大家应当也能从内容中看到我的认真。盼顶。
-</code></pre></div>
+</code></pre>
+
 <p>不写了，早点睡觉～</p>
+
 
   </article>
 

@@ -86,14 +86,15 @@
 
 
   <article class="post-content">
-    <h3 id=">简介</h3>
+    <h3>简介</h3>
 
 <p>目标是尽可能自动抓取目标大学、所需院系的在职教师名单和详细信息（主要是联系方式，简历等），结果生成格式化csv文件，包含内容包括姓名、英文名、职称、邮件、电话、部门、个人网站、电话、研究方向等。最大的问题在于各大学校院系的网站千奇百怪，格式不尽相同，工作量大。</p>
 
 <p>思路：爬虫+解析器+存取器</p>
 
-<h3 id=">依赖</h3>
-<div class="highlight"><pre><code class="language-text" data-lang="text">python 2.7.10
+<h3>依赖</h3>
+
+<pre><code>python 2.7.10
 beautifulsoup4==4.4.1
 lxml==3.4.4（remove）
 requests==2.8.1
@@ -102,45 +103,60 @@ python-imaging
 pytesseract
 tesseract-ocr（图像识别）
 wand(imageMagic的绑定)
-</code></pre></div>
-<h3 id=">其他库</h3>
-<div class="highlight"><pre><code class="language-text" data-lang="text">ImageMagic
+</code></pre>
+
+<h3>其他库</h3>
+
+<pre><code>ImageMagic
 media-libs/leptonica
 app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training工具）
-</code></pre></div>
-<h3 id="ocr">OCR训练工具</h3>
-<div class="highlight"><pre><code class="language-text" data-lang="text">jTessBoxEditor
-</code></pre></div>
-<h3 id=">基本使用</h3>
+</code></pre>
+
+<h3>OCR训练工具</h3>
+
+<pre><code>jTessBoxEditor
+</code></pre>
+
+<h3>基本使用</h3>
 
 <p>我只是写了一个简单的架子，功能：</p>
 
 <ol>
-<li><p>解析hao123的211/985名单</p></li>
-<li><p>数据 《=》csv/json相互转化</p></li>
-<li><p>按照用户选择解析各个学校、学院的在职员工数据（模糊匹配职称、电子邮件、电话等等基本信息），并抓取简历保存在学院目录。</p></li>
-<li><p>按照设置规则文件抓取目标内容,规则内容如下：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    # 目标所在的区域的tag和attrs（属性）
-    self.zone_tag = &#39;&#39;
-    self.zone_attr = {}
-    # 要抓取的目标标签tag
-    self.tag_name = tag_name or &#39;&#39;
-    # 要抓取的目标标签的递归父亲tag列表
-    # &lt;span&gt;&lt;p&gt;
-    #   &lt;a&gt;something&lt;/a&gt;
-    #  &lt;/p&gt;&lt;/span&gt;
-    # 如&lt;a&gt; tag的父亲列表为[&quot;p&quot;,&quot;span&quot;]
-    self.parents = []    
-    # 1. 目标节点属性
-    # {
-    #   &#39;class&#39;:true, true或者false表示是否含有此标签
-    #   &#39;width&#39;:&#39;21%&#39;，标签为具体值则表示仅当标签=值时抓取
-    #   &#39;class&#39;:[&#39;class1&#39;,&#39;class2&#39;], 标签为列表时表示仅当标签值为列表中的值才成立。暂未用到
-    # }
-    self.attrs = {}
-    # 2. 结果筛选，暂未用到
-    self.select = []
-</code></pre></div></li>
+  <li>
+    <p>解析hao123的211/985名单</p>
+  </li>
+  <li>
+    <p>数据 《=》csv/json相互转化</p>
+  </li>
+  <li>
+    <p>按照用户选择解析各个学校、学院的在职员工数据（模糊匹配职称、电子邮件、电话等等基本信息），并抓取简历保存在学院目录。</p>
+  </li>
+  <li>
+    <p>按照设置规则文件抓取目标内容,规则内容如下：</p>
+
+    <p><code>
+     # 目标所在的区域的tag和attrs（属性）
+     self.zone_tag = ''
+     self.zone_attr = {}
+     # 要抓取的目标标签tag
+     self.tag_name = tag_name or ''
+     # 要抓取的目标标签的递归父亲tag列表
+     # &lt;span&gt;&lt;p&gt;
+     #   &lt;a&gt;something&lt;/a&gt;
+     #  &lt;/p&gt;&lt;/span&gt;
+     # 如&lt;a&gt; tag的父亲列表为["p","span"]
+     self.parents = []    
+     # 1. 目标节点属性
+     # {
+     #   'class':true, true或者false表示是否含有此标签
+     #   'width':'21%'，标签为具体值则表示仅当标签=值时抓取
+     #   'class':['class1','class2'], 标签为列表时表示仅当标签值为列表中的值才成立。暂未用到
+     # }
+     self.attrs = {}
+     # 2. 结果筛选，暂未用到
+     self.select = []
+</code></p>
+  </li>
 </ol>
 
 <p>一般来说，找到合适的zone、目标的tag、属性就能找到要找的内容。</p>
@@ -150,52 +166,55 @@ app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training�
 <p>由于每个学院的解析模式各不相同，所以需要在每个学院目录下自己实现两个方法：</p>
 
 <ul>
-<li>handler：将找到的目标转化为员工数据实体</li>
-<li>profile_handler：保存简历正文到文件，模糊匹配员工数据并返回</li>
+  <li>handler：将找到的目标转化为员工数据实体</li>
+  <li>profile_handler：保存简历正文到文件，模糊匹配员工数据并返回</li>
 </ul>
 
 <p>json中的主要数据结构如下所示：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&quot;__classname__&quot;: &quot;Academy&quot;,     表示数据的类型，自动写好的
-&quot;__module__&quot;: &quot;models&quot;,         表示类的模块，自动写好的
-&quot;departments&quot;: {                [*] 找到一个学院的所有教师名单的索引页面，并填写进去,这个页面将用来解析employee（在职员工）
+
+<pre><code>"__classname__": "Academy",     表示数据的类型，自动写好的
+"__module__": "models",         表示类的模块，自动写好的
+"departments": {                [*] 找到一个学院的所有教师名单的索引页面，并填写进去,这个页面将用来解析employee（在职员工）
                                 格式为名字：网址
-    &quot;全职教员&quot;:&quot;http://www.math.pku.edu.cn/static/quanzhijiaoyuan.html&quot;
+    "全职教员":"http://www.math.pku.edu.cn/static/quanzhijiaoyuan.html"
 },
 departmentsRule结构暂时不用管，没用到
-&quot;departmentsRule&quot;: {
-    &quot;__classname__&quot;: &quot;ParseRule&quot;, 
-    &quot;__module__&quot;: &quot;models&quot;, 
-    &quot;attrs&quot;: {}, 
-    &quot;parents&quot;: [], 
-    &quot;select&quot;: [], 
-    &quot;tag_name&quot;: &quot;&quot;, 
-    &quot;zone_attr&quot;: {}, 
-    &quot;zone_tag&quot;: &quot;&quot;
+"departmentsRule": {
+    "__classname__": "ParseRule", 
+    "__module__": "models", 
+    "attrs": {}, 
+    "parents": [], 
+    "select": [], 
+    "tag_name": "", 
+    "zone_attr": {}, 
+    "zone_tag": ""
 }, 
-&quot;departmentsUrl&quot;: &quot;&quot;,           没用到
-&quot;done&quot;: false,                  没用到
-&quot;employees&quot;: [],                没用到，自动生成，不用管
-&quot;eng_name&quot;: &quot;www.math.pku.edu.cn&quot;, 自动解析生成学院的英文名字，不用管
-&quot;hasDepartments&quot;: false,            不用管
-&quot;name&quot;: &quot;数学科学学院&quot;,               自动解析生成，不用管
-&quot;parser&quot;: null, 
-&quot;rule&quot;: {                       [*]Rule是你的重点，这是一个规则配置文件
-    &quot;__classname__&quot;: &quot;ParseRule&quot;, 表示数据的类型，自动写好的
-    &quot;__module__&quot;: &quot;models&quot;,       表示类的模块，自动写好的  
-    &quot;attrs&quot;: {},                  目标tag_name的属性，类似zone_attr
-    &quot;parents&quot;: [],              [*]这个也是重点，目标的父标签，用于缩小解析范围的
-    &quot;select&quot;: [],                忽略永不到                              
-    &quot;tag_name&quot;: &quot;a&quot;,            [*]目标tag，这个也是重点    
-    &quot;zone_attr&quot;: {&quot;id&quot;:&quot;main&quot;}, [*]目标tag的属性，这个也是重点，如&lt;a class=&quot;link&quot;&gt;中的class属性为link，所以规则为{&quot;class&quot;:&quot;link&quot;}
-    &quot;zone_tag&quot;: &quot;div&quot;           [*]目标区域tag，这个也是重点，（标签，如&lt;table&gt;，&lt;html&gt;，&lt;p&gt;都是标签），zone用于缩小网站目标范围，过滤冗余信息
+"departmentsUrl": "",           没用到
+"done": false,                  没用到
+"employees": [],                没用到，自动生成，不用管
+"eng_name": "www.math.pku.edu.cn", 自动解析生成学院的英文名字，不用管
+"hasDepartments": false,            不用管
+"name": "数学科学学院",               自动解析生成，不用管
+"parser": null, 
+"rule": {                       [*]Rule是你的重点，这是一个规则配置文件
+    "__classname__": "ParseRule", 表示数据的类型，自动写好的
+    "__module__": "models",       表示类的模块，自动写好的  
+    "attrs": {},                  目标tag_name的属性，类似zone_attr
+    "parents": [],              [*]这个也是重点，目标的父标签，用于缩小解析范围的
+    "select": [],                忽略永不到                              
+    "tag_name": "a",            [*]目标tag，这个也是重点    
+    "zone_attr": {"id":"main"}, [*]目标tag的属性，这个也是重点，如&lt;a class="link"&gt;中的class属性为link，所以规则为{"class":"link"}
+    "zone_tag": "div"           [*]目标区域tag，这个也是重点，（标签，如&lt;table&gt;，&lt;html&gt;，&lt;p&gt;都是标签），zone用于缩小网站目标范围，过滤冗余信息
 },
 
-&quot;sname&quot;: &quot;math&quot;,                  学院简称
-&quot;url&quot;: &quot;http://www.math.pku.edu.cn/&quot;,    学院主页，自动解析出来的
-&quot;web_engine&quot;: &quot;urllib2&quot;             一般用urllib2,对于特定的js网站，需要用selen
-</code></pre></div>
-<h4 id=">菜单</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">menu0 = &#39;&#39;&#39;
+"sname": "math",                  学院简称
+"url": "http://www.math.pku.edu.cn/",    学院主页，自动解析出来的
+"web_engine": "urllib2"             一般用urllib2,对于特定的js网站，需要用selen
+</code></pre>
+
+<p>####菜单</p>
+
+<pre><code>menu0 = '''
 q. 退出
 p. 打印所有大学名单
 1. 抓取211名单到json文件
@@ -204,62 +223,69 @@ p. 打印所有大学名单
 4. 测试抓取院系导航目录
 5. 自动猜测并分析出学校的院系导航链接
 6. 抓取院系的名称和主页
-</code></pre></div>
+</code></pre>
+
 <ol>
-<li>out目录下如果存在<code>china211.json</code>则将其大学目录数据导入。如果不存在，可运行<code>python run.py</code>选择菜单1从hao123抓取。</li>
-<li>编辑<code>china985.json</code>，删除不感兴趣的大学。如仅保留985+理工。</li>
-<li>运行</li>
+  <li>out目录下如果存在<code>china211.json</code>则将其大学目录数据导入。如果不存在，可运行<code>python run.py</code>选择菜单1从hao123抓取。</li>
+  <li>编辑<code>china985.json</code>，删除不感兴趣的大学。如仅保留985+理工。</li>
+  <li>运行</li>
 </ol>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    $ python run.py
+
+<pre><code>    $ python run.py
     选择6菜单
     选择学校
     选择院系
     开始解析
-</code></pre></div>
-<h3 id=">数据结构</h3>
-<div class="highlight"><pre><code class="language-text" data-lang="text">China211
+</code></pre>
+
+<h3>数据结构</h3>
+
+<pre><code>China211
 collges + rule
 academies
 Department
 employees
-</code></pre></div>
-<h4 id="parser">Parser</h4>
+</code></pre>
+
+<p>####Parser</p>
 
 <p>Parser主要有两种，一种是SimpleAParser对于简单的链接+简历url正文的教师队伍介绍页面进行解析。一种是SimpleTableParser对表格式的教师队伍介绍页面进行解析。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">l_parsers = {
-    &quot;Parser&quot;: Parser,
-    &quot;Hao123_211_Parser&quot;: Hao123_211_Parser,
-    &quot;SimpleAParser&quot;: SimpleAParser,
-    &quot;AutoAcademyParser&quot;: AutoAcademyParser,
-    &quot;SimpleTableParser&quot;:SimpleTableParser
+
+<pre><code>l_parsers = {
+    "Parser": Parser,
+    "Hao123_211_Parser": Hao123_211_Parser,
+    "SimpleAParser": SimpleAParser,
+    "AutoAcademyParser": AutoAcademyParser,
+    "SimpleTableParser":SimpleTableParser
 }
-</code></pre></div>
-<h4 id="models">Models</h4>
+</code></pre>
+
+<p>####Models</p>
 
 <p>Models模块包含了相关数据的结构，如College，Academy，Employee类结构，同时提供obj2json和json2obj等串行化/实例化接口。</p>
 
-<h3 id="javascript">浏览器和javascript支持</h3>
+<p>###浏览器和javascript支持</p>
 
 <p>对于一些比较变态的主页（主要是javascript数据），使用selenium调用firefox获取数据</p>
 
-<h3 id=">反爬虫问题</h3>
+<h3>反爬虫问题</h3>
 
 <p>遇到过比较棘手的将邮件等信息用图片方式进行展示的情况，没办法，只能用的OCR方式进行图像文字识别，可能还需要自己训练数据。</p>
 
-<h3 id=">其他</h3>
+<h3>其他</h3>
 
 <ol>
-<li>JSon&quot;陷阱&quot;<br>
-对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现<code>循环解析</code>的问题。</li>
-<li>BeautifulSoup解析器<br>
-社区推荐优先使用lxml，主要是速度较快。但是使用时发现有时解析不到目标，改为python自带的&quot;html-parser&quot;。后期将分析原因，或者向社区提交bug</li>
-<li>中英文名转换
-主要是中文转英文名，使用了pypinyin库</li>
+  <li>JSon”陷阱”  <br />
+ 对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现<code>循环解析</code>的问题。</li>
+  <li>BeautifulSoup解析器  <br />
+ 社区推荐优先使用lxml，主要是速度较快。但是使用时发现有时解析不到目标，改为python自带的”html-parser”。后期将分析原因，或者向社区提交bug</li>
+  <li>中英文名转换<br />
+ 主要是中文转英文名，使用了pypinyin库</li>
 </ol>
 
-<h3 id=">源代码</h3>
+<h3>源代码</h3>
 
-<p>github地址：<a href="https://github.com/yixiaoyang/EduParser/">https://github.com/yixiaoyang/EduParser/</a></p>
+<p>github地址：https://github.com/yixiaoyang/EduParser/</p>
 
   </article>
 

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>[Beaglebone] BBB eeprom的擦写</title>
-  <meta name="description" content="EEPROM on BBB">
+  <meta name="description" content="###EEPROM on BBB">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="/2015/07/20/bbb-eeprom/">
@@ -92,75 +92,80 @@
 
 
   <article class="post-content">
-    <h3 id="eeprom-on-bbb">EEPROM on BBB</h3>
+    <p>###EEPROM on BBB</p>
 
 <p>半年前使用BBW（White版本）将eeprom物理损坏或者内容导致无法启动，原因暂不确定，现在使用正常的BBB板用I2C将eeprom重新连接起来进行擦写。</p>
 
 <blockquote>
-<p>BBB SRM文档的说明<br>
-A single 4KB EEPROM is provided on I2C0 that holds the board information. This information includes board name, serial number, and revision information. This is the not the same as the one used on the original BeagleBone. The device was changed for cost reduction reasons. It has a test point to allow the device to be programmed and otherwise to provide write protection when not grounded.
+  <p>BBB SRM文档的说明  <br />
+A single 4KB EEPROM is provided on I2C0 that holds the board information. This information includes board name, serial number, and revision information. This is the not the same as the one used on the original BeagleBone. The device was changed for cost reduction reasons. It has a test point to allow the device to be programmed and otherwise to provide write protection when not grounded.<br />
 ..</p>
+</blockquote>
 
-<p>The EEPROM used is the same one as is used on the BeagleBone and the eagleBone Black, a CAT24C256. The <strong>CAT24C256</strong> is a 256 kb Serial CMOS EEPROM, internally organized as 32,768 words of 8 bits each. It features a 64−byte page write buffer and supports the Standard (100 kHz), Fast (400 kHz) and Fast−Plus (1 MHz) I2 C protocol.</p>
+<blockquote>
+  <p>The EEPROM used is the same one as is used on the BeagleBone and the eagleBone Black, a CAT24C256. The <strong>CAT24C256</strong> is a 256 kb Serial CMOS EEPROM, internally organized as 32,768 words of 8 bits each. It features a 64−byte page write buffer and supports the Standard (100 kHz), Fast (400 kHz) and Fast−Plus (1 MHz) I2 C protocol.</p>
 </blockquote>
 
 <p>The BeagleBone is equipped with a single 32Kbit(4KB) 24LC32AT-I/OT EEPROM to allow the SW to identify the board. Table 7 below defined the contents of the EERPOM.</p>
 
-<table><thead>
-<tr>
-<th>NAME</th>
-<th>Size(Bytes)</th>
-<th>Contents</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Header</td>
-<td>4</td>
-<td>0xAA, 0x55, 0x33, EE</td>
-</tr>
-<tr>
-<td>Board Name</td>
-<td>8</td>
-<td>Name for board in ASCII: A335BNLT</td>
-</tr>
-<tr>
-<td>Size(bytes)</td>
-<td>4</td>
-<td>Hardware version code for board in ASCII: 00A3 for Rev A3, 00A4 for Rev A4, 00A5 for Rev A5, 00A6 for Rev A6,00B0 for Rev B, and 00C0 for Rev C.</td>
-</tr>
-<tr>
-<td>Serial Number</td>
-<td>12</td>
-<td>Serial number of the board. This is a 12 character string which is:<code>WWYY4P16nnnn</code> where: WW = 2 digit week of the year of production YY = 2 digit year of production BBBK = BeagleBone Black nnnn = incrementing board number</td>
-</tr>
-<tr>
-<td>Configuration Option</td>
-<td>32</td>
-<td>Codes to show the configuration setup on this board.All FF</td>
-</tr>
-<tr>
-<td>RSVD</td>
-<td>6</td>
-<td>FF FF FF FF FF FF</td>
-</tr>
-<tr>
-<td>RSVD</td>
-<td>6</td>
-<td>FF FF FF FF FF FF</td>
-</tr>
-<tr>
-<td>RSVD</td>
-<td>6</td>
-<td>FF FF FF FF FF FF</td>
-</tr>
-<tr>
-<td>Available</td>
-<td>4018</td>
-<td>FF FF FF FF FF FF</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>NAME</th>
+      <th>Size(Bytes)</th>
+      <th>Contents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Header</td>
+      <td>4</td>
+      <td>0xAA, 0x55, 0x33, EE</td>
+    </tr>
+    <tr>
+      <td>Board Name</td>
+      <td>8</td>
+      <td>Name for board in ASCII: A335BNLT</td>
+    </tr>
+    <tr>
+      <td>Size(bytes)</td>
+      <td>4</td>
+      <td>Hardware version code for board in ASCII: 00A3 for Rev A3, 00A4 for Rev A4, 00A5 for Rev A5, 00A6 for Rev A6,00B0 for Rev B, and 00C0 for Rev C.</td>
+    </tr>
+    <tr>
+      <td>Serial Number</td>
+      <td>12</td>
+      <td>Serial number of the board. This is a 12 character string which is:<code>WWYY4P16nnnn</code> where: WW = 2 digit week of the year of production YY = 2 digit year of production BBBK = BeagleBone Black nnnn = incrementing board number</td>
+    </tr>
+    <tr>
+      <td>Configuration Option</td>
+      <td>32</td>
+      <td>Codes to show the configuration setup on this board.All FF</td>
+    </tr>
+    <tr>
+      <td>RSVD</td>
+      <td>6</td>
+      <td>FF FF FF FF FF FF</td>
+    </tr>
+    <tr>
+      <td>RSVD</td>
+      <td>6</td>
+      <td>FF FF FF FF FF FF</td>
+    </tr>
+    <tr>
+      <td>RSVD</td>
+      <td>6</td>
+      <td>FF FF FF FF FF FF</td>
+    </tr>
+    <tr>
+      <td>Available</td>
+      <td>4018</td>
+      <td>FF FF FF FF FF FF</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>从BBW读出来数据如下：  </p>
+<p>从BBW读出来数据如下：</p>
 
 <pre>
 U-Boot SPL 2013.01.01 (Jul 20 2015 - 11:39:45)
@@ -180,20 +185,22 @@ ff ff ff ff ff ff ff ff
 ff ff ff ff ff ff ff ff 
 </pre>
 
-<h3 id="device-address">Device Address</h3>
+<p>###Device Address</p>
 
 <blockquote>
-<p>Address line A2 is always tied high. <strong>This sets the allowable address range for the expansion cards to 0x54 to 0x57</strong>. All other I2C addresses can be used by the user in the design of their capes. But, these addresses must not be used other than for the board EEPROM information. This also allows for the inclusion of EEPROM devices on the cape if needed without interfering with this EEPROM. It requires that A2 be grounded on the EEPROM not used for cape identification.</p>
+  <p>Address line A2 is always tied high. <strong>This sets the allowable address range for the expansion cards to 0x54 to 0x57</strong>. All other I2C addresses can be used by the user in the design of their capes. But, these addresses must not be used other than for the board EEPROM information. This also allows for the inclusion of EEPROM devices on the cape if needed without interfering with this EEPROM. It requires that A2 be grounded on the EEPROM not used for cape identification.</p>
+</blockquote>
 
-<p>This particular chip has 3 pins used for chip select addressing. However, those 3 pins alone don&#39;t make up the address. They are part of a hard coded binary prefix of &#39;1010&#39;. So, if you ground the three pins, the address really becomes &#39;1010000&#39;, which is address 0x50 in hex. It will be important to know this address later. The chip also has a write protect pin. Because I want to write to it, I need to connect that to ground according to the datasheet. Connect up the chip Vss and Vdd and that covers all 8 pins of the chip. Pretty simple.</p>
+<blockquote>
+  <p>This particular chip has 3 pins used for chip select addressing. However, those 3 pins alone don’t make up the address. They are part of a hard coded binary prefix of ‘1010’. So, if you ground the three pins, the address really becomes ‘1010000’, which is address 0x50 in hex. It will be important to know this address later. The chip also has a write protect pin. Because I want to write to it, I need to connect that to ground according to the datasheet. Connect up the chip Vss and Vdd and that covers all 8 pins of the chip. Pretty simple.</p>
 </blockquote>
 
 <p>我使用Raspberry Pi作为烧写器，配置内核添加“i2c-dev,i2c-bcm2708”两个模块：<code>CONFIG_I2C_CHARDEV=M</code>和<code>CONFIG_I2C_BCM2708=M</code>，并将<code>I2C_BCM2708_BAUDRATE</code>设置成200k速率。</p>
 
-<h3 id="i2c-tools">I2C Tools</h3>
+<p>###I2C Tools<br />
+使用buildroot工具配置<code>BR2_PACKAGE_I2C_TOOLS=y</code>，添加i2cget/i2cset等工具支持.</p>
 
-<p>使用buildroot工具配置<code>BR2_PACKAGE_I2C_TOOLS=y</code>，添加i2cget/i2cset等工具支持.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># modprobe i2c_bcm2708
+<pre><code># modprobe i2c_bcm2708
 # modprobe i2c_dev
 # ls /dev/i2c*
 /dev/i2c-1
@@ -204,27 +211,27 @@ i2c_bcm2708             4119  0
 i2c_core               16380  2 i2c_dev,i2c_bcm2708
 # i2cdetect -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-     00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-     70: -- -- -- -- -- -- -- --                         
+	 00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+	 70: -- -- -- -- -- -- -- --                         
 # 
 
 # i2cdump -y 1 0x50
 No size specified (using byte-data access)
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f    0123456789abcdef
-     00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
-     70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 10: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 20: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 30: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
+	 70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff    ................
 # 
 
 # header
@@ -232,7 +239,9 @@ No size specified (using byte-data access)
 # i2cset -y 1 0x50 1 0x55
 # i2cset -y 1 0x50 2 0x33
 # i2cset -y 1 0x50 3 0xEE
-</code></pre></div>
+</code></pre>
+
+
   </article>
 
 </div>

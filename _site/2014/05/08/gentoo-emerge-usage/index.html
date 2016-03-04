@@ -88,23 +88,22 @@
 
 
   <article class="post-content">
-    <h3 id="gentoo">gentoo常用命令</h3>
+    <h3>gentoo常用命令</h3>
 
 <p>emerg的常用用法</p>
 
-<h4 id=">更新系统</h4>
+<h4>更新系统</h4>
 
 <ol>
-<li>更新系统并移除孤立依赖的软件包
-<code bash>
+  <li>更新系统并移除孤立依赖的软件包<br />
+<code bash="">
 # emerge --update --deep --newuse world
 # emerge --depclean
 # revdep-rebuild (搜索相应缺失的库，并且重新emerge相应的包，需安装gentoolkit，并需运行两次以便确认)
 </code></li>
 </ol>
 
-<h4 id="emerge">emerge常用参数</h4>
-
+<h4>emerge常用参数</h4>
 <pre>
   -world | system， world范围更广，包含了system，这是两个set，前面不用加--或-
   --p pretend 预览
@@ -130,75 +129,80 @@
   --n noreplace 更新system，但先前安装的软件不予覆盖
 </pre>
 
-<h4 id="mirror">查找最快的mirror</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># mirrorselect -s3 -b10 -o -D &gt;&gt; /etc/make.conf
-</code></pre></div>
+<h4>查找最快的mirror</h4>
+
+<pre><code># mirrorselect -s3 -b10 -o -D &gt;&gt; /etc/make.conf
+</code></pre>
+
 <p>此命令对每个mirror均下载100k文件，以此确定最快源，要注意修改/etc/make.conf</p>
 
-<h4 id=">系统升级</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text"># emerge --sync 或 # emerge-webrsync （更新或称同步portage树）
+<h4>系统升级</h4>
+
+<pre><code># emerge --sync 或 # emerge-webrsync （更新或称同步portage树）
 # emerge --update --deep --newuse world
 # emerge --depclean -pv
 # revdep-rebuild (需安装gentoolkit)
-</code></pre></div>
+</code></pre>
 <p>如果使用emerge-webrsync命令进行升级，可先下载最新的portage（以日期命名，而不要用latest命名）至/var/tmp/emerge-webrsync/目录</p>
 
-<p>查看安装XXX的情况，同时列出了使用的 USE 和 LINGUAS
+<p>查看安装XXX的情况，同时列出了使用的 USE 和 LINGUAS<br />
 <code># emerge -pv XXX</code></p>
 
-<p>在world中增加记录，避免自己已手动编译的软件被再次编译
+<p>在world中增加记录，避免自己已手动编译的软件被再次编译<br />
 <code># emerge -n fcitx （添加fcitx至emerge tree）</code></p>
 
-<p>配置文件更新工具
+<p>配置文件更新工具<br />
 <code># etc-update 或 # dispatch-conf</code></p>
 
-<p>查询XXX包用了什么USE（需gentoolkit）
+<p>查询XXX包用了什么USE（需gentoolkit）<br />
 <code># equery uses XXX</code></p>
 
-<p>找到 /bin/ls 所属包
+<p>找到 /bin/ls 所属包<br />
 <code># qfile /bin/ls</code></p>
 
-<p>列出 glibc 包所包含文件
+<p>列出 glibc 包所包含文件<br />
 <code># qlist glibc</code></p>
 
-<h4 id="etc-portage-package">/etc/portage/package.*应用举例</h4>
+<h4>/etc/portage/package.*应用举例</h4>
 
 <p><strong>package.use</strong></p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">sys-apps/man-pages -nls sys-apps/pciutils -zlib media-libs/freetype bindist app-text/acroread linguas_zh_TW linguas_zh_CN linguas_en
-</code></pre></div>
-<p>作用：
+
+<pre><code>sys-apps/man-pages -nls sys-apps/pciutils -zlib media-libs/freetype bindist app-text/acroread linguas_zh_TW linguas_zh_CN linguas_en
+</code></pre>
+
+<p>作用：<br />
 不改变全局USE的同时，微调包的USE。 开始2个是说这2个包不使用相应的 USE，第三个说明要单独在这个包使用这个USE，最后一个是调整 LINGUAS 的，很容易明白。</p>
 
 <p><strong>package.keywordssys-apps/hdparm ~x86</strong></p>
 
-<p>作用：
-指定相应的包的 KEYWORDS。比如你想 hdparm 包用 ~x86 的版本，而不用 x86 的版本，就用这个来指定。 注意，因为 emerge 的设计，如果你的 make.conf 里边指定了 ~x86的话，你不能反过来通过指定 x86 而 不要 ~x86，只能用 -~x86 来达到目的。 引用 gentoo@freenode 上<kojiro>的话： ”ACCEPT_KEYWORDS is incremental“</p>
+<p>作用：<br />
+指定相应的包的 KEYWORDS。比如你想 hdparm 包用 ~x86 的版本，而不用 x86 的版本，就用这个来指定。 注意，因为 emerge 的设计，如果你的 make.conf 里边指定了 ~x86的话，你不能反过来通过指定 x86 而 不要 ~x86，只能用 -~x86 来达到目的。 引用 gentoo@freenode 上<kojiro>的话： ”ACCEPT_KEYWORDS is incremental“</kojiro></p>
 
 <p><strong>package.mask&gt;sys-devel/libtool-1.5.23</strong></p>
 
-<p>作用：
-屏蔽某个包某个版本，或者某些版本，甚至整个包。
+<p>作用：<br />
+屏蔽某个包某个版本，或者某些版本，甚至整个包。<br />
 比如 libtool-1.5.23b 在我的系统有问题，那么就屏蔽一下，只用 比 1.5.23 小的。</p>
 
-<p><strong>package.unmask=net-www/apache-2.2.4 games-arcade/stepmania</strong>
+<p><strong>package.unmask=net-www/apache-2.2.4 games-arcade/stepmania</strong><br />
 和 mask 一样，不过效果正好相反。我要用 2.2.4 的 apache，但是 portage 把他 mask 了，所以手动 unmask 一下。</p>
 
-<p>往 default runlevel 里边加入 XXX 服务 (add)
+<p>往 default runlevel 里边加入 XXX 服务 (add)<br />
 <code># rc-update -a XXX default</code></p>
 
-<p>从 default runlevel 里边删除 XXX 服务 (delete)
+<p>从 default runlevel 里边删除 XXX 服务 (delete)<br />
 <code># rc-update -d XXX default</code></p>
 
-<p>列出 default runlevel 所有的服务 (show)
+<p>列出 default runlevel 所有的服务 (show)<br />
 <code># rc-update -s default</code></p>
 
-<p>删除过期的包
+<p>删除过期的包<br />
 <code># eclean distfiles (请先 emerge gentoolkit)</code></p>
 
-<p>清除emerge过程中产生的临时文件
+<p>清除emerge过程中产生的临时文件<br />
 <code># rm -rf /var/tmp/portage/*</code></p>
 
-<p>清除所有安装源码包（除非太穷，否则不建议）
+<p>清除所有安装源码包（除非太穷，否则不建议）<br />
 <code># rm -rf /usr/portage/distfiles/*</code></p>
 
   </article>

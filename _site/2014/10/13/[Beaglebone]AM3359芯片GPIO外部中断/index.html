@@ -94,369 +94,375 @@
   <article class="post-content">
     <p>AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的<code>gpio_omap.c</code>中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&gt;设置input方向-&gt;使能中断-&gt;填写中断处理函数槽-&gt;清中断标记位等几个步骤。需要理解的异步通知fasync的使用，这是中断等信号传递到用户空间的常用方法。</p>
 
-<h4 id=">驱动方面</h4>
+<p>####驱动方面</p>
 
 <ol>
-<li>在设备抽象的数据结构中增加一个<code>struct fasync_struct</code>的指针</li>
-<li>实现设备操作中的fasync函数，主体就是调用内核的<code>fasync_helper</code>函数。</li>
-<li>在需要向用户空间通知的地方(例如中断中)调用内核的<code>kill_fasync</code>函数发送信号。</li>
-<li>在驱动的release方法中调用前面定义的fasync函数fasync(-1, fd, 0)以删除释放通知。</li>
+  <li>在设备抽象的数据结构中增加一个<code>struct fasync_struct</code>的指针</li>
+  <li>实现设备操作中的fasync函数，主体就是调用内核的<code>fasync_helper</code>函数。</li>
+  <li>在需要向用户空间通知的地方(例如中断中)调用内核的<code>kill_fasync</code>函数发送信号。</li>
+  <li>在驱动的release方法中调用前面定义的fasync函数fasync(-1, fd, 0)以删除释放通知。</li>
 </ol>
 
-<h4 id=">应用层方面</h4>
-
+<h4>应用层方面</h4>
 <ol>
-<li>利用signal或者sigaction设置SIGIO信号的处理函数</li>
-<li>fcntl的<code>F_SETOWN</code>指令设置当前进程为设备文件owner</li>
-<li>fcntl的<code>F_SETFL</code>指令设置FASYNC标志</li>
+  <li>利用signal或者sigaction设置SIGIO信号的处理函数</li>
+  <li>fcntl的<code>F_SETOWN</code>指令设置当前进程为设备文件owner</li>
+  <li>fcntl的<code>F_SETFL</code>指令设置FASYNC标志</li>
 </ol>
 
 <p>为测试外部驱动，我让硬件工程师接了一个下拉电阻，但是拨上开关后出现了外部中断一直触发的现象，之后用示波器抓了GPIO端口的波形发现噪声太大，有时都能超过2v，遂使用一般按键的方法外接电容处理减少噪声，中断才一次按键一次中断响应。</p>
 
 <p>驱动和应用层代码如下。</p>
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#include &lt;linux/kernel.h&gt;  </span>
-<span class="cp">#include &lt;linux/module.h&gt;  </span>
-<span class="cp">#include &lt;linux/cdev.h&gt;  </span>
-<span class="cp">#include &lt;linux/fs.h&gt;  </span>
-<span class="cp">#include &lt;linux/device.h&gt;  </span>
-<span class="cp">#include &lt;linux/syscalls.h&gt;</span>
-<span class="cp">#include &lt;linux/interrupt.h&gt; </span>
-<span class="cp">#include &lt;linux/gpio.h&gt;</span>
-<span class="cp">#include &lt;linux/of_gpio.h&gt;</span>
-<span class="cp">#include &lt;linux/of_platform.h&gt;</span>
-<span class="cp">#include &lt;linux/uaccess.h&gt;  </span>
-<span class="cp">#include &lt;linux/string.h&gt; </span>
 
-<span class="cp">#include &lt;mach/gpio.h&gt;</span>
-<span class="cp">#include &lt;mach/irqs.h&gt;</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers">  <a href="#n1" name="n1">1</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/kernel.h&gt;</span>  
+<span class="line-numbers">  <a href="#n2" name="n2">2</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/module.h&gt;</span>  
+<span class="line-numbers">  <a href="#n3" name="n3">3</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/cdev.h&gt;</span>  
+<span class="line-numbers">  <a href="#n4" name="n4">4</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/fs.h&gt;</span>  
+<span class="line-numbers">  <a href="#n5" name="n5">5</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/device.h&gt;</span>  
+<span class="line-numbers">  <a href="#n6" name="n6">6</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/syscalls.h&gt;</span>
+<span class="line-numbers">  <a href="#n7" name="n7">7</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/interrupt.h&gt;</span> 
+<span class="line-numbers">  <a href="#n8" name="n8">8</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/gpio.h&gt;</span>
+<span class="line-numbers">  <a href="#n9" name="n9">9</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/of_gpio.h&gt;</span>
+<span class="line-numbers"> <strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/of_platform.h&gt;</span>
+<span class="line-numbers"> <a href="#n11" name="n11">11</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/uaccess.h&gt;</span>  
+<span class="line-numbers"> <a href="#n12" name="n12">12</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;linux/string.h&gt;</span> 
+<span class="line-numbers"> <a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"> <a href="#n14" name="n14">14</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;mach/gpio.h&gt;</span>
+<span class="line-numbers"> <a href="#n15" name="n15">15</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;mach/irqs.h&gt;</span>
+<span class="line-numbers"> <a href="#n16" name="n16">16</a></span>
+<span class="line-numbers"> <a href="#n17" name="n17">17</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;plat/gpio.h&gt;</span>
+<span class="line-numbers"> <a href="#n18" name="n18">18</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;plat/am33xx.h&gt;</span>
+<span class="line-numbers"> <a href="#n19" name="n19">19</a></span>
+<span class="line-numbers"> <strong><a href="#n20" name="n20">20</a></strong></span><span style="color:#579">#define</span> GPIO_TO_PIN(bank, gpio)     (<span style="color:#00D">32</span> * (bank) + (gpio))
+<span class="line-numbers"> <a href="#n21" name="n21">21</a></span><span style="color:#579">#define</span> IRQ_GPIO_PIN                GPIO_TO_PIN(<span style="color:#00D">1</span>, <span style="color:#00D">13</span>)
+<span class="line-numbers"> <a href="#n22" name="n22">22</a></span>
+<span class="line-numbers"> <a href="#n23" name="n23">23</a></span><span style="color:#579">#define</span>   TRIGGERD_FLAG_IRQ_DISABLED        (<span style="color:#00D">1</span>&lt;&lt;<span style="color:#00D">0</span>)
+<span class="line-numbers"> <a href="#n24" name="n24">24</a></span><span style="color:#579">#define</span>   TRIGGERD_FLAG_IRQ_ENABLED         (<span style="color:#00D">1</span>&lt;&lt;<span style="color:#00D">1</span>)
+<span class="line-numbers"> <a href="#n25" name="n25">25</a></span>
+<span class="line-numbers"> <a href="#n26" name="n26">26</a></span><span style="color:#777">/* cmd definations shouled be same with that in user space */</span>
+<span class="line-numbers"> <a href="#n27" name="n27">27</a></span><span style="color:#579">#define</span> MAGIC_NUM   <span style="color:#D20">'k'</span>
+<span class="line-numbers"> <a href="#n28" name="n28">28</a></span><span style="color:#080;font-weight:bold">enum</span> IOCTL_CMDS{
+<span class="line-numbers"> <a href="#n29" name="n29">29</a></span>  IOCTL_CMD_IRQ_NONE = <span style="color:#00D">0</span>,
+<span class="line-numbers"> <strong><a href="#n30" name="n30">30</a></strong></span>  IOCTL_CMD_IRQ_DISABLE = _IO(MAGIC_NUM,<span style="color:#00D">0</span>),
+<span class="line-numbers"> <a href="#n31" name="n31">31</a></span>  IOCTL_CMD_IRQ_ENABLE  = _IO(MAGIC_NUM,<span style="color:#00D">1</span>),
+<span class="line-numbers"> <a href="#n32" name="n32">32</a></span>};
+<span class="line-numbers"> <a href="#n33" name="n33">33</a></span>
+<span class="line-numbers"> <a href="#n34" name="n34">34</a></span><span style="color:#080;font-weight:bold">struct</span> fpga_key_dev  
+<span class="line-numbers"> <a href="#n35" name="n35">35</a></span>{  
+<span class="line-numbers"> <a href="#n36" name="n36">36</a></span>    <span style="color:#080;font-weight:bold">struct</span> cdev cdev;  
+<span class="line-numbers"> <a href="#n37" name="n37">37</a></span>    dev_t devno;
+<span class="line-numbers"> <a href="#n38" name="n38">38</a></span>    <span style="color:#080;font-weight:bold">struct</span> class *fpga_key_class; 
+<span class="line-numbers"> <a href="#n39" name="n39">39</a></span>    <span style="color:#080;font-weight:bold">struct</span> fasync_struct *async_queue;
+<span class="line-numbers"> <strong><a href="#n40" name="n40">40</a></strong></span>
+<span class="line-numbers"> <a href="#n41" name="n41">41</a></span>    <span style="color:#0a8;font-weight:bold">int</span> message_cdev_open;
+<span class="line-numbers"> <a href="#n42" name="n42">42</a></span>    
+<span class="line-numbers"> <a href="#n43" name="n43">43</a></span>    <span style="color:#0a8;font-weight:bold">int</span> irq_no; 
+<span class="line-numbers"> <a href="#n44" name="n44">44</a></span>    <span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span> triggered_flags;
+<span class="line-numbers"> <a href="#n45" name="n45">45</a></span>};
+<span class="line-numbers"> <a href="#n46" name="n46">46</a></span>
+<span class="line-numbers"> <a href="#n47" name="n47">47</a></span><span style="color:#080;font-weight:bold">struct</span> fpga_key_dev fpga_key_dev;
+<span class="line-numbers"> <a href="#n48" name="n48">48</a></span>
+<span class="line-numbers"> <a href="#n49" name="n49">49</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#088;font-weight:bold">void</span> irq_enable( <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev, <span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span> enable)
+<span class="line-numbers"> <strong><a href="#n50" name="n50">50</a></strong></span>{
+<span class="line-numbers"> <a href="#n51" name="n51">51</a></span>  <span style="color:#080;font-weight:bold">if</span>(!dev)
+<span class="line-numbers"> <a href="#n52" name="n52">52</a></span>    <span style="color:#080;font-weight:bold">return</span> ;
+<span class="line-numbers"> <a href="#n53" name="n53">53</a></span>  
+<span class="line-numbers"> <a href="#n54" name="n54">54</a></span>  <span style="color:#080;font-weight:bold">switch</span>(enable){
+<span class="line-numbers"> <a href="#n55" name="n55">55</a></span>    <span style="color:#080;font-weight:bold">case</span> IOCTL_CMD_IRQ_ENABLE:
+<span class="line-numbers"> <a href="#n56" name="n56">56</a></span>      printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">enable irq</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"> <a href="#n57" name="n57">57</a></span>      enable_irq(dev-&gt;irq_no);
+<span class="line-numbers"> <a href="#n58" name="n58">58</a></span>      dev-&gt;triggered_flags &amp;= (~TRIGGERD_FLAG_IRQ_DISABLED);
+<span class="line-numbers"> <a href="#n59" name="n59">59</a></span>      dev-&gt;triggered_flags |= TRIGGERD_FLAG_IRQ_ENABLED;  
+<span class="line-numbers"> <strong><a href="#n60" name="n60">60</a></strong></span>      <span style="color:#080;font-weight:bold">break</span>;
+<span class="line-numbers"> <a href="#n61" name="n61">61</a></span>    <span style="color:#080;font-weight:bold">case</span> IOCTL_CMD_IRQ_DISABLE:
+<span class="line-numbers"> <a href="#n62" name="n62">62</a></span>      printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">disable irq</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"> <a href="#n63" name="n63">63</a></span>      disable_irq_nosync(dev-&gt;irq_no);
+<span class="line-numbers"> <a href="#n64" name="n64">64</a></span>      dev-&gt;triggered_flags &amp;= (~TRIGGERD_FLAG_IRQ_ENABLED);
+<span class="line-numbers"> <a href="#n65" name="n65">65</a></span>      dev-&gt;triggered_flags |= TRIGGERD_FLAG_IRQ_DISABLED;  
+<span class="line-numbers"> <a href="#n66" name="n66">66</a></span>      <span style="color:#080;font-weight:bold">break</span>;
+<span class="line-numbers"> <a href="#n67" name="n67">67</a></span>    <span style="color:#080;font-weight:bold">default</span>:
+<span class="line-numbers"> <a href="#n68" name="n68">68</a></span>      <span style="color:#080;font-weight:bold">break</span>;
+<span class="line-numbers"> <a href="#n69" name="n69">69</a></span>  }
+<span class="line-numbers"> <strong><a href="#n70" name="n70">70</a></strong></span>  printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">irq_enable finished</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"> <a href="#n71" name="n71">71</a></span>}
+<span class="line-numbers"> <a href="#n72" name="n72">72</a></span>
+<span class="line-numbers"> <a href="#n73" name="n73">73</a></span>irqreturn_t irq_handler(<span style="color:#0a8;font-weight:bold">int</span> irqno, <span style="color:#088;font-weight:bold">void</span> *dev_id)
+<span class="line-numbers"> <a href="#n74" name="n74">74</a></span>{
+<span class="line-numbers"> <a href="#n75" name="n75">75</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev = &amp;fpga_key_dev;
+<span class="line-numbers"> <a href="#n76" name="n76">76</a></span> 
+<span class="line-numbers"> <a href="#n77" name="n77">77</a></span>    printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga int triggered</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"> <a href="#n78" name="n78">78</a></span>    <span style="color:#080;font-weight:bold">if</span> (dev-&gt;async_queue)
+<span class="line-numbers"> <a href="#n79" name="n79">79</a></span>        kill_fasync(&amp;dev-&gt;async_queue, SIGIO, POLL_IN); 
+<span class="line-numbers"> <strong><a href="#n80" name="n80">80</a></strong></span>    
+<span class="line-numbers"> <a href="#n81" name="n81">81</a></span>    <span style="color:#080;font-weight:bold">return</span> IRQ_HANDLED;
+<span class="line-numbers"> <a href="#n82" name="n82">82</a></span>}
+<span class="line-numbers"> <a href="#n83" name="n83">83</a></span>
+<span class="line-numbers"> <a href="#n84" name="n84">84</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> fpga_key_open(<span style="color:#080;font-weight:bold">struct</span> inode *node, <span style="color:#080;font-weight:bold">struct</span> file *fd)  
+<span class="line-numbers"> <a href="#n85" name="n85">85</a></span>{  
+<span class="line-numbers"> <a href="#n86" name="n86">86</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev;
+<span class="line-numbers"> <a href="#n87" name="n87">87</a></span>      
+<span class="line-numbers"> <a href="#n88" name="n88">88</a></span>    dev = container_of(node-&gt;i_cdev, <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev, cdev);
+<span class="line-numbers"> <a href="#n89" name="n89">89</a></span>    
+<span class="line-numbers"> <strong><a href="#n90" name="n90">90</a></strong></span>    <span style="color:#080;font-weight:bold">if</span> (!dev-&gt;message_cdev_open) {
+<span class="line-numbers"> <a href="#n91" name="n91">91</a></span>        dev-&gt;message_cdev_open = <span style="color:#00D">1</span>;
+<span class="line-numbers"> <a href="#n92" name="n92">92</a></span>        fd-&gt;private_data = dev;
+<span class="line-numbers"> <a href="#n93" name="n93">93</a></span>    }
+<span class="line-numbers"> <a href="#n94" name="n94">94</a></span>    <span style="color:#080;font-weight:bold">else</span>{
+<span class="line-numbers"> <a href="#n95" name="n95">95</a></span>        <span style="color:#080;font-weight:bold">return</span> -EFAULT;
+<span class="line-numbers"> <a href="#n96" name="n96">96</a></span>    }
+<span class="line-numbers"> <a href="#n97" name="n97">97</a></span>    
+<span class="line-numbers"> <a href="#n98" name="n98">98</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"> <a href="#n99" name="n99">99</a></span>}   
+<span class="line-numbers"><strong><a href="#n100" name="n100">100</a></strong></span>  
+<span class="line-numbers"><a href="#n101" name="n101">101</a></span><span style="color:#088;font-weight:bold">static</span> ssize_t fpga_key_write(<span style="color:#080;font-weight:bold">struct</span> file *fd, <span style="color:#088;font-weight:bold">const</span> <span style="color:#0a8;font-weight:bold">char</span> __user *buf, size_t len, loff_t *ptr)  
+<span class="line-numbers"><a href="#n102" name="n102">102</a></span>{  
+<span class="line-numbers"><a href="#n103" name="n103">103</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n104" name="n104">104</a></span>}  
+<span class="line-numbers"><a href="#n105" name="n105">105</a></span><span style="color:#088;font-weight:bold">static</span> ssize_t fpga_key_read(<span style="color:#080;font-weight:bold">struct</span> file *fd, <span style="color:#0a8;font-weight:bold">char</span> __user *buf, size_t len, loff_t *ptr)  
+<span class="line-numbers"><a href="#n106" name="n106">106</a></span>{  
+<span class="line-numbers"><a href="#n107" name="n107">107</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev = fd-&gt;private_data;
+<span class="line-numbers"><a href="#n108" name="n108">108</a></span>    <span style="color:#0a8;font-weight:bold">int</span> size = <span style="color:#080;font-weight:bold">sizeof</span>(<span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span>);
+<span class="line-numbers"><a href="#n109" name="n109">109</a></span>    <span style="color:#080;font-weight:bold">if</span>(len &lt; size){
+<span class="line-numbers"><strong><a href="#n110" name="n110">110</a></strong></span>      printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">read length too small</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"><a href="#n111" name="n111">111</a></span>      <span style="color:#080;font-weight:bold">return</span> EFAULT;
+<span class="line-numbers"><a href="#n112" name="n112">112</a></span>    }
+<span class="line-numbers"><a href="#n113" name="n113">113</a></span>    
+<span class="line-numbers"><a href="#n114" name="n114">114</a></span>    <span style="color:#080;font-weight:bold">if</span>(copy_to_user(buf, &amp;dev-&gt;triggered_flags, size))  
+<span class="line-numbers"><a href="#n115" name="n115">115</a></span>        <span style="color:#080;font-weight:bold">return</span> -EFAULT;  
+<span class="line-numbers"><a href="#n116" name="n116">116</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n117" name="n117">117</a></span>}  
+<span class="line-numbers"><a href="#n118" name="n118">118</a></span>
+<span class="line-numbers"><a href="#n119" name="n119">119</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> fpga_key_fasync(<span style="color:#0a8;font-weight:bold">int</span> fd, <span style="color:#080;font-weight:bold">struct</span> file *filp, <span style="color:#0a8;font-weight:bold">int</span> mode)
+<span class="line-numbers"><strong><a href="#n120" name="n120">120</a></strong></span>{
+<span class="line-numbers"><a href="#n121" name="n121">121</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev     *dev = filp-&gt;private_data;
+<span class="line-numbers"><a href="#n122" name="n122">122</a></span>    fasync_helper(fd, filp, mode, &amp;dev-&gt;async_queue); 
+<span class="line-numbers"><a href="#n123" name="n123">123</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n124" name="n124">124</a></span>}
+<span class="line-numbers"><a href="#n125" name="n125">125</a></span>
+<span class="line-numbers"><a href="#n126" name="n126">126</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> fpga_key_release(<span style="color:#080;font-weight:bold">struct</span> inode *node, <span style="color:#080;font-weight:bold">struct</span> file *fd)  
+<span class="line-numbers"><a href="#n127" name="n127">127</a></span>{  
+<span class="line-numbers"><a href="#n128" name="n128">128</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev = fd-&gt;private_data;
+<span class="line-numbers"><a href="#n129" name="n129">129</a></span>
+<span class="line-numbers"><strong><a href="#n130" name="n130">130</a></strong></span>    dev-&gt;message_cdev_open = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n131" name="n131">131</a></span>    fpga_key_fasync(-<span style="color:#00D">1</span>, fd, <span style="color:#00D">0</span>);
+<span class="line-numbers"><a href="#n132" name="n132">132</a></span>    
+<span class="line-numbers"><a href="#n133" name="n133">133</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n134" name="n134">134</a></span>} 
+<span class="line-numbers"><a href="#n135" name="n135">135</a></span>
+<span class="line-numbers"><a href="#n136" name="n136">136</a></span>
+<span class="line-numbers"><a href="#n137" name="n137">137</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> fpga_key_ioctl(<span style="color:#080;font-weight:bold">struct</span> file *fd, <span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span> cmd, <span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">long</span> args)  
+<span class="line-numbers"><a href="#n138" name="n138">138</a></span>{  
+<span class="line-numbers"><a href="#n139" name="n139">139</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev = fd-&gt;private_data;
+<span class="line-numbers"><strong><a href="#n140" name="n140">140</a></strong></span>  
+<span class="line-numbers"><a href="#n141" name="n141">141</a></span>    <span style="color:#080;font-weight:bold">if</span>(!dev){
+<span class="line-numbers"><a href="#n142" name="n142">142</a></span>      printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">dev data null</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"><a href="#n143" name="n143">143</a></span>      <span style="color:#080;font-weight:bold">return</span> -EINVAL;
+<span class="line-numbers"><a href="#n144" name="n144">144</a></span>    }
+<span class="line-numbers"><a href="#n145" name="n145">145</a></span>    <span style="color:#080;font-weight:bold">switch</span>(cmd)  
+<span class="line-numbers"><a href="#n146" name="n146">146</a></span>    {  
+<span class="line-numbers"><a href="#n147" name="n147">147</a></span>        <span style="color:#080;font-weight:bold">case</span> IOCTL_CMD_IRQ_NONE:  
+<span class="line-numbers"><a href="#n148" name="n148">148</a></span>          <span style="color:#080;font-weight:bold">break</span>;  
+<span class="line-numbers"><a href="#n149" name="n149">149</a></span>        <span style="color:#080;font-weight:bold">case</span> IOCTL_CMD_IRQ_DISABLE:  
+<span class="line-numbers"><strong><a href="#n150" name="n150">150</a></strong></span>          irq_enable(dev, IOCTL_CMD_IRQ_DISABLE);
+<span class="line-numbers"><a href="#n151" name="n151">151</a></span>          <span style="color:#080;font-weight:bold">break</span>;  
+<span class="line-numbers"><a href="#n152" name="n152">152</a></span>        <span style="color:#080;font-weight:bold">case</span> IOCTL_CMD_IRQ_ENABLE:
+<span class="line-numbers"><a href="#n153" name="n153">153</a></span>          irq_enable(dev, IOCTL_CMD_IRQ_ENABLE);
+<span class="line-numbers"><a href="#n154" name="n154">154</a></span>          <span style="color:#080;font-weight:bold">break</span>;
+<span class="line-numbers"><a href="#n155" name="n155">155</a></span>        <span style="color:#080;font-weight:bold">default</span>:  
+<span class="line-numbers"><a href="#n156" name="n156">156</a></span>          <span style="color:#080;font-weight:bold">return</span> -ENOTTY;  
+<span class="line-numbers"><a href="#n157" name="n157">157</a></span>          <span style="color:#080;font-weight:bold">break</span>;  
+<span class="line-numbers"><a href="#n158" name="n158">158</a></span>    }  
+<span class="line-numbers"><a href="#n159" name="n159">159</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><strong><a href="#n160" name="n160">160</a></strong></span>}
+<span class="line-numbers"><a href="#n161" name="n161">161</a></span>
+<span class="line-numbers"><a href="#n162" name="n162">162</a></span><span style="color:#080;font-weight:bold">struct</span> file_operations meassage_operatons =  
+<span class="line-numbers"><a href="#n163" name="n163">163</a></span>{  
+<span class="line-numbers"><a href="#n164" name="n164">164</a></span>    .owner = THIS_MODULE,  
+<span class="line-numbers"><a href="#n165" name="n165">165</a></span>    .open = fpga_key_open,  
+<span class="line-numbers"><a href="#n166" name="n166">166</a></span>    .write = fpga_key_write,
+<span class="line-numbers"><a href="#n167" name="n167">167</a></span>    .read = fpga_key_read, 
+<span class="line-numbers"><a href="#n168" name="n168">168</a></span>    .fasync = fpga_key_fasync,
+<span class="line-numbers"><a href="#n169" name="n169">169</a></span>    .release = fpga_key_release,  
+<span class="line-numbers"><strong><a href="#n170" name="n170">170</a></strong></span>    .unlocked_ioctl = fpga_key_ioctl,
+<span class="line-numbers"><a href="#n171" name="n171">171</a></span>};  
+<span class="line-numbers"><a href="#n172" name="n172">172</a></span>  
+<span class="line-numbers"><a href="#n173" name="n173">173</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> __init fpga_key_init(<span style="color:#088;font-weight:bold">void</span>)  
+<span class="line-numbers"><a href="#n174" name="n174">174</a></span>{  
+<span class="line-numbers"><a href="#n175" name="n175">175</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev * dev = &amp;fpga_key_dev;  
+<span class="line-numbers"><a href="#n176" name="n176">176</a></span>    <span style="color:#0a8;font-weight:bold">int</span> ret = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n177" name="n177">177</a></span>    <span style="color:#0a8;font-weight:bold">int</span> irq = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n178" name="n178">178</a></span>    <span style="color:#088;font-weight:bold">const</span> <span style="color:#0a8;font-weight:bold">char</span>* gpio_lable = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_msg_irq_key</span><span style="color:#710">&quot;</span></span>;
+<span class="line-numbers"><a href="#n179" name="n179">179</a></span>  
+<span class="line-numbers"><strong><a href="#n180" name="n180">180</a></strong></span>    dev-&gt;triggered_flags = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n181" name="n181">181</a></span>    dev-&gt;irq_no = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n182" name="n182">182</a></span>    
+<span class="line-numbers"><a href="#n183" name="n183">183</a></span>    alloc_chrdev_region(&amp;dev-&gt;devno, <span style="color:#00D">0</span>, <span style="color:#00D">1</span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_msg_irq</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n184" name="n184">184</a></span>    cdev_init(&amp;dev-&gt;cdev, &amp;meassage_operatons);  
+<span class="line-numbers"><a href="#n185" name="n185">185</a></span>    cdev_add(&amp;dev-&gt;cdev, dev-&gt;devno, <span style="color:#00D">1</span>);  
+<span class="line-numbers"><a href="#n186" name="n186">186</a></span>
+<span class="line-numbers"><a href="#n187" name="n187">187</a></span>    dev-&gt;fpga_key_class = class_create(THIS_MODULE, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_msg_irq_class</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n188" name="n188">188</a></span>    <span style="color:#080;font-weight:bold">if</span>(IS_ERR(dev-&gt;fpga_key_class)) {  
+<span class="line-numbers"><a href="#n189" name="n189">189</a></span>         printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">failed in creating class./n</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><strong><a href="#n190" name="n190">190</a></strong></span>         <span style="color:#080;font-weight:bold">goto</span> fail1;   
+<span class="line-numbers"><a href="#n191" name="n191">191</a></span>     }  
+<span class="line-numbers"><a href="#n192" name="n192">192</a></span>    device_create(dev-&gt;fpga_key_class, <span style="color:#069">NULL</span>, dev-&gt;devno, <span style="color:#069">NULL</span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_msg_irq_dev</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n193" name="n193">193</a></span>
+<span class="line-numbers"><a href="#n194" name="n194">194</a></span>    <span style="color:#777">/* gpio interrupt request */</span>
+<span class="line-numbers"><a href="#n195" name="n195">195</a></span>    ret = gpio_request(IRQ_GPIO_PIN, gpio_lable);
+<span class="line-numbers"><a href="#n196" name="n196">196</a></span>    <span style="color:#080;font-weight:bold">if</span>(ret){
+<span class="line-numbers"><a href="#n197" name="n197">197</a></span>        printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">gpio_request() failed !</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"><a href="#n198" name="n198">198</a></span>        <span style="color:#080;font-weight:bold">goto</span> fail1;
+<span class="line-numbers"><a href="#n199" name="n199">199</a></span>    }
+<span class="line-numbers"><strong><a href="#n200" name="n200">200</a></strong></span>    ret = gpio_direction_input(IRQ_GPIO_PIN);
+<span class="line-numbers"><a href="#n201" name="n201">201</a></span>    <span style="color:#080;font-weight:bold">if</span>(ret){
+<span class="line-numbers"><a href="#n202" name="n202">202</a></span>        printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">gpio_direction_input() failed !</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"><a href="#n203" name="n203">203</a></span>        <span style="color:#080;font-weight:bold">goto</span> fail2; 
+<span class="line-numbers"><a href="#n204" name="n204">204</a></span>    }
+<span class="line-numbers"><a href="#n205" name="n205">205</a></span>    
+<span class="line-numbers"><a href="#n206" name="n206">206</a></span>    irq = gpio_to_irq(IRQ_GPIO_PIN);
+<span class="line-numbers"><a href="#n207" name="n207">207</a></span>    <span style="color:#080;font-weight:bold">if</span>(irq &lt; <span style="color:#00D">0</span>){
+<span class="line-numbers"><a href="#n208" name="n208">208</a></span>        printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">gpio_to_irq() failed !</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);
+<span class="line-numbers"><a href="#n209" name="n209">209</a></span>        ret = irq;
+<span class="line-numbers"><strong><a href="#n210" name="n210">210</a></strong></span>        <span style="color:#080;font-weight:bold">goto</span> fail2; 
+<span class="line-numbers"><a href="#n211" name="n211">211</a></span>    }
+<span class="line-numbers"><a href="#n212" name="n212">212</a></span>    dev-&gt;irq_no = irq;
+<span class="line-numbers"><a href="#n213" name="n213">213</a></span>    
+<span class="line-numbers"><a href="#n214" name="n214">214</a></span><span style="color:#777">#if 0</span>
+<span class="line-numbers"><a href="#n215" name="n215">215</a></span><span style="color:#777">   ret = request_irq(dev-&gt;irq_no, </span>
+<span class="line-numbers"><a href="#n216" name="n216">216</a></span><span style="color:#777">                    irq_handler, </span>
+<span class="line-numbers"><a href="#n217" name="n217">217</a></span><span style="color:#777">                    IRQF_TRIGGER_RISING | IRQF_SHARED, </span>
+<span class="line-numbers"><a href="#n218" name="n218">218</a></span><span style="color:#777">                    gpio_lable, </span>
+<span class="line-numbers"><a href="#n219" name="n219">219</a></span><span style="color:#777">                    &amp;dev-&gt;devno); </span>
+<span class="line-numbers"><strong><a href="#n220" name="n220">220</a></strong></span><span style="color:#777">#else</span>
+<span class="line-numbers"><a href="#n221" name="n221">221</a></span>   ret = request_irq(dev-&gt;irq_no, 
+<span class="line-numbers"><a href="#n222" name="n222">222</a></span>                    irq_handler, 
+<span class="line-numbers"><a href="#n223" name="n223">223</a></span>                    IRQF_TRIGGER_RISING | IRQF_DISABLED, 
+<span class="line-numbers"><a href="#n224" name="n224">224</a></span>                    gpio_lable, 
+<span class="line-numbers"><a href="#n225" name="n225">225</a></span>                    &amp;dev-&gt;devno); 
+<span class="line-numbers"><a href="#n226" name="n226">226</a></span><span style="color:#579">#endif</span>
+<span class="line-numbers"><a href="#n227" name="n227">227</a></span>    
+<span class="line-numbers"><a href="#n228" name="n228">228</a></span>    <span style="color:#080;font-weight:bold">if</span>(ret){
+<span class="line-numbers"><a href="#n229" name="n229">229</a></span>        printk(KERN_ERR <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">request_irq() failed ! %d</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>, ret);
+<span class="line-numbers"><strong><a href="#n230" name="n230">230</a></strong></span>        <span style="color:#080;font-weight:bold">goto</span> fail2;
+<span class="line-numbers"><a href="#n231" name="n231">231</a></span>    }
+<span class="line-numbers"><a href="#n232" name="n232">232</a></span>    
+<span class="line-numbers"><a href="#n233" name="n233">233</a></span>    printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_key_to_app_init</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);      
+<span class="line-numbers"><a href="#n234" name="n234">234</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n235" name="n235">235</a></span>
+<span class="line-numbers"><a href="#n236" name="n236">236</a></span><span style="color:#970;font-weight:bold">fail2:</span>  
+<span class="line-numbers"><a href="#n237" name="n237">237</a></span>    gpio_free(IRQ_GPIO_PIN);  
+<span class="line-numbers"><a href="#n238" name="n238">238</a></span><span style="color:#970;font-weight:bold">fail1:</span>    
+<span class="line-numbers"><a href="#n239" name="n239">239</a></span>    device_destroy(dev-&gt;fpga_key_class, dev-&gt;devno);  
+<span class="line-numbers"><strong><a href="#n240" name="n240">240</a></strong></span>    class_destroy(dev-&gt;fpga_key_class);   
+<span class="line-numbers"><a href="#n241" name="n241">241</a></span>    cdev_del(&amp;dev-&gt;cdev);  
+<span class="line-numbers"><a href="#n242" name="n242">242</a></span>    unregister_chrdev_region(dev-&gt;devno, <span style="color:#00D">1</span>);  
+<span class="line-numbers"><a href="#n243" name="n243">243</a></span>
+<span class="line-numbers"><a href="#n244" name="n244">244</a></span>    <span style="color:#080;font-weight:bold">return</span> ret;
+<span class="line-numbers"><a href="#n245" name="n245">245</a></span>}  
+<span class="line-numbers"><a href="#n246" name="n246">246</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#088;font-weight:bold">void</span> __exit fpga_key_exit(<span style="color:#088;font-weight:bold">void</span>)  
+<span class="line-numbers"><a href="#n247" name="n247">247</a></span>{  
+<span class="line-numbers"><a href="#n248" name="n248">248</a></span>    <span style="color:#080;font-weight:bold">struct</span> fpga_key_dev *dev = &amp;fpga_key_dev;  
+<span class="line-numbers"><a href="#n249" name="n249">249</a></span>  
+<span class="line-numbers"><strong><a href="#n250" name="n250">250</a></strong></span>    free_irq(dev-&gt;irq_no, &amp;dev-&gt;devno); 
+<span class="line-numbers"><a href="#n251" name="n251">251</a></span>    gpio_free(IRQ_GPIO_PIN);
+<span class="line-numbers"><a href="#n252" name="n252">252</a></span>    
+<span class="line-numbers"><a href="#n253" name="n253">253</a></span>    device_destroy(dev-&gt;fpga_key_class, dev-&gt;devno);  
+<span class="line-numbers"><a href="#n254" name="n254">254</a></span>    class_destroy(dev-&gt;fpga_key_class);   
+<span class="line-numbers"><a href="#n255" name="n255">255</a></span>    cdev_del(&amp;dev-&gt;cdev);  
+<span class="line-numbers"><a href="#n256" name="n256">256</a></span>    unregister_chrdev_region(dev-&gt;devno, <span style="color:#00D">1</span>);  
+<span class="line-numbers"><a href="#n257" name="n257">257</a></span>       
+<span class="line-numbers"><a href="#n258" name="n258">258</a></span>    printk(KERN_INFO <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">fpga_key_to_app_exit</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n259" name="n259">259</a></span>}  
+<span class="line-numbers"><strong><a href="#n260" name="n260">260</a></strong></span>module_init(fpga_key_init);  
+<span class="line-numbers"><a href="#n261" name="n261">261</a></span>module_exit(fpga_key_exit);  
+<span class="line-numbers"><a href="#n262" name="n262">262</a></span>  
+<span class="line-numbers"><a href="#n263" name="n263">263</a></span>MODULE_LICENSE(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">GPL</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n264" name="n264">264</a></span>MODULE_AUTHOR(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">hityixiaoyang@gmail.com</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n265" name="n265">265</a></span>MODULE_DESCRIPTION(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">AM335x GPIO IQR for FPGA</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n266" name="n266">266</a></span>
+<span class="line-numbers"><a href="#n267" name="n267">267</a></span>
+<span class="line-numbers"><a href="#n268" name="n268">268</a></span>
+<span class="line-numbers"><a href="#n269" name="n269">269</a></span>
+<span class="line-numbers"><strong><a href="#n270" name="n270">270</a></strong></span>
+<span class="line-numbers"><a href="#n271" name="n271">271</a></span>
+<span class="line-numbers"><a href="#n272" name="n272">272</a></span><span style="color:#777">/*</span>
+<span class="line-numbers"><a href="#n273" name="n273">273</a></span><span style="color:#777"> * linux异步通知类似于中断，程序开始做的就是将想监测的文件设置为异步通知，然后程序就去做别的事情了，</span>
+<span class="line-numbers"><a href="#n274" name="n274">274</a></span><span style="color:#777"> * 当这些文件上面有数据可读时候，就发送一个信号，程序接受到这个信号就去处理这个文件的数据。</span>
+<span class="line-numbers"><a href="#n275" name="n275">275</a></span><span style="color:#777"> * 这样程序不再是主动去读文件了，而是以类型于中断的方式，这样程序更加灵活。</span>
+<span class="line-numbers"><a href="#n276" name="n276">276</a></span><span style="color:#777"> * </span>
+<span class="line-numbers"><a href="#n277" name="n277">277</a></span><span style="color:#777"> * 要弄清linux异步通知必须要弄明白一下几件事:</span>
+<span class="line-numbers"><a href="#n278" name="n278">278</a></span><span style="color:#777"> * 1.谁发信号</span>
+<span class="line-numbers"><a href="#n279" name="n279">279</a></span><span style="color:#777"> * 2.发给谁</span>
+<span class="line-numbers"><strong><a href="#n280" name="n280">280</a></strong></span><span style="color:#777"> * 3.接受到信号怎么办</span>
+<span class="line-numbers"><a href="#n281" name="n281">281</a></span><span style="color:#777"> */</span>
+<span class="line-numbers"><a href="#n282" name="n282">282</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;stdio.h&gt;</span>  
+<span class="line-numbers"><a href="#n283" name="n283">283</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;sys/types.h&gt;</span>  
+<span class="line-numbers"><a href="#n284" name="n284">284</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;sys/stat.h&gt;</span>  
+<span class="line-numbers"><a href="#n285" name="n285">285</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;fcntl.h&gt;</span>  
+<span class="line-numbers"><a href="#n286" name="n286">286</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;sys/select.h&gt;</span>  
+<span class="line-numbers"><a href="#n287" name="n287">287</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;unistd.h&gt;</span>  
+<span class="line-numbers"><a href="#n288" name="n288">288</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;signal.h&gt;</span>  
+<span class="line-numbers"><a href="#n289" name="n289">289</a></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;string.h&gt;</span>  
+<span class="line-numbers"><strong><a href="#n290" name="n290">290</a></strong></span><span style="color:#579">#include</span><span style="color:#B44;font-weight:bold">&lt;linux/ioctl.h&gt;</span>
+<span class="line-numbers"><a href="#n291" name="n291">291</a></span>
+<span class="line-numbers"><a href="#n292" name="n292">292</a></span><span style="color:#579">#define</span> FPIO_IRQ_DEV_NAME   <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/dev/fpga_msg_irq_dev</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n293" name="n293">293</a></span>
+<span class="line-numbers"><a href="#n294" name="n294">294</a></span><span style="color:#579">#define</span> MAGIC_NUM   <span style="color:#D20">'k'</span>
+<span class="line-numbers"><a href="#n295" name="n295">295</a></span><span style="color:#080;font-weight:bold">enum</span> IOCTL_CMDS{
+<span class="line-numbers"><a href="#n296" name="n296">296</a></span>  IOCTL_CMD_IRQ_NONE = <span style="color:#00D">0</span>,
+<span class="line-numbers"><a href="#n297" name="n297">297</a></span>  IOCTL_CMD_IRQ_DISABLE = _IO(MAGIC_NUM,<span style="color:#00D">0</span>),
+<span class="line-numbers"><a href="#n298" name="n298">298</a></span>  IOCTL_CMD_IRQ_ENABLE  = _IO(MAGIC_NUM,<span style="color:#00D">1</span>),
+<span class="line-numbers"><a href="#n299" name="n299">299</a></span>};
+<span class="line-numbers"><strong><a href="#n300" name="n300">300</a></strong></span>
+<span class="line-numbers"><a href="#n301" name="n301">301</a></span><span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span> flag = <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n302" name="n302">302</a></span><span style="color:#0a8;font-weight:bold">int</span> fd = <span style="color:#00D">0</span>;
+<span class="line-numbers"><a href="#n303" name="n303">303</a></span>  
+<span class="line-numbers"><a href="#n304" name="n304">304</a></span><span style="color:#088;font-weight:bold">void</span> sig_handler(<span style="color:#0a8;font-weight:bold">int</span> sig)  
+<span class="line-numbers"><a href="#n305" name="n305">305</a></span>{  
+<span class="line-numbers"><a href="#n306" name="n306">306</a></span>  printf(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[pid %d] %s recieved signal</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>,getpid(),__FUNCTION__);  
+<span class="line-numbers"><a href="#n307" name="n307">307</a></span>}  
+<span class="line-numbers"><a href="#n308" name="n308">308</a></span>
+<span class="line-numbers"><a href="#n309" name="n309">309</a></span><span style="color:#0a8;font-weight:bold">int</span> main(<span style="color:#088;font-weight:bold">void</span>)  
+<span class="line-numbers"><strong><a href="#n310" name="n310">310</a></strong></span>{  
+<span class="line-numbers"><a href="#n311" name="n311">311</a></span>    <span style="color:#0a8;font-weight:bold">int</span> f_flags; 
+<span class="line-numbers"><a href="#n312" name="n312">312</a></span>    <span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span> number; 
+<span class="line-numbers"><a href="#n313" name="n313">313</a></span>    
+<span class="line-numbers"><a href="#n314" name="n314">314</a></span>    fd=open(FPIO_IRQ_DEV_NAME,O_RDWR);  
+<span class="line-numbers"><a href="#n315" name="n315">315</a></span>    <span style="color:#080;font-weight:bold">if</span>(fd &lt; <span style="color:#00D">0</span>){  
+<span class="line-numbers"><a href="#n316" name="n316">316</a></span>        perror(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">open gpio irq device failed</span><span style="color:#710">&quot;</span></span>);  
+<span class="line-numbers"><a href="#n317" name="n317">317</a></span>        <span style="color:#080;font-weight:bold">return</span> -<span style="color:#00D">1</span>;  
+<span class="line-numbers"><a href="#n318" name="n318">318</a></span>    }  
+<span class="line-numbers"><a href="#n319" name="n319">319</a></span>
+<span class="line-numbers"><strong><a href="#n320" name="n320">320</a></strong></span>    signal(SIGIO, sig_handler); 
+<span class="line-numbers"><a href="#n321" name="n321">321</a></span>    fcntl(fd, F_SETOWN, getpid());
+<span class="line-numbers"><a href="#n322" name="n322">322</a></span>    
+<span class="line-numbers"><a href="#n323" name="n323">323</a></span>   <span style="color:#777">/* </span>
+<span class="line-numbers"><a href="#n324" name="n324">324</a></span><span style="color:#777">    * 设置该文件的标志为FASYNC,设置文件的标志为FASYNC将导致驱动程序的fasync被调用</span>
+<span class="line-numbers"><a href="#n325" name="n325">325</a></span><span style="color:#777">    * 这样文件就开始处于异步通知状态了</span>
+<span class="line-numbers"><a href="#n326" name="n326">326</a></span><span style="color:#777">    */</span>
+<span class="line-numbers"><a href="#n327" name="n327">327</a></span>    f_flags = fcntl(fd, F_GETFL);
+<span class="line-numbers"><a href="#n328" name="n328">328</a></span>    
+<span class="line-numbers"><a href="#n329" name="n329">329</a></span>    printf(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">waiting for signal </span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>); 
+<span class="line-numbers"><strong><a href="#n330" name="n330">330</a></strong></span>    fcntl(fd, F_SETFL, FASYNC | f_flags); 
+<span class="line-numbers"><a href="#n331" name="n331">331</a></span>
+<span class="line-numbers"><a href="#n332" name="n332">332</a></span>    <span style="color:#080;font-weight:bold">while</span> (<span style="color:#00D">1</span>){
+<span class="line-numbers"><a href="#n333" name="n333">333</a></span>      read(fd, &amp;number, <span style="color:#080;font-weight:bold">sizeof</span>(<span style="color:#0a8;font-weight:bold">unsigned</span> <span style="color:#0a8;font-weight:bold">int</span>));
+<span class="line-numbers"><a href="#n334" name="n334">334</a></span>      printf(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">key count=%d</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>,number);
+<span class="line-numbers"><a href="#n335" name="n335">335</a></span>      sleep(<span style="color:#00D">15</span>); 
+<span class="line-numbers"><a href="#n336" name="n336">336</a></span>    }
+<span class="line-numbers"><a href="#n337" name="n337">337</a></span>    
+<span class="line-numbers"><a href="#n338" name="n338">338</a></span>    close(fd);  
+<span class="line-numbers"><a href="#n339" name="n339">339</a></span>
+<span class="line-numbers"><strong><a href="#n340" name="n340">340</a></strong></span>    printf(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">main exit</span><span style="color:#b0b">\n</span><span style="color:#710">&quot;</span></span>); 
+<span class="line-numbers"><a href="#n341" name="n341">341</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;  
+<span class="line-numbers"><a href="#n342" name="n342">342</a></span>}  
+<span class="line-numbers"><a href="#n343" name="n343">343</a></span>
+</pre></div>
+</div>
+</div>
 
-<span class="cp">#include &lt;plat/gpio.h&gt;</span>
-<span class="cp">#include &lt;plat/am33xx.h&gt;</span>
 
-<span class="cp">#define GPIO_TO_PIN(bank, gpio)     (32 * (bank) + (gpio))</span>
-<span class="cp">#define IRQ_GPIO_PIN                GPIO_TO_PIN(1, 13)</span>
-
-<span class="cp">#define   TRIGGERD_FLAG_IRQ_DISABLED        (1&lt;&lt;0)</span>
-<span class="cp">#define   TRIGGERD_FLAG_IRQ_ENABLED         (1&lt;&lt;1)</span>
-
-<span class="cm">/* cmd definations shouled be same with that in user space */</span>
-<span class="cp">#define MAGIC_NUM   &#39;k&#39;</span>
-<span class="k">enum</span> <span class="n">IOCTL_CMDS</span><span class="p">{</span>
-  <span class="n">IOCTL_CMD_IRQ_NONE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="n">IOCTL_CMD_IRQ_DISABLE</span> <span class="o">=</span> <span class="n">_IO</span><span class="p">(</span><span class="n">MAGIC_NUM</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
-  <span class="n">IOCTL_CMD_IRQ_ENABLE</span>  <span class="o">=</span> <span class="n">_IO</span><span class="p">(</span><span class="n">MAGIC_NUM</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="n">fpga_key_dev</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">cdev</span> <span class="n">cdev</span><span class="p">;</span>  
-    <span class="kt">dev_t</span> <span class="n">devno</span><span class="p">;</span>
-    <span class="k">struct</span> <span class="n">class</span> <span class="o">*</span><span class="n">fpga_key_class</span><span class="p">;</span> 
-    <span class="k">struct</span> <span class="n">fasync_struct</span> <span class="o">*</span><span class="n">async_queue</span><span class="p">;</span>
-
-    <span class="kt">int</span> <span class="n">message_cdev_open</span><span class="p">;</span>
-
-    <span class="kt">int</span> <span class="n">irq_no</span><span class="p">;</span> 
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">triggered_flags</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="n">fpga_key_dev</span><span class="p">;</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">irq_enable</span><span class="p">(</span> <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">enable</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">;</span>
-
-  <span class="k">switch</span><span class="p">(</span><span class="n">enable</span><span class="p">){</span>
-    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
-      <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;enable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">enable_irq</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
-      <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">);</span>
-      <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">;</span>  
-      <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>
-      <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;disable irq</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">disable_irq_nosync</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">);</span>
-      <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="o">~</span><span class="n">TRIGGERD_FLAG_IRQ_ENABLED</span><span class="p">);</span>
-      <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">|=</span> <span class="n">TRIGGERD_FLAG_IRQ_DISABLED</span><span class="p">;</span>  
-      <span class="k">break</span><span class="p">;</span>
-    <span class="k">default</span><span class="o">:</span>
-      <span class="k">break</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;irq_enable finished</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">irqreturn_t</span> <span class="nf">irq_handler</span><span class="p">(</span><span class="kt">int</span> <span class="n">irqno</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">dev_id</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">fpga_key_dev</span><span class="p">;</span>
-
-    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;fpga int triggered</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">async_queue</span><span class="p">)</span>
-        <span class="n">kill_fasync</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">async_queue</span><span class="p">,</span> <span class="n">SIGIO</span><span class="p">,</span> <span class="n">POLL_IN</span><span class="p">);</span> 
-
-    <span class="k">return</span> <span class="n">IRQ_HANDLED</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">fpga_key_open</span><span class="p">(</span><span class="k">struct</span> <span class="n">inode</span> <span class="o">*</span><span class="n">node</span><span class="p">,</span> <span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">fd</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span><span class="p">;</span>
-
-    <span class="n">dev</span> <span class="o">=</span> <span class="n">container_of</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">i_cdev</span><span class="p">,</span> <span class="k">struct</span> <span class="n">fpga_key_dev</span><span class="p">,</span> <span class="n">cdev</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">message_cdev_open</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">dev</span><span class="o">-&gt;</span><span class="n">message_cdev_open</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">fd</span><span class="o">-&gt;</span><span class="n">private_data</span> <span class="o">=</span> <span class="n">dev</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">EFAULT</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>   
-
-<span class="k">static</span> <span class="kt">ssize_t</span> <span class="nf">fpga_key_write</span><span class="p">(</span><span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">fd</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">loff_t</span> <span class="o">*</span><span class="n">ptr</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-<span class="k">static</span> <span class="kt">ssize_t</span> <span class="nf">fpga_key_read</span><span class="p">(</span><span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">fd</span><span class="p">,</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">loff_t</span> <span class="o">*</span><span class="n">ptr</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="n">fd</span><span class="o">-&gt;</span><span class="n">private_data</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">){</span>
-      <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;read length too small&quot;</span><span class="p">);</span>
-      <span class="k">return</span> <span class="n">EFAULT</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="n">copy_to_user</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span><span class="p">,</span> <span class="n">size</span><span class="p">))</span>  
-        <span class="k">return</span> <span class="o">-</span><span class="n">EFAULT</span><span class="p">;</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">fpga_key_fasync</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">filp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mode</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span>     <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="n">filp</span><span class="o">-&gt;</span><span class="n">private_data</span><span class="p">;</span>
-    <span class="n">fasync_helper</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">filp</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">async_queue</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">fpga_key_release</span><span class="p">(</span><span class="k">struct</span> <span class="n">inode</span> <span class="o">*</span><span class="n">node</span><span class="p">,</span> <span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">fd</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="n">fd</span><span class="o">-&gt;</span><span class="n">private_data</span><span class="p">;</span>
-
-    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">message_cdev_open</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">fpga_key_fasync</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span> 
-
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">fpga_key_ioctl</span><span class="p">(</span><span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">fd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">args</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="n">fd</span><span class="o">-&gt;</span><span class="n">private_data</span><span class="p">;</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">dev</span><span class="p">){</span>
-      <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;dev data null&quot;</span><span class="p">);</span>
-      <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">switch</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>  
-    <span class="p">{</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_NONE</span><span class="p">:</span>  
-          <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_DISABLE</span><span class="p">:</span>  
-          <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_DISABLE</span><span class="p">);</span>
-          <span class="k">break</span><span class="p">;</span>  
-        <span class="k">case</span> <span class="nl">IOCTL_CMD_IRQ_ENABLE</span><span class="p">:</span>
-          <span class="n">irq_enable</span><span class="p">(</span><span class="n">dev</span><span class="p">,</span> <span class="n">IOCTL_CMD_IRQ_ENABLE</span><span class="p">);</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="k">default</span><span class="o">:</span>  
-          <span class="k">return</span> <span class="o">-</span><span class="n">ENOTTY</span><span class="p">;</span>  
-          <span class="k">break</span><span class="p">;</span>  
-    <span class="p">}</span>  
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>
-
-<span class="k">struct</span> <span class="n">file_operations</span> <span class="n">meassage_operatons</span> <span class="o">=</span>  
-<span class="p">{</span>  
-    <span class="p">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">THIS_MODULE</span><span class="p">,</span>  
-    <span class="p">.</span><span class="n">open</span> <span class="o">=</span> <span class="n">fpga_key_open</span><span class="p">,</span>  
-    <span class="p">.</span><span class="n">write</span> <span class="o">=</span> <span class="n">fpga_key_write</span><span class="p">,</span>
-    <span class="p">.</span><span class="n">read</span> <span class="o">=</span> <span class="n">fpga_key_read</span><span class="p">,</span> 
-    <span class="p">.</span><span class="n">fasync</span> <span class="o">=</span> <span class="n">fpga_key_fasync</span><span class="p">,</span>
-    <span class="p">.</span><span class="n">release</span> <span class="o">=</span> <span class="n">fpga_key_release</span><span class="p">,</span>  
-    <span class="p">.</span><span class="n">unlocked_ioctl</span> <span class="o">=</span> <span class="n">fpga_key_ioctl</span><span class="p">,</span>
-<span class="p">};</span>  
-
-<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">fpga_key_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span> <span class="n">dev</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">fpga_key_dev</span><span class="p">;</span>  
-    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">irq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">gpio_lable</span> <span class="o">=</span> <span class="s">&quot;fpga_msg_irq_key&quot;</span><span class="p">;</span>
-
-    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">triggered_flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="n">alloc_chrdev_region</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;fpga_msg_irq&quot;</span><span class="p">);</span>  
-    <span class="n">cdev_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">meassage_operatons</span><span class="p">);</span>  
-    <span class="n">cdev_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>  
-
-    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span> <span class="o">=</span> <span class="n">class_create</span><span class="p">(</span><span class="n">THIS_MODULE</span><span class="p">,</span> <span class="s">&quot;fpga_msg_irq_class&quot;</span><span class="p">);</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">IS_ERR</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">))</span> <span class="p">{</span>  
-         <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;failed in creating class./n&quot;</span><span class="p">);</span>  
-         <span class="k">goto</span> <span class="n">fail1</span><span class="p">;</span>   
-     <span class="p">}</span>  
-    <span class="n">device_create</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="s">&quot;fpga_msg_irq_dev&quot;</span><span class="p">);</span>  
-
-    <span class="cm">/* gpio interrupt request */</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="n">gpio_request</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">,</span> <span class="n">gpio_lable</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
-        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;gpio_request() failed !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-        <span class="k">goto</span> <span class="n">fail1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">ret</span> <span class="o">=</span> <span class="n">gpio_direction_input</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
-        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;gpio_direction_input() failed !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-        <span class="k">goto</span> <span class="n">fail2</span><span class="p">;</span> 
-    <span class="p">}</span>
-
-    <span class="n">irq</span> <span class="o">=</span> <span class="n">gpio_to_irq</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">irq</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;gpio_to_irq() failed !</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="n">irq</span><span class="p">;</span>
-        <span class="k">goto</span> <span class="n">fail2</span><span class="p">;</span> 
-    <span class="p">}</span>
-    <span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span> <span class="o">=</span> <span class="n">irq</span><span class="p">;</span>
-
-<span class="cp">#if 0</span><span class="c"></span>
-<span class="c">   ret = request_irq(dev-&gt;irq_no, </span>
-<span class="c">                    irq_handler, </span>
-<span class="c">                    IRQF_TRIGGER_RISING | IRQF_SHARED, </span>
-<span class="c">                    gpio_lable, </span>
-<span class="c">                    &amp;dev-&gt;devno); </span>
-<span class="cp">#else</span>
-   <span class="n">ret</span> <span class="o">=</span> <span class="n">request_irq</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">,</span> 
-                    <span class="n">irq_handler</span><span class="p">,</span> 
-                    <span class="n">IRQF_TRIGGER_RISING</span> <span class="o">|</span> <span class="n">IRQF_DISABLED</span><span class="p">,</span> 
-                    <span class="n">gpio_lable</span><span class="p">,</span> 
-                    <span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span> 
-<span class="cp">#endif</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="n">ret</span><span class="p">){</span>
-        <span class="n">printk</span><span class="p">(</span><span class="n">KERN_ERR</span> <span class="s">&quot;request_irq() failed ! %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
-        <span class="k">goto</span> <span class="n">fail2</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;fpga_key_to_app_init</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>      
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-
-<span class="nl">fail2</span><span class="p">:</span>  
-    <span class="n">gpio_free</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>  
-<span class="nl">fail1</span><span class="p">:</span>    
-    <span class="n">device_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span>  
-    <span class="n">class_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">);</span>   
-    <span class="n">cdev_del</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">);</span>  
-    <span class="n">unregister_chrdev_region</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>  
-
-    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
-<span class="p">}</span>  
-<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">fpga_key_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="k">struct</span> <span class="n">fpga_key_dev</span> <span class="o">*</span><span class="n">dev</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">fpga_key_dev</span><span class="p">;</span>  
-
-    <span class="n">free_irq</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">irq_no</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span> 
-    <span class="n">gpio_free</span><span class="p">(</span><span class="n">IRQ_GPIO_PIN</span><span class="p">);</span>
-
-    <span class="n">device_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">,</span> <span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">);</span>  
-    <span class="n">class_destroy</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">fpga_key_class</span><span class="p">);</span>   
-    <span class="n">cdev_del</span><span class="p">(</span><span class="o">&amp;</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">cdev</span><span class="p">);</span>  
-    <span class="n">unregister_chrdev_region</span><span class="p">(</span><span class="n">dev</span><span class="o">-&gt;</span><span class="n">devno</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>  
-
-    <span class="n">printk</span><span class="p">(</span><span class="n">KERN_INFO</span> <span class="s">&quot;fpga_key_to_app_exit</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>  
-<span class="p">}</span>  
-<span class="n">module_init</span><span class="p">(</span><span class="n">fpga_key_init</span><span class="p">);</span>  
-<span class="n">module_exit</span><span class="p">(</span><span class="n">fpga_key_exit</span><span class="p">);</span>  
-
-<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">&quot;GPL&quot;</span><span class="p">);</span>  
-<span class="n">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&quot;hityixiaoyang@gmail.com&quot;</span><span class="p">);</span>  
-<span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&quot;AM335x GPIO IQR for FPGA&quot;</span><span class="p">);</span>  
-
-
-
-
-
-
-<span class="cm">/*</span>
-<span class="cm"> * linux异步通知类似于中断，程序开始做的就是将想监测的文件设置为异步通知，然后程序就去做别的事情了，</span>
-<span class="cm"> * 当这些文件上面有数据可读时候，就发送一个信号，程序接受到这个信号就去处理这个文件的数据。</span>
-<span class="cm"> * 这样程序不再是主动去读文件了，而是以类型于中断的方式，这样程序更加灵活。</span>
-<span class="cm"> * </span>
-<span class="cm"> * 要弄清linux异步通知必须要弄明白一下几件事:</span>
-<span class="cm"> * 1.谁发信号</span>
-<span class="cm"> * 2.发给谁</span>
-<span class="cm"> * 3.接受到信号怎么办</span>
-<span class="cm"> */</span>
-<span class="cp">#include&lt;stdio.h&gt;  </span>
-<span class="cp">#include&lt;sys/types.h&gt;  </span>
-<span class="cp">#include&lt;sys/stat.h&gt;  </span>
-<span class="cp">#include&lt;fcntl.h&gt;  </span>
-<span class="cp">#include&lt;sys/select.h&gt;  </span>
-<span class="cp">#include&lt;unistd.h&gt;  </span>
-<span class="cp">#include&lt;signal.h&gt;  </span>
-<span class="cp">#include&lt;string.h&gt;  </span>
-<span class="cp">#include&lt;linux/ioctl.h&gt;</span>
-
-<span class="cp">#define FPIO_IRQ_DEV_NAME   &quot;/dev/fpga_msg_irq_dev&quot;</span>
-
-<span class="cp">#define MAGIC_NUM   &#39;k&#39;</span>
-<span class="k">enum</span> <span class="n">IOCTL_CMDS</span><span class="p">{</span>
-  <span class="n">IOCTL_CMD_IRQ_NONE</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="n">IOCTL_CMD_IRQ_DISABLE</span> <span class="o">=</span> <span class="n">_IO</span><span class="p">(</span><span class="n">MAGIC_NUM</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
-  <span class="n">IOCTL_CMD_IRQ_ENABLE</span>  <span class="o">=</span> <span class="n">_IO</span><span class="p">(</span><span class="n">MAGIC_NUM</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
-<span class="p">};</span>
-
-<span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">sig_handler</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">)</span>  
-<span class="p">{</span>  
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;[pid %d] %s recieved signal</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">getpid</span><span class="p">(),</span><span class="n">__FUNCTION__</span><span class="p">);</span>  
-<span class="p">}</span>  
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>  
-<span class="p">{</span>  
-    <span class="kt">int</span> <span class="n">f_flags</span><span class="p">;</span> 
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">number</span><span class="p">;</span> 
-
-    <span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="n">FPIO_IRQ_DEV_NAME</span><span class="p">,</span><span class="n">O_RDWR</span><span class="p">);</span>  
-    <span class="k">if</span><span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>  
-        <span class="n">perror</span><span class="p">(</span><span class="s">&quot;open gpio irq device failed&quot;</span><span class="p">);</span>  
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>  
-    <span class="p">}</span>  
-
-    <span class="n">signal</span><span class="p">(</span><span class="n">SIGIO</span><span class="p">,</span> <span class="n">sig_handler</span><span class="p">);</span> 
-    <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETOWN</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
-
-   <span class="cm">/* </span>
-<span class="cm">    * 设置该文件的标志为FASYNC,设置文件的标志为FASYNC将导致驱动程序的fasync被调用</span>
-<span class="cm">    * 这样文件就开始处于异步通知状态了</span>
-<span class="cm">    */</span>
-    <span class="n">f_flags</span> <span class="o">=</span> <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_GETFL</span><span class="p">);</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;waiting for signal </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> 
-    <span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">FASYNC</span> <span class="o">|</span> <span class="n">f_flags</span><span class="p">);</span> 
-
-    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-      <span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">number</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span><span class="p">));</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;key count=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">number</span><span class="p">);</span>
-      <span class="n">sleep</span><span class="p">(</span><span class="mi">15</span><span class="p">);</span> 
-    <span class="p">}</span>
-
-    <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>  
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;main exit</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>  
-<span class="p">}</span>  
-</code></pre></div>
   </article>
 
 </div>

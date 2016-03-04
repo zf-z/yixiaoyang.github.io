@@ -45,6 +45,7 @@ Android在嵌入式开发中越来越常见。底层出了linux内核基础的�
 之前写个的一个指纹模块驱动代码结构，可以看出相对于传统的linux驱动，android驱动涉及到android架构中的HAL层、framwork（jni、service、接口层），然后才是app进行硬件服务接口调用。
 
 ```bash
+
 hal_jni_biovox2/                                       
 ├── cp.sh
 ├── development

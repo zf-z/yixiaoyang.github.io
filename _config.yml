@@ -15,8 +15,12 @@ author:
 markdown: kramdown
 kramdown:
    input: GFM
-   auto_ids: true
-
+   use_coderay: true
+   extensions:
+      - autolink
+      - footnotes
+      - smart
+   auto_ids: false
 #markdown: redcarpet
 #redcarpet: 
 #       extensions: ["fenced_code_blocks", "tables", "highlight", "with_toc_data", "strikethrough", "with_toc_data", "autolink"]

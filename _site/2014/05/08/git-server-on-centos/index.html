@@ -86,18 +86,18 @@
 
 
   <article class="post-content">
-    <h3 id="git-server-on-centos-via-ssh">Git Server on Centos via SSH</h3>
+    <h3>Git Server on Centos via SSH</h3>
 
 <p>本wiki为Centos上部署git服务器提供文档。</p>
 
-<h4 id=">基本软件安装</h4>
+<h4>基本软件安装</h4>
 
 <pre>
 $ yum install python python-setuptools
 $ git clone git://eagain.net/gitosis.git gitosis
 $ python setup.py install --record uninstall.txt 
 $ su git
-$ gitosis-init < /tmp/id_rsa.pub 
+$ gitosis-init &lt; /tmp/id_rsa.pub 
 $ cd /var/git/
 $ ln -s /home/git/repositories/ repo
 $ chmod 755 /var/git/repo/gitosis-admin.git/hooks/post-update
@@ -108,17 +108,17 @@ Connection to server.holocene-instrument.com closed.
 
 <p>大功告成，说明gitosis生效</p>
 
-<h4 id="ssh">添加用户（ssh）</h4>
+<h4>添加用户（ssh）</h4>
 
-<p>To add new users:
-- add a keys/USER.pub file
-- authorize them to read/write repositories as needed (or just authorize the group @all)
-To create new repositories, just authorize writing to them and push. It&#39;s that simple! For example: let&#39;s assume your username is jdoe and you want to create a repository myproject. In your clone of gitosis-admin, edit gitosis.conf and add:
+<p>To add new users:<br />
+- add a keys/USER.pub file<br />
+- authorize them to read/write repositories as needed (or just authorize the group @all)<br />
+To create new repositories, just authorize writing to them and push. It’s that simple! For example: let’s assume your username is jdoe and you want to create a repository myproject. In your clone of gitosis-admin, edit gitosis.conf and add:</p>
 <pre>
 [group myteam]
 members = jdoe
 writable = myproject
-</pre></p>
+</pre>
 
 <p>Commit that change and push. Then create the initial commit and push it:</p>
 
@@ -131,20 +131,19 @@ git remote add myserver git@MYSERVER:myproject.git
 git push myserver master:refs/heads/master
 </pre>
 
-<p>That&#39;s it. If you now add others to members, they can use that repository too.</p>
+<p>That’s it. If you now add others to members, they can use that repository too.</p>
 
-<h4 id=">权限修改</h4>
-
-<p>提交本地工程到服务器，首先clonegitosis-admin项目到本地
+<h4>权限修改</h4>
+<p>提交本地工程到服务器，首先clonegitosis-admin项目到本地</p>
 <pre>
-$ git clone <a href="mailto:git@server.holocene-instrument.com">git@server.holocene-instrument.com</a>:gitosis-admin.git
+$ git clone git@server.holocene-instrument.com:gitosis-admin.git
 Cloning into gitosis-admin
 remote: Counting objects: 5, done.
 remote: Compressing objects: 100% (5/5), done.
 remote: Total 5 (delta 0), reused 5 (delta 0)
 Receiving objects: 100% (5/5), done.
 </pre>
-修改查看到gitosis.conf
+<p>修改查看到gitosis.conf</p>
 <pre>
 [gitosis]
 [group gitosis-admin]
@@ -156,18 +155,16 @@ writable = costdb \
            demo/test
 members = yuan
 </pre>
-如上所示，分有2个组类型admin和我们自定义的，你可以随便定义一个组，其实就是个权限集合.writable意思是，这个权限组有哪几个项目的写权限？这里是空格分开，如果太长就换行，例如demo/test的话，就是：</p>
+<p>如上所示，分有2个组类型admin和我们自定义的，你可以随便定义一个组，其实就是个权限集合.writable意思是，这个权限组有哪几个项目的写权限？这里是空格分开，如果太长就换行，例如demo/test的话，就是：</p>
 
 <pre>$ git remote add origin git@gitserver:demo/test.git</pre>
 
 <p>members就是有这个权限的组成员了，通过把有权限的开发者的公钥上传至keydir,最后将gitosis-admin提交至远程</p>
 
 <pre>$ git push remote origin master</pre>
-
 <p>服务端将同步有一个仓库了。</p>
 
-<h4 id="git">新建git库</h4>
-
+<h4>新建git库</h4>
 <p>服务器端新建git空库</p>
 
 <pre>
@@ -177,73 +174,77 @@ $ su git
 $ cd /home/git/repositories
 $ ./gitc.sh bone
 </pre>
+<p>在客户端拷贝新的空库</p>
+<pre>$ git clone git@server.holocene-instrument.com:bone.git</pre>
+<p>如果拥有读写权限就可以开始使用git工作了。</p>
 
-<p>在客户端拷贝新的空库
-<pre>$ git clone <a href="mailto:git@server.holocene-instrument.com">git@server.holocene-instrument.com</a>:bone.git</pre>
-如果拥有读写权限就可以开始使用git工作了。</p>
-
-<h3 id="q-amp-a">Q&amp;A</h3>
+<h3>Q&amp;A</h3>
 
 <p><strong>(1)ERROR:gitosis.serve.main:Repository read access denied</strong></p>
 
 <p>原因:gitosis.conf中的members与keydir中的用户名不一致，如gitosis中的members = foo@bar，但keydir中的公密名却叫foo.pub</p>
 
-<p>解决:使keydir的名称与gitosis中members所指的名称一致。 </p>
+<p>解决:使keydir的名称与gitosis中members所指的名称一致。</p>
 
 <p><strong>(2)git push时提示remote:error:refusing to update checked out branch:refs/heads/master</strong></p>
 
-<p>原因:这是在服务器创建git新库时使用git init而没有使用git init --bare引起git服务器默认拒绝了push操作</p>
+<p>原因:这是在服务器创建git新库时使用git init而没有使用git init –bare引起git服务器默认拒绝了push操作</p>
 
-<p>解决:需要进行设置可修改.git/config文件后面添加如下代码
+<p>解决:需要进行设置可修改.git/config文件后面添加如下代码</p>
 <pre>
 [receive]
 denyCurrentBranch = ignore
-</pre></p>
+</pre>
 
 <p><strong>(3)自己写的库创建脚本</strong></p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
-<span class="c">#</span>
-<span class="c">#</span>
-<span class="c"># log:</span>
-<span class="c">#   1.  create, 11Jan14</span>
 
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>#!/bin/bash
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>#
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>#
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span># log:
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>#     1.    create, 11Jan14
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>if [ $# -lt 1 ] 
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>then
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    echo &quot;Argument error:$# arguments&quot;
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    exit
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>fi
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>repo=&quot;$1.git&quot;
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>mkdir $repo
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>echo &quot;mkdir $repo&quot;
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>cd $repo
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>git init --bare
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>touch Readme.rm
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>date +&quot;%Y-%m-%d %H:%M:%S&quot; &gt;&gt; Readme.rm
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>echo &quot;by git.&quot; &gt;&gt; Readme.rm
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>echo &quot;Create repo $repo succced~&quot;
+</pre></div>
+</div>
+</div>
 
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-lt <span class="m">1</span> <span class="o">]</span> 
-<span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Argument error:</span><span class="nv">$# </span><span class="s2">arguments&quot;</span>
-    <span class="nb">exit</span>
-<span class="k">fi</span>
-
-<span class="nv">repo</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">.git&quot;</span>
-mkdir <span class="nv">$repo</span>
-<span class="nb">echo</span> <span class="s2">&quot;mkdir </span><span class="nv">$repo</span><span class="s2">&quot;</span>
-
-<span class="nb">cd</span> <span class="nv">$repo</span>
-git init --bare
-touch Readme.rm
-date +<span class="s2">&quot;%Y-%m-%d %H:%M:%S&quot;</span> &gt;&gt; Readme.rm
-<span class="nb">echo</span> <span class="s2">&quot;by git.&quot;</span> &gt;&gt; Readme.rm
-
-
-<span class="nb">echo</span> <span class="s2">&quot;Create repo </span><span class="nv">$repo</span><span class="s2"> succced~&quot;</span>
-</code></pre></div>
 <p><strong>(4)Split subtree as new repo</strong></p>
 
 <p>参考：<a href="http://stackoverflow.com/questions/359424/detach-subdirectory-into-separate-git-repository/17864475#17864475">http://stackoverflow.com/questions/359424/detach-subdirectory-into-separate-git-repository/17864475#17864475</a></p>
 
 <p><strong>(5)如何恢复误删除的git文件</strong></p>
 
-<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 具体做法 git checkout file 同时恢复多个被删除的文件： 
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 具体做法 git checkout file 同时恢复多个被删除的文件： <br />
 <code>bash
 git ls-files -d | xargs -i git checkout {}
 </code></p>
 
 <ul>
-<li>Q1: 如果是不小心执行了git reset，还有办法取消吗？ A:git reflog 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</li>
-<li>Q2: 怎样找回历史版本中删除的文件？ A:先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt;</code>就可以恢复 </li>
+  <li>Q1: 如果是不小心执行了git reset，还有办法取消吗？ A:git reflog 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</li>
+  <li>Q2: 怎样找回历史版本中删除的文件？ A:先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt; </code>就可以恢复</li>
 </ul>
 
-<h3 id="reference">Reference</h3>
+<h3>Reference</h3>
 
 <p><a href="http://www.blogjava.net/yuanqixun/archive/2011/05/26/351057.html">http://www.blogjava.net/yuanqixun/archive/2011/05/26/351057.html</a></p>
 

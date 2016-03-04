@@ -83,11 +83,12 @@
 
   <article class="post-content">
     <p>为对付公司内部的工程师能力考核，复习一下c，类似面试题目，你懂得。以下程序均通过简单的单元测试。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">#include &lt;stdio.h&gt;
+
+<pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 #define TEST(func,cnt,test) do{ 
-        printf(&quot;-------------Test %d %-16sn&quot;,cnt++,func); 
+        printf("-------------Test %d %-16sn",cnt++,func); 
         test(); 
     }while(0)
 
@@ -101,7 +102,7 @@ void is2Power_test() {
     srand(time());
     for(idx = 0; idx &lt; sizeof(arr)/sizeof(arr[0]); idx++) {
         arr[idx] = rand()%64;
-        printf(&quot;%-6d %-4sn&quot;,arr[idx], (arr[idx]-1)&amp;(arr[idx])?&quot; &quot;:&quot;*&quot; );
+        printf("%-6d %-4sn",arr[idx], (arr[idx]-1)&amp;(arr[idx])?" ":"*" );
     }
 }
 
@@ -123,11 +124,11 @@ void is2Power_test() {
 void swap_test() {
     int x = 10;
     int y = 32;
-    printf(&quot;orgi x=%d, y=%dn&quot;,x,y);
+    printf("orgi x=%d, y=%dn",x,y);
     SWAP(x,y);
-    printf(&quot;swap x=%d, y=%dn&quot;,x,y);
+    printf("swap x=%d, y=%dn",x,y);
     SWAP(x,y);
-    printf(&quot;swap x=%d, y=%dn&quot;,x,y);
+    printf("swap x=%d, y=%dn",x,y);
 }
 
 /**
@@ -145,43 +146,43 @@ int floadCmp(float f1, float f2, double precision) {
     }
 }
 void floadCmp_test() {
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.123456789,0.123456788, floadCmp(0.123456789,0.123456788, 0.000001));
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.123455123,0.123455224, floadCmp(0.123455123,0.123455224, 0.000001));
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.123456123,0.123456123, floadCmp(0.123456123,0.123456123, 0.000001));
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.123456123,0.123456123, floadCmp(0.123455123,0.123456123, 0.000001));
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.12345,0.12340, floadCmp(0.12345,0.12340, 0.000001));
-    printf(&quot;%.8f, %.8f, %2dn&quot;, 0.123456,0.123457, floadCmp(0.123456,0.123457, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456789,0.123456788, floadCmp(0.123456789,0.123456788, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123455123,0.123455224, floadCmp(0.123455123,0.123455224, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456123,0.123456123, floadCmp(0.123456123,0.123456123, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456123,0.123456123, floadCmp(0.123455123,0.123456123, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.12345,0.12340, floadCmp(0.12345,0.12340, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456,0.123457, floadCmp(0.123456,0.123457, 0.000001));
 }
 
 /**
  * 4.指针、内存和数组
  */
 void mem_size_show(char a[32]) {
-    printf(&quot;mem-size %dn&quot;,sizeof(a));
+    printf("mem-size %dn",sizeof(a));
 }
 
 char* mem_get_str() {
     /// 指向常量区内存
-    char*p = &quot;hello world&quot;;
+    char*p = "hello world";
     return p;
 }
 
 char* mem_get_str2() {
     /// 动态分配内存
-    char p[] = &quot;hello world&quot;;
+    char p[] = "hello world";
     return p;
 }
 
 char mem_free_without_null() {
     char* m = malloc(32);
-    strcpy(m, &quot;hello mem&quot;);
-    printf(&quot;m = %sn&quot;,m);
+    strcpy(m, "hello mem");
+    printf("m = %sn",m);
     free(m);
     /* m = NULL */
     /// 野生指针你好
     /** if(m) {
-        strcpy(m, &quot;hello NULL&quot;);
-        printf(&quot;m = %sn&quot;,m);
+        strcpy(m, "hello NULL");
+        printf("m = %sn",m);
     }*/
 }
 
@@ -192,9 +193,9 @@ void mem_test() {
 
     for(idx = 0; idx &lt; 8; idx++) {
         /** Tips: 内存指向常量区，每次返回的地址和值都相同 */
-        printf(&quot;  test mem1 %08x, val %sn&quot;,  mem_get_str(),mem_get_str());
+        printf("  test mem1 %08x, val %sn",  mem_get_str(),mem_get_str());
         /** Tips: 内存指向堆栈区，每次返回的地址和内容不可预测，乱码 */
-        printf(&quot;  test mem2 %08x, val %sn&quot;,  mem_get_str2(),mem_get_str2());
+        printf("  test mem2 %08x, val %sn",  mem_get_str2(),mem_get_str2());
     }
 
     mem_free_without_null();
@@ -210,7 +211,7 @@ void endien_test() {
     } t_union;
     t_union test_union;
     test_union.ch = 1;
-    printf(&quot;%s endienn&quot;, test_union.integer?&quot;Little&quot;:&quot;Big&quot;);
+    printf("%s endienn", test_union.integer?"Little":"Big");
 }
 /**
  * 算法1：输出一个给定整数的所有和的组合如5,输出1,4; 2,3，相加的数不能重复
@@ -234,12 +235,12 @@ void endien_test() {
 void qsort_array_print(unsigned int *array, unsigned int size) {
     unsigned int idx = 0;
     for(idx = 0; idx &lt; size; idx++) {
-        printf(&quot;%d &quot;,array[idx]);
+        printf("%d ",array[idx]);
         if(idx%10 == 9) {
-            printf(&quot;n&quot;);
+            printf("n");
         }
     }
-    printf(&quot;n&quot;);
+    printf("n");
 }
 
 static int qsort_array_split_sort(unsigned int *array, unsigned int start, unsigned int end) {
@@ -280,12 +281,12 @@ static void qsort_array_do(unsigned int *array, unsigned int start, unsigned int
 
 void qsort_unit_test(int* array, unsigned int size) {
     static cnt = 0;
-    printf(&quot;----------test array %d init----------n&quot;,cnt);
+    printf("----------test array %d init----------n",cnt);
     qsort_array_print(array, size);
-    printf(&quot;----------test array %d gogo----------n&quot;,cnt);
+    printf("----------test array %d gogo----------n",cnt);
     qsort_array_do(array, 0, size-1);
     qsort_array_print(array, size);
-    printf(&quot;----------test array %d over----------n&quot;,cnt);
+    printf("----------test array %d over----------n",cnt);
     cnt++;
 }
 
@@ -318,15 +319,15 @@ void more_test() {
     char c = 128;
     unsigned short s = 10;
     /// Tips:char 128即0x100,最高位为负数,所以输出int时是-128
-    printf(&quot;char(128)=%d(%%d -128)n&quot;,c);
-    printf(&quot;~short(10)=%u, %08x, %d(%%u 4294967285)n&quot;,~s, ~s, ~s);
+    printf("char(128)=%d(%%d -128)n",c);
+    printf("~short(10)=%u, %08x, %d(%%u 4294967285)n",~s, ~s, ~s);
 }
 
 void string_arr_test() {
     int idx = 0;
-    char arr[4][32] = {&quot;ifconfig&quot;,&quot;eth1&quot;,&quot;inet&quot;,&quot;208.254.254.254&quot;};
+    char arr[4][32] = {"ifconfig","eth1","inet","208.254.254.254"};
     for(idx = 0; idx &lt; 4; idx++) {
-        printf(&quot;idx:%d %sn&quot;, idx, arr[idx]);
+        printf("idx:%d %sn", idx, arr[idx]);
     }
 }
 /**
@@ -334,17 +335,19 @@ void string_arr_test() {
  */
 int main() {
     int idx = 0;
-    TEST(&quot;is2Power_test&quot;,   idx, is2Power_test);
-    TEST(&quot;swap_test&quot;,       idx, swap_test);
-    TEST(&quot;floadCmp_test&quot;,   idx, floadCmp_test);
-    TEST(&quot;more_test&quot;,       idx, more_test);
-    TEST(&quot;qsort_test&quot;,      idx, qsort_test);
-    TEST(&quot;mem_test&quot;,        idx, mem_test);
-    TEST(&quot;endien_test&quot;,     idx, endien_test);
+    TEST("is2Power_test",   idx, is2Power_test);
+    TEST("swap_test",       idx, swap_test);
+    TEST("floadCmp_test",   idx, floadCmp_test);
+    TEST("more_test",       idx, more_test);
+    TEST("qsort_test",      idx, qsort_test);
+    TEST("mem_test",        idx, mem_test);
+    TEST("endien_test",     idx, endien_test);
 
     return 0;
 }
-</code></pre></div>
+</code></pre>
+
+
   </article>
 
 </div>

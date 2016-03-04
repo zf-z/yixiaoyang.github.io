@@ -90,111 +90,130 @@
   <article class="post-content">
     <p>使用NIOS PIO中断响应外部信号</p>
 
-<h3 id=">寄存器定义</h3>
+<h3>寄存器定义</h3>
 
-<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png" alt="nios_pio_reg_def"></a></p>
+<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png" alt="nios_pio_reg_def" /></a></p>
 
-<h3 id="edgecapture-register">edgecapture Register</h3>
+<h3>edgecapture Register</h3>
 
 <p>Bit n in the  edgecapture register is set to 1 whenever an edge is detected on input port n. An Avalon-MM master peripheral can read the  edgecapture register to determine if an edge has occurred on any of the PIO input ports. <strong>If the option <code>Enable bit-clearing for edge capture register</code> is turned off, writing any value to the  edgecapture register clears all bits in the register. Otherwise, writing a 1 to a particular bit in the register clears only that bit.</strong></p>
 
 <p>The type of edge(s) to detect is fixed in hardware at system generation time. The edgecapture register only exists when the hardware is configured to capture edges. If the core is not configured to capture edges, reading from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</p>
 
-<h3 id="pio">PIO定义</h3>
+<h3>PIO定义</h3>
 
-<p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png" alt="nios_pio_irq_def"></a></p>
+<p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png" alt="nios_pio_irq_def" /></a></p>
 
-<h3 id=">编程模式</h3>
+<h3>编程模式</h3>
 
 <ol>
-<li><p>使能中断。对mask寄存器对应位set。</p></li>
-<li><p>清edgecapture寄存器，设置中断处理函数。</p></li>
-<li><p>进入中断函数后先读取eadecapture的值，查看对应触发的位进行相应处理。</p></li>
-<li><p>退出中断处理函数前清除edgecapture寄存器。</p></li>
+  <li>
+    <p>使能中断。对mask寄存器对应位set。</p>
+  </li>
+  <li>
+    <p>清edgecapture寄存器，设置中断处理函数。</p>
+  </li>
+  <li>
+    <p>进入中断函数后先读取eadecapture的值，查看对应触发的位进行相应处理。</p>
+  </li>
+  <li>
+    <p>退出中断处理函数前清除edgecapture寄存器。</p>
+  </li>
 </ol>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp">    <span class="kt">void</span> <span class="nf">init_pio</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="cm">/* Enable all interrupts */</span>
-        <span class="n">IOWR_ALTERA_AVALON_PIO_IRQ_MASK</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span>
-                <span class="n">PIO_IRQ_PLOT_EN</span> <span class="o">|</span> <span class="n">PIO_IRQ_FO_WR_DONE</span> <span class="o">|</span> <span class="n">PIO_IRQ_DDR3_RD_REQ</span><span class="p">);</span>
 
-        <span class="cm">/* Reset the edge capture register */</span>
-        <span class="n">IOWR_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">);</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>    <span style="color:#088;font-weight:bold">void</span> init_pio()
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    {
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>        <span style="color:#777">/* Enable all interrupts */</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        IOWR_ALTERA_AVALON_PIO_IRQ_MASK(PARALLEL_INPUT_IRQ_16_BASE,
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>                PIO_IRQ_PLOT_EN | PIO_IRQ_FO_WR_DONE | PIO_IRQ_DDR3_RD_REQ);
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        <span style="color:#777">/* Reset the edge capture register */</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE, <span style="color:#02b">0xFFFF</span>);
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    <span style="color:#579">#ifdef</span> ALT_ENHANCED_INTERRUPT_API_PRESENT
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>        alt_ic_isr_register(PARALLEL_INPUT_IRQ_16_IRQ_INTERRUPT_CONTROLLER_ID,
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>                PARALLEL_INPUT_IRQ_16_IRQ,  <span style="color:#777">/* 硬件中断号，NIOS中定义 */</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>                handle_irq_pio16_input,     <span style="color:#777">/* 中断handler */</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>                edge_capture_ptr,           <span style="color:#777">/* 用于存储edgecapture寄存器内容*/</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>                <span style="color:#00D">0</span>);
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    <span style="color:#579">#endif</span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    }
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="color:#579">#ifdef</span> ALT_ENHANCED_INTERRUPT_API_PRESENT
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    <span style="color:#777">/**</span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span><span style="color:#777">     * @param context 存储edgecapture值的位置</span>
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span><span style="color:#777">     *</span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span><span style="color:#777">     * @ note: Bit n in the  edgecapture register is set to 1 whenever an edge is detected on input port n.</span>
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span><span style="color:#777">     * An Avalon-MM master peripheral can read the  edgecapture register to determine if an edge has</span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span><span style="color:#777">     * occurred on any of the PIO input ports. If the option Enable bit-clearing for edge capture register</span>
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span><span style="color:#777">     * is turned off, writing any value to the  edgecapture register clears all bits in the register.</span>
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span><span style="color:#777">     * Otherwise, writing a 1 to a particular bit in the register clears only that bit. The type of edge(s)</span>
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span><span style="color:#777">     * to detect is fixed in hardware at system generation time. The edgecapture register only exists when</span>
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span><span style="color:#777">     * the hardware is configured to capture edges. If the core is not configured to capture edges, reading</span>
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span><span style="color:#777">     * from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</span>
+<span class="line-numbers"><a href="#n31" name="n31">31</a></span><span style="color:#777">     */</span>
+<span class="line-numbers"><a href="#n32" name="n32">32</a></span>    <span style="color:#088;font-weight:bold">void</span> handle_irq_pio16_input(<span style="color:#088;font-weight:bold">void</span>* context)
+<span class="line-numbers"><a href="#n33" name="n33">33</a></span>    {
+<span class="line-numbers"><a href="#n34" name="n34">34</a></span>        <span style="color:#777">/* Cast context to edge_capture's type. It is important that this</span>
+<span class="line-numbers"><a href="#n35" name="n35">35</a></span><span style="color:#777">        be declared volatile to avoid unwanted compiler optimization. */</span>
+<span class="line-numbers"><a href="#n36" name="n36">36</a></span>        <span style="color:#088;font-weight:bold">volatile</span> <span style="color:#0a8;font-weight:bold">int</span>* edge_capture_ptr = (<span style="color:#088;font-weight:bold">volatile</span> <span style="color:#0a8;font-weight:bold">int</span>*) context;
+<span class="line-numbers"><a href="#n37" name="n37">37</a></span>    
+<span class="line-numbers"><a href="#n38" name="n38">38</a></span>        <span style="color:#777">/*</span>
+<span class="line-numbers"><a href="#n39" name="n39">39</a></span><span style="color:#777">        * Read the edge capture register on the button PIO.</span>
+<span class="line-numbers"><strong><a href="#n40" name="n40">40</a></strong></span><span style="color:#777">        * Store value.</span>
+<span class="line-numbers"><a href="#n41" name="n41">41</a></span><span style="color:#777">        */</span>
+<span class="line-numbers"><a href="#n42" name="n42">42</a></span>        *edge_capture_ptr = IORD_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE);
+<span class="line-numbers"><a href="#n43" name="n43">43</a></span>    
+<span class="line-numbers"><a href="#n44" name="n44">44</a></span>        <span style="color:#777">/* 中断处理 */</span>
+<span class="line-numbers"><a href="#n45" name="n45">45</a></span>        <span style="color:#080;font-weight:bold">if</span> (*edge_capture_ptr &amp; PIO_IRQ_PLOT_EN) {
+<span class="line-numbers"><a href="#n46" name="n46">46</a></span>            handle_irq_plot_en();
+<span class="line-numbers"><a href="#n47" name="n47">47</a></span>        }
+<span class="line-numbers"><a href="#n48" name="n48">48</a></span>        <span style="color:#080;font-weight:bold">if</span> (*edge_capture_ptr &amp; PIO_IRQ_FO_WR_DONE) {
+<span class="line-numbers"><a href="#n49" name="n49">49</a></span>            handle_irq_fo_wr_done();
+<span class="line-numbers"><strong><a href="#n50" name="n50">50</a></strong></span>        }
+<span class="line-numbers"><a href="#n51" name="n51">51</a></span>        <span style="color:#080;font-weight:bold">if</span> (*edge_capture_ptr &amp; PIO_IRQ_DDR3_RD_REQ) {
+<span class="line-numbers"><a href="#n52" name="n52">52</a></span>            handle_irq_ddr3_read_req();
+<span class="line-numbers"><a href="#n53" name="n53">53</a></span>        }
+<span class="line-numbers"><a href="#n54" name="n54">54</a></span>    
+<span class="line-numbers"><a href="#n55" name="n55">55</a></span>    
+<span class="line-numbers"><a href="#n56" name="n56">56</a></span>        <span style="color:#777">/* Write to the edge capture register to reset it. */</span>
+<span class="line-numbers"><a href="#n57" name="n57">57</a></span>        <span style="color:#777">/*IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE, 0);*/</span>
+<span class="line-numbers"><a href="#n58" name="n58">58</a></span>        IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE, <span style="color:#02b">0xFFFF</span>);
+<span class="line-numbers"><a href="#n59" name="n59">59</a></span>    
+<span class="line-numbers"><strong><a href="#n60" name="n60">60</a></strong></span>    
+<span class="line-numbers"><a href="#n61" name="n61">61</a></span>        <span style="color:#777">/* Read the PIO to delay ISR exit. This is done to prevent a</span>
+<span class="line-numbers"><a href="#n62" name="n62">62</a></span><span style="color:#777">        spurious interrupt in systems with high processor -&gt; pio</span>
+<span class="line-numbers"><a href="#n63" name="n63">63</a></span><span style="color:#777">        latency and fast interrupts. */</span>
+<span class="line-numbers"><a href="#n64" name="n64">64</a></span>        IORD_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE);
+<span class="line-numbers"><a href="#n65" name="n65">65</a></span>    }
+<span class="line-numbers"><a href="#n66" name="n66">66</a></span>    
+</pre></div>
+</div>
+</div>
 
-    <span class="cp">#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT</span>
-        <span class="n">alt_ic_isr_register</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_IRQ_INTERRUPT_CONTROLLER_ID</span><span class="p">,</span>
-                <span class="n">PARALLEL_INPUT_IRQ_16_IRQ</span><span class="p">,</span>  <span class="cm">/* 硬件中断号，NIOS中定义 */</span>
-                <span class="n">handle_irq_pio16_input</span><span class="p">,</span>     <span class="cm">/* 中断handler */</span>
-                <span class="n">edge_capture_ptr</span><span class="p">,</span>           <span class="cm">/* 用于存储edgecapture寄存器内容*/</span>
-                <span class="mi">0</span><span class="p">);</span>
-    <span class="cp">#endif</span>
-    <span class="p">}</span>
-    <span class="cp">#ifdef ALT_ENHANCED_INTERRUPT_API_PRESENT</span>
-
-    <span class="cm">/**</span>
-<span class="cm">     * @param context 存储edgecapture值的位置</span>
-<span class="cm">     *</span>
-<span class="cm">     * @ note: Bit n in the  edgecapture register is set to 1 whenever an edge is detected on input port n.</span>
-<span class="cm">     * An Avalon-MM master peripheral can read the  edgecapture register to determine if an edge has</span>
-<span class="cm">     * occurred on any of the PIO input ports. If the option Enable bit-clearing for edge capture register</span>
-<span class="cm">     * is turned off, writing any value to the  edgecapture register clears all bits in the register.</span>
-<span class="cm">     * Otherwise, writing a 1 to a particular bit in the register clears only that bit. The type of edge(s)</span>
-<span class="cm">     * to detect is fixed in hardware at system generation time. The edgecapture register only exists when</span>
-<span class="cm">     * the hardware is configured to capture edges. If the core is not configured to capture edges, reading</span>
-<span class="cm">     * from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</span>
-<span class="cm">     */</span>
-    <span class="kt">void</span> <span class="nf">handle_irq_pio16_input</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">context</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="cm">/* Cast context to edge_capture&#39;s type. It is important that this</span>
-<span class="cm">        be declared volatile to avoid unwanted compiler optimization. */</span>
-        <span class="k">volatile</span> <span class="kt">int</span><span class="o">*</span> <span class="n">edge_capture_ptr</span> <span class="o">=</span> <span class="p">(</span><span class="k">volatile</span> <span class="kt">int</span><span class="o">*</span><span class="p">)</span> <span class="n">context</span><span class="p">;</span>
-
-        <span class="cm">/*</span>
-<span class="cm">        * Read the edge capture register on the button PIO.</span>
-<span class="cm">        * Store value.</span>
-<span class="cm">        */</span>
-        <span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">=</span> <span class="n">IORD_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">);</span>
-
-        <span class="cm">/* 中断处理 */</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_PLOT_EN</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">handle_irq_plot_en</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_FO_WR_DONE</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">handle_irq_fo_wr_done</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">edge_capture_ptr</span> <span class="o">&amp;</span> <span class="n">PIO_IRQ_DDR3_RD_REQ</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">handle_irq_ddr3_read_req</span><span class="p">();</span>
-        <span class="p">}</span>
-
-
-        <span class="cm">/* Write to the edge capture register to reset it. */</span>
-        <span class="cm">/*IOWR_ALTERA_AVALON_PIO_EDGE_CAP(PARALLEL_INPUT_IRQ_16_BASE, 0);*/</span>
-        <span class="n">IOWR_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span> <span class="mh">0xFFFF</span><span class="p">);</span>
-
-
-        <span class="cm">/* Read the PIO to delay ISR exit. This is done to prevent a</span>
-<span class="cm">        spurious interrupt in systems with high processor -&gt; pio</span>
-<span class="cm">        latency and fast interrupts. */</span>
-        <span class="n">IORD_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">);</span>
-    <span class="p">}</span>
-</code></pre></div>
-<h3 id=">测试</h3>
+<h3>测试</h3>
 
 <p>将pio irq接到pio output上，控制pio output的高低即可模拟外部中断信号的输入。</p>
-<div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="p">...</span>
-        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-            <span class="n">test_trigger_pio</span><span class="p">(</span><span class="n">PIO_IRQ_PLOT_EN</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
-            <span class="cm">/* sleep for 1sec */</span>
-            <span class="n">usleep</span><span class="p">(</span><span class="mi">3000000</span><span class="p">);</span>
 
-            <span class="n">test_trigger_pio</span><span class="p">(</span><span class="n">PIO_IRQ_PLOT_EN</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-            <span class="cm">/* sleep for 1sec */</span>
-            <span class="n">usleep</span><span class="p">(</span><span class="mi">3000000</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">...</span>
-    <span class="p">}</span>
-</code></pre></div>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#0a8;font-weight:bold">int</span> main(){
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    ...
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>        <span style="color:#080;font-weight:bold">while</span>(<span style="color:#00D">1</span>){
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>            test_trigger_pio(PIO_IRQ_PLOT_EN,<span style="color:#00D">0</span>);
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>            <span style="color:#777">/* sleep for 1sec */</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>            usleep(<span style="color:#00D">3000000</span>);
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>            test_trigger_pio(PIO_IRQ_PLOT_EN,<span style="color:#00D">1</span>);
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>            <span style="color:#777">/* sleep for 1sec */</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>            usleep(<span style="color:#00D">3000000</span>);
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>        }
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    ...
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    }
+</pre></div>
+</div>
+</div>
+
   </article>
 
 </div>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>[Beaglebone] U-boot and Buildroot for Beaglebone</title>
-  <meta name="description" content="U-Boot for BeagleBone[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make CROSSCOMPILE=arm-linux-gnueabihf- ARCH=arm dis...">
+  <meta name="description" content="U-Boot for BeagleBone">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="/2014/05/07/buildroot-for-beaglebone/">
@@ -82,170 +82,192 @@
 
 
   <article class="post-content">
-    <h3 id="u-boot-for-beaglebone">U-Boot for BeagleBone</h3>
+    <h3>U-Boot for BeagleBone</h3>
 
-<h4 id="host-machine">Host Machine</h4>
+<h4>Host Machine</h4>
 
 <pre>
 Ubuntu 12.04 LTS Intel® Core™ i3-3220 CPU @ 3.30GHz × 4
 $ uname -a
 Linux xiaoyang-desktop 3.2.0-57-generic #87-Ubuntu SMP Tue Nov 12 21:35:10 UTC 2013 x86_64 x86_64 x86_64 
-GNU/Linux</code>
+GNU/Linux
 </pre>
 
-<h3 id="buildroot-for-beaglebone">Buildroot for Beaglebone</h3>
+<h3>Buildroot for Beaglebone</h3>
 
-<h4 id="waht-39-s-buildroot">Waht&#39;s BuildRoot</h4>
-
-<p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. 
-Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a 
-bootloader image. Buildroot is useful mainly for people working with small or embedded systems, using various 
-CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
+<h4>Waht’s BuildRoot</h4>
+<p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. <br />
+Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a <br />
+bootloader image. Buildroot is useful mainly for people working with small or embedded systems, using various <br />
+CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded<br />
 system and eases the cross-compilation process.</p>
 
-<h4 id="why-buildroot">Why BuildRoot？===</h4>
+<h4>Why BuildRoot？===</h4>
 
 <p>首先是其对BeagleBone 的原生支持，不需要另行移植；其次是其大小，相较于Angstrom 与 Ubuntu 的体积来说，BuildRoot非常袖珍，除去大家都一样的bootloader 与 Kernel 不算，根文件系统只有4MB 左右，还包括了uClibc。当然我们可以在编译的时候指定第三方的编译环境，比如Ti SDK 或是 cross-N，libc 也可以使用诸如eglibc 和 标准的glibc，这都不是问题。更详细的介绍参见其官方网站 <a href="http://buildroot.uclibc.org/">http://buildroot.uclibc.org/</a> ，此项目到目前为止还在维护中。</p>
 
-<h4 id="system-requirements">System requirements</h4>
-
-<p>Install required packages following &#39;Mandatory packagesin&#39; section in document。</p>
+<h4>System requirements</h4>
+<p>Install required packages following ‘Mandatory packagesin’ section in document。</p>
 
 <p><code>$ sudo apt-get install binutils build-essential g++ gcc perl  cpio rsync ncurses-dev</code></p>
 
-<h4 id="config-and-build">Config and Build</h4>
-
+<h4>Config and Build</h4>
 <p>Use the beaglebone_defconfig</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>make beaglebone_defconfig
-<span class="nv">$ </span>makemenuconfig
-</code></pre></div>
-<p>Select following options：
-- Toolchain -&gt; C library (glibc)
-- System configuration -&gt; remount root filesystem read-write during boot 此选项用于在boot后重新挂载可读写文件系统
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>$ make beaglebone_defconfig
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>$ makemenuconfig
+</pre></div>
+</div>
+</div>
+<p>Select following options：<br />
+- Toolchain -&gt; C library (glibc)<br />
+- System configuration -&gt; remount root filesystem read-write during boot 此选项用于在boot后重新挂载可读写文件系统<br />
 - Target packages -&gt; Filesystem and flash utilities 添加nfs组件从host机器上传输文件</p>
 
-<p>You can also using &quot;make linux-menuconfig | glibc-menuconfig | busybox-menuconfig&quot; to config linux kernel or glibc or busybox.Then you can begin download source by <code>$ make source</code></p>
+<table>
+  <tbody>
+    <tr>
+      <td>You can also using “make linux-menuconfig</td>
+      <td>glibc-menuconfig</td>
+      <td>busybox-menuconfig” to config linux kernel or glibc or busybox.Then you can begin download source by <code>$ make source</code></td>
+    </tr>
+  </tbody>
+</table>
 
 <blockquote>
-<p>Tips:由于国内网络在下载am33x-cm3-AM335xPSP时会比较慢，可以自行下载am33x-cm3-AM335xPSP_04.06.00.10-rc1.tar.gz对应文件到/buildroot/buildroot-2013.11/dl目录。重新make source就会使用次工具包。同理在下载ti linux时，为了节省时间也可以自行下载源文件打包，放置到此目录。</p>
+  <p>Tips:由于国内网络在下载am33x-cm3-AM335xPSP时会比较慢，可以自行下载am33x-cm3-AM335xPSP_04.06.00.10-rc1.tar.gz对应文件到/buildroot/buildroot-2013.11/dl目录。重新make source就会使用次工具包。同理在下载ti linux时，为了节省时间也可以自行下载源文件打包，放置到此目录。</p>
 </blockquote>
 
 <p>The make command will generally perform the following steps:</p>
 
 <ul>
-<li>download source files (as required);</li>
-<li>configure, build and install the cross-compiling toolchain using the appropriate toolchain backend, or simply import an external toolchain;</li>
-<li>build/install selected target packages;</li>
-<li>build a kernel image, if selected;</li>
-<li>build a bootloader image, if selected;</li>
-<li>create a root filesystem in selected formats. </li>
+  <li>download source files (as required);</li>
+  <li>configure, build and install the cross-compiling toolchain using the appropriate toolchain backend, or simply import an external toolchain;</li>
+  <li>build/install selected target packages;</li>
+  <li>build a kernel image, if selected;</li>
+  <li>build a bootloader image, if selected;</li>
+  <li>create a root filesystem in selected formats.</li>
 </ul>
 
-<h4 id=">目录结构</h4>
+<h4>目录结构</h4>
 
 <p>Buildroot output is stored in a single directory, output/. This directory contains several subdirectories:</p>
 
 <ul>
-<li><strong>images/</strong> where all the images (kernel image, bootloader and root filesystem images) are stored.</li>
-<li><strong>build/</strong> where all the components except for the cross-compilation toolchain are built (this includes tools needed to run Buildroot on the host and packages compiled for the target). The build/ directory contains one subdirectory for each of these components.</li>
-<li><strong>taging/</strong> which contains a hierarchy similar to a root filesystem hierarchy. This directory contains the installation of the cross-compilation toolchain and all the userspace packages selected for the target. However, this directory is not intended to be the root filesystem for the target: it contains a lot of development files, unstripped binaries and libraries that make it far too big for an embedded system. These development files are used to compile libraries and applications for the target that depend on other libraries.</li>
-<li><strong>target/</strong> which contains almost the complete root filesystem for the target: everything needed is present except the device files in /dev/ (Buildroot can’t create them because Buildroot doesn’t run as root and doesn’t want to run as root). Also, it doesn’t have the correct permissions (e.g. setuid for the busybox binary). Therefore, this directory should not be used on your target. Instead, you should use one of the images built in the images/ directory. If you need an extracted image of the root filesystem for booting over NFS, then use the tarball image generated in images/ and extract it as root. Compared to staging/, target/ contains only the files and libraries needed to run the selected target applications: the development files (headers, etc.) are not present, the binaries are stripped.</li>
-<li><strong>host/</strong> contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain.</li>
-<li><strong>toolchain/</strong> contains the build directories for the various components of the cross-compilation toolchain. </li>
+  <li><strong>images/</strong> where all the images (kernel image, bootloader and root filesystem images) are stored.</li>
+  <li><strong>build/</strong> where all the components except for the cross-compilation toolchain are built (this includes tools needed to run Buildroot on the host and packages compiled for the target). The build/ directory contains one subdirectory for each of these components.</li>
+  <li><strong>taging/</strong> which contains a hierarchy similar to a root filesystem hierarchy. This directory contains the installation of the cross-compilation toolchain and all the userspace packages selected for the target. However, this directory is not intended to be the root filesystem for the target: it contains a lot of development files, unstripped binaries and libraries that make it far too big for an embedded system. These development files are used to compile libraries and applications for the target that depend on other libraries.</li>
+  <li><strong>target/</strong> which contains almost the complete root filesystem for the target: everything needed is present except the device files in /dev/ (Buildroot can’t create them because Buildroot doesn’t run as root and doesn’t want to run as root). Also, it doesn’t have the correct permissions (e.g. setuid for the busybox binary). Therefore, this directory should not be used on your target. Instead, you should use one of the images built in the images/ directory. If you need an extracted image of the root filesystem for booting over NFS, then use the tarball image generated in images/ and extract it as root. Compared to staging/, target/ contains only the files and libraries needed to run the selected target applications: the development files (headers, etc.) are not present, the binaries are stripped.</li>
+  <li><strong>host/</strong> contains the installation of tools compiled for the host that are needed for the proper execution of Buildroot, including the cross-compilation toolchain.</li>
+  <li><strong>toolchain/</strong> contains the build directories for the various components of the cross-compilation toolchain.</li>
 </ul>
 
-<h3 id="uboot-comiple-with-ti-sdk">uboot comiple with Ti SDK</h3>
-
+<h3>uboot comiple with Ti SDK</h3>
 <p>uboot comiple with Ti SDK</p>
 
 <pre>
 make CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm distclean
 xiaoyang@xiaoyang-desktop:/opt/ti-sdk-am335x/linux-devkit$ source environment-setup
-[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> make CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm distclean
-[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> ls board/ti/
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm distclean
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; ls board/ti/
 am335x  am3517crane  beagle  dra7xx  evm  omap1510inn  omap2420h4  omap5912osk  omap5_evm  omap730p2  panda  sdp3430  sdp4430  tnetv107xevm
-[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00> make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
+[linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 </pre>
 
 <p>编译最后会出现问题mkimage的问题，应该是ubuntu环境下TI提供的mkimage工具不兼容导致，解决办法：<code>$ apt-get install uboot-mkimage</code></p>
 
 <p>然后修改makefile将mkimage前的路径去掉，使用系统默认的mkimage，或者直接mkimage</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$: mkimage -T omapimage -a 0x402F0400 -d /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/spl/u-boot-spl.bin /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/MLO
-make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
-</code></pre></div>
-<h3 id="make-the-bootable-microsd-card-for-beaglebone">Make the bootable MicroSD Card for Beaglebone</h3>
 
+<pre><code>$: mkimage -T omapimage -a 0x402F0400 -d /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/spl/u-boot-spl.bin /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/MLO
+make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
+</code></pre>
+
+<h3>Make the bootable MicroSD Card for Beaglebone</h3>
 <p>First Check your disk and find SD card, <strong>/dev/sdb</strong> for example:</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>sudo emerge dosfstools
-<span class="nv">$ </span>sudo fdisk -l
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdb
-</code></pre></div>
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>$ sudo emerge dosfstools
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>$ sudo fdisk -l
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>$ export DISK=/dev/sdb
+</pre></div>
+</div>
+</div>
+
 <p>Then unmount the disk, and flash /dev/sdb</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
-<span class="nv">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span> <span class="s">&lt;&lt;-__EOF__</span>
-<span class="s">1,48,0xE,*</span>
-<span class="s">,,,-</span>
-<span class="s">__EOF__</span>
-<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">1</span> -n boot
-<span class="nv">$ </span>sudo mkfs.ext4 <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> -L rootfs
-<span class="nv">$ </span>sudo mkdir -p /media/boot/
-<span class="nv">$ </span>sudo mkdir -p /media/rootfs/
-<span class="nv">$ </span>sudo mount <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">1</span> /media/boot/
-<span class="nv">$ </span>sudo mount <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> /media/rootfs/
-<span class="nv">$ </span>sudo cp -v MLO  /media/boot/       
-<span class="nv">$ </span>sudo cp -v u-boot.img  /media/boot/
-<span class="nv">$ </span>sudo cp -v ./uEnv.txt /media/boot/
-<span class="nv">$ </span>sudo cp -v uImage  /media/boot/
-<span class="nv">$ </span>sudo mkdir -p /media/boot/dtbs/          
-<span class="nv">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
-<span class="nv">$ </span>sync
-<span class="nv">$ </span>sudo umount /media/boot
-<span class="nv">$ </span>sudo umount /media/rootfs
-<span class="nv">$ </span><span class="nb">exit</span>
-</code></pre></div>
-<p>Following pages may helpful:
-<a href="http://linux-sunxi.org/Bootable_SD_card">http://linux-sunxi.org/Bootable<em>SD</em>card</a></p>
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>$ export DISK=/dev/sdc
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>$ sudo dd if=/dev/zero of=${DISK} bs=1M count=16
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>$ sudo sfdisk --in-order --Linux --unit M ${DISK} &lt;&lt;-__EOF__
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>1,48,0xE,*
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>,,,-
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>__EOF__
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>$ sudo mkfs.vfat -F 16 ${DISK}1 -n boot
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>$ sudo mkfs.ext4 ${DISK}2 -L rootfs
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>$ sudo mkdir -p /media/boot/
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>$ sudo mkdir -p /media/rootfs/
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>$ sudo mount ${DISK}1 /media/boot/
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>$ sudo mount ${DISK}2 /media/rootfs/
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>$ sudo cp -v MLO  /media/boot/       
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>$ sudo cp -v u-boot.img  /media/boot/
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>$ sudo cp -v ./uEnv.txt /media/boot/
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>$ sudo cp -v uImage  /media/boot/
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>$ sudo mkdir -p /media/boot/dtbs/          
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>$ sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>$ sudo dd if=rootfs.ext4 of=${DISK}2 bs=128k
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>$ sync
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>$ sudo umount /media/boot
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>$ sudo umount /media/rootfs
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>$ exit
+</pre></div>
+</div>
+</div>
+
+<p>Following pages may helpful:<br />
+<a href="http://linux-sunxi.org/Bootable_SD_card">http://linux-sunxi.org/Bootable_SD_card</a></p>
 
 <p>现在SD卡被分成两个区，一个LBA vfat区放置boot相关文件，一个ext4放置文件系统等。现在将文件系统强制拷贝到第二个分区，因为文件系统带有分区信息，因此可以直接dd拷贝1</p>
 
 <p><code>$ sudo dd if=rootfs.ext2 of=/dev/sdc2 bs=128k</code></p>
 
-<p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：
+<p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：<br />
 <code>uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
 
-<h3 id="usb-serial-driver-for-beaglebone-on-ubuntu12-04lts">USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
-
+<h3>USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
 <p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="s">&lt;&lt;EOF</span>
-<span class="s">ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ENV{DEVTYPE}==&quot;usb_interface&quot;, \</span>
-<span class="s">        ATTRS{idVendor}==&quot;0403&quot;, ATTRS{idProduct}==&quot;a6d0&quot;, \</span>
-<span class="s">        DRIVER==&quot;&quot;, RUN+=&quot;/sbin/modprobe -b ftdi_sio&quot;</span>
 
-<span class="s">ACTION==&quot;add&quot;, SUBSYSTEM==&quot;drivers&quot;, \</span>
-<span class="s">        ENV{DEVPATH}==&quot;/bus/usb-serial/drivers/ftdi_sio&quot;, \</span>
-<span class="s">        ATTR{new_id}=&quot;0403 a6d0&quot;</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>cat &gt; /etc/udev/rules.d/73-beaglebone.rules &lt;&lt;EOF
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ENV{DEVTYPE}==&quot;usb_interface&quot;, \
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>        ATTRS{idVendor}==&quot;0403&quot;, ATTRS{idProduct}==&quot;a6d0&quot;, \
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        DRIVER==&quot;&quot;, RUN+=&quot;/sbin/modprobe -b ftdi_sio&quot;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>ACTION==&quot;add&quot;, SUBSYSTEM==&quot;drivers&quot;, \
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        ENV{DEVPATH}==&quot;/bus/usb-serial/drivers/ftdi_sio&quot;, \
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        ATTR{new_id}=&quot;0403 a6d0&quot;
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    ATTRS{interface}==&quot;BeagleBone&quot;, \
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>        ATTRS{bInterfaceNumber}==&quot;00&quot;, \
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    SYMLINK+=&quot;beaglebone-jtag&quot;
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    ATTRS{interface}==&quot;BeagleBone&quot;, \
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        ATTRS{bInterfaceNumber}==&quot;01&quot;, \
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    SYMLINK+=&quot;beaglebone-serial&quot;
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>EOF
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>sudo udevadm control --reload-rules
+</pre></div>
+</div>
+</div>
 
-<span class="s">ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \</span>
-<span class="s">    ATTRS{interface}==&quot;BeagleBone&quot;, \</span>
-<span class="s">        ATTRS{bInterfaceNumber}==&quot;00&quot;, \</span>
-<span class="s">    SYMLINK+=&quot;beaglebone-jtag&quot;</span>
-
-<span class="s">ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \</span>
-<span class="s">    ATTRS{interface}==&quot;BeagleBone&quot;, \</span>
-<span class="s">        ATTRS{bInterfaceNumber}==&quot;01&quot;, \</span>
-<span class="s">    SYMLINK+=&quot;beaglebone-serial&quot;</span>
-<span class="s">EOF</span>
-
-sudo udevadm control --reload-rules
-</code></pre></div>
-<h3 id="using-sitara-linux-sdk">Using Sitara Linux SDK</h3>
-
+<h3>Using Sitara Linux SDK</h3>
 <ul>
-<li><a href="http://processors.wiki.ti.com/index.php/Sitara_Linux_Software_Developer%E2%80%99s_Guide">Sitara_Linux_Software_Developer_Guide</a></li>
-<li><a href="http://my.oschina.net/u/614480/blog/105059">BuildRoot FOR BeagleBone</a></li>
-<li><a href="http://eewiki.net/display/linuxonarm/BeagleBone">Linux on ARM BeagleBone</a> </li>
+  <li><a href="http://processors.wiki.ti.com/index.php/Sitara_Linux_Software_Developer%E2%80%99s_Guide">Sitara_Linux_Software_Developer_Guide</a></li>
+  <li><a href="http://my.oschina.net/u/614480/blog/105059">BuildRoot FOR BeagleBone</a></li>
+  <li><a href="http://eewiki.net/display/linuxonarm/BeagleBone">Linux on ARM BeagleBone</a></li>
 </ul>
 
   </article>

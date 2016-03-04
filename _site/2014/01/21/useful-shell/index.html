@@ -89,79 +89,89 @@
     <p>shell是Unix系统的一个特色，fuck点和hack点并存：</p>
 
 <ul>
-<li>fuck点： 需要记住一些复杂的命令，看组织得还算不错的man &amp; help，有一个学习的过程，相比所见所得的视窗真是反人类。代表包括grep、sed、awk。</li>
-<li>hack点： 可以用简单的命令完成复杂的工作，如替换多个文档里的字符串，grep、seed、find再结合正则表达式简直无敌，代表包括grep、sed、awk。</li>
+  <li>fuck点： 需要记住一些复杂的命令，看组织得还算不错的man &amp; help，有一个学习的过程，相比所见所得的视窗真是反人类。代表包括grep、sed、awk。</li>
+  <li>hack点： 可以用简单的命令完成复杂的工作，如替换多个文档里的字符串，grep、seed、find再结合正则表达式简直无敌，代表包括grep、sed、awk。</li>
 </ul>
 
 <p>本文将平时用的一些shell集合起来，待不时之需。</p>
 
-<h3 id=">文本替换</h3>
+<h3>文本替换</h3>
 
 <ol>
-<li><p>替换所有特定后缀的文件中的字符串，无正则 </p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">find -type f -name <span class="s2">&quot;*.markdown&quot;</span> <span class="p">|</span> xargs sed -i <span class="s1">&#39;s/${oldstr}/${newstr}/g&#39;</span>
-</code></pre></div></li>
+  <li>
+    <p>替换所有特定后缀的文件中的字符串，无正则</p>
+
+    <p><code>bash
+ find -type f -name "*.markdown" | xargs sed -i 's/${oldstr}/${newstr}/g'
+</code></p>
+  </li>
 </ol>
 
-<h3 id="awk">awk</h3>
+<h3>awk</h3>
+<ol>
+  <li>
+    <p>awk工作模式<br />
+ awk被设计成数据流方式处理，内建很多基本的语法，因此使用起来非常灵活和强大，常用作字符处理。最基本的awk命令模式类似：</p>
+
+    <p><code>awk ' BEGIN{  print "start" } pattern { commands } END{ print "end" }  file</code></p>
+
+    <blockquote>
+      <p>How it Works? The awk command works in the following manner:</p>
+
+      <ul>
+        <li>Execute the statements in the BEGIN { commands } block.</li>
+        <li>Read one line from the file or stdin, and execute pattern { commands }. Repeat this step until the end of the file is reached.</li>
+        <li>When the end of the input stream is reached, execute the END { commands } block.</li>
+      </ul>
+    </blockquote>
+
+    <p>awk首先调用BEGIN区块，然后逐行处理流，按照相应的匹配模式作相应的处理动作，最后调用END区块。 一个简单的行数计数用法如下：</p>
+
+    <p><code>awk 'BEGIN {i=0} {i++} END {print i}' filename</code></p>
+  </li>
+  <li>
+    <p>特殊变量</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NR</td>
+          <td>It stands for number of records and corresponds to current line number under execution.</td>
+        </tr>
+        <tr>
+          <td>$0</td>
+          <td>It is a variable that contain the text content of current line under execution.</td>
+        </tr>
+        <tr>
+          <td>$1</td>
+          <td>It is a variable that holds the text of the first field.</td>
+        </tr>
+        <tr>
+          <td>$2</td>
+          <td>It is the variable that holds the test of the second field text.</td>
+        </tr>
+        <tr>
+          <td>NF</td>
+          <td>It stands for number of fields and corresponds to number of fields in the current line under execution (Fields are delimited by space).</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h3>Git</h3>
 
 <ol>
-<li><p>awk工作模式
-awk被设计成数据流方式处理，内建很多基本的语法，因此使用起来非常灵活和强大，常用作字符处理。最基本的awk命令模式类似：</p>
-
-<p><code>awk &#39; BEGIN{  print &quot;start&quot; } pattern { commands } END{ print &quot;end&quot; }  file</code></p>
-
-<blockquote>
-<p>How it Works? The awk command works in the following manner:</p>
-
-<ul>
-<li>Execute the statements in the BEGIN { commands } block.</li>
-<li>Read one line from the file or stdin, and execute pattern { commands }. Repeat this step until the end of the file is reached.</li>
-<li>When the end of the input stream is reached, execute the END { commands } block.</li>
-</ul>
-</blockquote>
-
-<p>awk首先调用BEGIN区块，然后逐行处理流，按照相应的匹配模式作相应的处理动作，最后调用END区块。 一个简单的行数计数用法如下：</p>
-
-<p><code>awk &#39;BEGIN {i=0} {i++} END {print i}&#39; filename</code></p></li>
-<li><p>特殊变量</p>
-
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Usage</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>NR</td>
-<td>It stands for number of records and corresponds to current line number under execution.</td>
-</tr>
-<tr>
-<td>$0</td>
-<td>It is a variable that contain the text content of current line under execution.</td>
-</tr>
-<tr>
-<td>$1</td>
-<td>It is a variable that holds the text of the first field.</td>
-</tr>
-<tr>
-<td>$2</td>
-<td>It is the variable that holds the test of the second field text.</td>
-</tr>
-<tr>
-<td>NF</td>
-<td>It stands for number of fields and corresponds to number of fields in the current line under execution (Fields are delimited by space).</td>
-</tr>
-</tbody></table></li>
+  <li>git恢复已经删除的文件</li>
 </ol>
 
-<h3 id="git">Git</h3>
-
-<ol>
-<li>git恢复已经删除的文件</li>
-</ol>
-
-<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 <br />
 具体做法 <code>git checkout file</code> 同时恢复多个被删除的文件：<code>git ls-files -d | xargs -i git checkout {}</code></p>
 
 <p>在使用Git的过程中，有时可能会有一些误操作 比如：执行<code>checkout -f</code> 或 <code>reset -hard</code> 或 <code>branch -d</code>删除一个分支 结果造成本地（远程）的分支或某些commit丢失 可以通过reflog来进行恢复，前提是丢失的分支或commit信息没有被<code>git gc</code>清除 一般情况下，gc对那些无用的object会保留很长时间后才清除的 reflog是git提供的一个内部工具，用于记录对git仓库进行的各种操作,可以使用<code>git reflog show</code>或<code>git log -g</code>命令来看到所有的操作日志。恢复的过程很简单：通过<code>git log -g</code>命令来找到我们需要恢复的信息对应的<code>commit_id</code>，可以通过提交的时间和日期来辨别。</p>
@@ -169,14 +179,14 @@ awk被设计成数据流方式处理，内建很多基本的语法，因此使�
 <p>一个好的办法是运行：</p>
 
 <ol>
-<li><code>git log –since=&quot;2 weeks ago&quot; – myfile</code> 可以2个星期期间的myfile历史；</li>
-<li><code>git log –branches=&quot;develop&quot;</code> 可以查看develop的commit </li>
-<li>通过<code>git branch recover_branch[新分支] commit_id</code>来建立一个新的分支</li>
+  <li><code>git log –since="2 weeks ago" – myfile</code> 可以2个星期期间的myfile历史；</li>
+  <li><code>git log –branches="develop"</code> 可以查看develop的commit</li>
+  <li>通过<code>git branch recover_branch[新分支] commit_id</code>来建立一个新的分支</li>
 </ol>
 
 <p>这样，我们就把丢失的东西给恢复到了<code>recover_branch</code>分支上了。</p>
 
-<p><strong>Q1:</strong> 如果是不小心执行了<code>git reset</code>，还有办法取消吗？ </p>
+<p><strong>Q1:</strong> 如果是不小心执行了<code>git reset</code>，还有办法取消吗？</p>
 
 <p><strong>A1:</strong> <code>git reflog</code> 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</p>
 
@@ -184,26 +194,35 @@ awk被设计成数据流方式处理，内建很多基本的语法，因此使�
 
 <p><strong>A2:</strong> 先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt;</code> 就可以恢复</p>
 
-<h3 id="diff-amp-patch">Diff &amp; Patch</h3>
+<h3>Diff &amp; Patch</h3>
 
 <ol>
-<li><p>diff</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>your-kernel-tree
-<span class="nb">cd</span> ..
-diff -Narup org-kernel-source your-kernel-tree &gt; kernel.patch
-</code></pre></div>
-<p>-x 过滤掉所比较目录中一些不想比较的文件类型，可以使用其他的pattern。实际上如果需要过滤的文件类型比较多的时候，使用-x这个选项就有点麻烦了，查看了文档之后，diff提供了更加方便的参数过滤文件。 -X excludefile 忽略在excludefile中的文件类型，注意每种文件占一行 pallying patches</p></li>
-<li><p>patch</p>
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>kernel-source
-patch -p1 &lt; ../kernel.patch
-patch -R -p1 &lt; ../kernel.patch
-</code></pre></div></li>
+  <li>
+    <p>diff</p>
+
+    <p><code>bash
+ cd your-kernel-tree
+ cd ..
+ diff -Narup org-kernel-source your-kernel-tree &gt; kernel.patch
+</code><br />
+-x 过滤掉所比较目录中一些不想比较的文件类型，可以使用其他的pattern。实际上如果需要过滤的文件类型比较多的时候，使用-x这个选项就有点麻烦了，查看了文档之后，diff提供了更加方便的参数过滤文件。 -X excludefile 忽略在excludefile中的文件类型，注意每种文件占一行 pallying patches</p>
+  </li>
+  <li>
+    <p>patch</p>
+
+    <p><code>bash
+ cd kernel-source
+ patch -p1 &lt; ../kernel.patch
+ patch -R -p1 &lt; ../kernel.patch
+</code></p>
+  </li>
 </ol>
 
-<h3 id="eix">eix</h3>
+<h3>eix</h3>
 
 <p>gentoo下经常使用的软件包查询管理工具</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">eix_tag  
+
+<pre><code>eix_tag  
 update-eix-remote update 可以查到未下载的overlay里的东西  
 equery uses XXX    查询XXX包带的USE标志  
 equery hasuse X    查询使用X这个USE标志的包  
@@ -217,7 +236,7 @@ eix -c(--compact) 只列出一些信息
 
 eix -d , --dup-packages  只匹配duplicated的包 如果sys-foo/bar同时存在不同的overlay里面(包括官方portage)  
 eix -D, --dup-versions  同时在存不同的版本,类似-d  
-eix -P,--provide i.e &quot;virtual/blackbox&quot;  
+eix -P,--provide i.e "virtual/blackbox"  
 eix --only-names 只列出名字  
 eix -I(--installed) 列出已完装的  
 eix -i(--multi-installed)  
@@ -231,10 +250,10 @@ eix -J(--installed-overlay)  安装了overaly的包
 eix --installed-from-overlay overlay  
 eix -s, --name 默认以名字查询  
 eix -S, --description 以描述查询  
-eix -C, --category  i.e. &quot;app-portage&quot;  
-eix -A, --category-name  i.e. &quot;app-portage/eix&quot;  
-eix -H, --homepage   i.e &quot;http://xxx&quot;  
-eix -L, --license    i.e &quot;GPL-2&quot;  
+eix -C, --category  i.e. "app-portage"  
+eix -A, --category-name  i.e. "app-portage/eix"  
+eix -H, --homepage   i.e "http://xxx"  
+eix -L, --license    i.e "GPL-2"  
 eix --installed-with-use  安装包带use参数的  
 eix --installed-without-use  
 eix -e, --exact  直接查完整包名 如 eix -e gcc 查出只是gcc的包  
@@ -253,20 +272,22 @@ eix -O, --overlay 只列出包最后一个版本在overlay，无论是否安装�
 eix -T, --test-obsolete 测试陈旧的包  
 eix -l, --pipe   
 eix -!, --not    
-</code></pre></div>
+</code></pre>
+
 <p>非常有用的FORMAT</p>
 
-<p>Application:<br>
-   FORMAT=&#39;{downgrade}%{FORMAT<em>COMPACT}{}&#39; eix -I<br>
-   This  will  print  all installed packages for which there are downgrade recommendations.  Note that<br>
-   the compact format is used to output the packages: We  cannot  use  FORMAT=&#39;{downgrade}%{FORMAT}{}&#39;<br>
-   because  this  would be a self-reference.  However, if you want to use the default FORMAT layout to<br>
-   output the packages, we can use FORMAT</em>COMPACT to wrap around FORMAT:  </p>
+<p>Application:  <br />
+   FORMAT=’{downgrade}%{FORMAT_COMPACT}{}’ eix -I  <br />
+   This  will  print  all installed packages for which there are downgrade recommendations.  Note that  <br />
+   the compact format is used to output the packages: We  cannot  use  FORMAT=’{downgrade}%{FORMAT}{}’  <br />
+   because  this  would be a self-reference.  However, if you want to use the default FORMAT layout to  <br />
+   output the packages, we can use FORMAT_COMPACT to wrap around FORMAT:</p>
 
-<p>FORMAT<em>COMPACT=&#39;{downgrade}%{FORMAT}{}&#39; eix -cI<br>
-   This is as above, but the matching packages will be printed with the default (non-compact)  format.<br>
-   The  option  -c  is  needed  so  that eix will use our FORMAT</em>COMPACT variable as the format string<br>
-   (which we &quot;misused&quot; as a &quot;wrapper&quot; for FORMAT in this example).  </p>
+<p>FORMAT_COMPACT=’{downgrade}%{FORMAT}{}’ eix -cI  <br />
+   This is as above, but the matching packages will be printed with the default (non-compact)  format.  <br />
+   The  option  -c  is  needed  so  that eix will use our FORMAT_COMPACT variable as the format string  <br />
+   (which we “misused” as a “wrapper” for FORMAT in this example).</p>
+
 
   </article>
 

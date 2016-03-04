@@ -89,291 +89,344 @@
     <p>《Python高级编程》第2章节，目标：</p>
 
 <ul>
-<li>自定义迭代器</li>
-<li>生成器yield关键字理解</li>
-<li>生成器send函数理解</li>
+  <li>自定义迭代器</li>
+  <li>生成器yield关键字理解</li>
+  <li>生成器send函数理解</li>
 </ul>
 
-<h3 id=">可迭代对象/迭代器</h3>
+<h3>可迭代对象/迭代器</h3>
 
-<p>当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象。他基于两个方法:
-1. <code>next()</code> 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常
+<p>当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象。他基于两个方法:<br />
+1. <code>next()</code> 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常<br />
 2. <code>__iter__</code> 返回容器本身</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
-<span class="c"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">output:</span>
-<span class="sd">D:\Python27\python.exe C:/Users/xiaoyang/PyProject/Parser58/iterator.py</span>
-<span class="sd">3</span>
-<span class="sd">2</span>
-<span class="sd">1</span>
-<span class="sd">0</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777">#!/usr/bin/env python</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#777"># -*- coding: utf-8 -*-</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>output:</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>D:</span><span>\P</span><span>ython27</span><span>\p</span><span>ython.exe C:/Users/xiaoyang/PyProject/Parser58/iterator.py</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span>3</span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span>2</span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span>1</span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span>0</span><span></span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#D42"><span></span><span>Process finished with exit code 0</span><span></span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">MyIterator</span>(<span style="color:#369;font-weight:bold">object</span>):
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">__init__</span>(<span style="color:#069">self</span>,step):
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        <span style="color:#069">self</span>.step = step
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">next</span>(<span style="color:#069">self</span>):
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>        <span style="color:#080;font-weight:bold">if</span> <span style="color:#069">self</span>.step == <span style="color:#00D">0</span>:
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>            <span style="color:#080;font-weight:bold">raise</span> <span style="color:#C00;font-weight:bold">StopIteration</span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>        <span style="color:#069">self</span>.step -= <span style="color:#00D">1</span>
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>        <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">self</span>.step
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">__iter__</span>(<span style="color:#069">self</span>):
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>        <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">self</span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span><span style="color:#080;font-weight:bold">for</span> el <span style="color:#080;font-weight:bold">in</span> MyIterator(<span style="color:#00D">4</span>):
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>    <span style="color:#080;font-weight:bold">print</span> el
+</pre></div>
+</div>
+</div>
 
-<span class="sd">Process finished with exit code 0</span>
-<span class="sd">&#39;&#39;&#39;</span>
-
-<span class="k">class</span> <span class="nc">MyIterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">step</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span>
-    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">StopIteration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span>
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">MyIterator</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="k">print</span> <span class="n">el</span>
-</code></pre></div>
-<h3 id=">生成器</h3>
+<h3>生成器</h3>
 
 <p><strong>生成器就是一种迭代器</strong>。 生成器使得需要返回一系列元素的函数所需的代码更加简单、高效。基于<code>yield</code>指令，可以暂停一个函数并返回中间结果，该函数将保存执行环境并可以在必要时恢复。</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">D:\Python27\python.exe C:/Users/xiaoyang/PyProject/Parser58/iterator.py</span>
-<span class="sd">Traceback (most recent call last):</span>
-<span class="sd">    File &quot;C:/Users/xiaoyang/PyProject/Parser58/iterator.py&quot;, line 42, in &lt;module&gt;</span>
-<span class="sd">[0] test iterator</span>
-<span class="sd">    print (generator.next())</span>
-<span class="sd">StopIteration</span>
 
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#D42"><span></span><span>D:</span><span>\P</span><span>ython27</span><span>\p</span><span>ython.exe C:/Users/xiaoyang/PyProject/Parser58/iterator.py</span><span></span></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#D42"><span></span><span>Traceback (most recent call last):</span><span></span></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span></span><span>    File &quot;C:/Users/xiaoyang/PyProject/Parser58/iterator.py&quot;, line 42, in &lt;module&gt;</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>[0] test iterator</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>    print (generator.next())</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span>StopIteration</span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span>[1] test generator</span><span></span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#D42"><span></span><span>0</span><span></span></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#D42"><span></span><span>1</span><span></span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#D42"><span></span><span>2</span><span></span></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span><span style="color:#D42"><span></span><span>Process finished with exit code 1</span><span></span></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">get_yield_0_1_2</span>():
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    a, b, c = [<span style="color:#00D">0</span>,<span style="color:#00D">1</span>,<span style="color:#00D">2</span>]
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    <span style="color:#080;font-weight:bold">yield</span> a
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    <span style="color:#080;font-weight:bold">yield</span> b
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    <span style="color:#080;font-weight:bold">yield</span> c
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span><span style="color:#080;font-weight:bold">print</span> <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[1] test generator</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>generator = get_yield_0_1_2()
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span><span style="color:#080;font-weight:bold">print</span> (generator.next())
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span><span style="color:#080;font-weight:bold">print</span> (generator.next())
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span><span style="color:#080;font-weight:bold">print</span> (generator.next())
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span><span style="color:#080;font-weight:bold">print</span> (generator.next())
+</pre></div>
+</div>
+</div>
 
-<span class="sd">[1] test generator</span>
-<span class="sd">0</span>
-<span class="sd">1</span>
-<span class="sd">2</span>
-
-<span class="sd">Process finished with exit code 1</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="k">def</span> <span class="nf">get_yield_0_1_2</span><span class="p">():</span>
-    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">yield</span> <span class="n">a</span>
-    <span class="k">yield</span> <span class="n">b</span>
-    <span class="k">yield</span> <span class="n">c</span>
-
-<span class="k">print</span> <span class="s">&quot;[1] test generator&quot;</span>
-<span class="n">generator</span> <span class="o">=</span> <span class="n">get_yield_0_1_2</span><span class="p">()</span>
-<span class="k">print</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
-<span class="k">print</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
-<span class="k">print</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
-<span class="k">print</span> <span class="p">(</span><span class="n">generator</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
-</code></pre></div>
-<p>生成器函数在每次暂停执行时，函数体内的所有变量都将被封存(freeze)在生成器中，并将在恢复执行时还原，并且类似于闭包，即使是同一个生成器函数返回的生成器，封存的变量也是互相独立的。
+<p>生成器函数在每次暂停执行时，函数体内的所有变量都将被封存(freeze)在生成器中，并将在恢复执行时还原，并且类似于闭包，即使是同一个生成器函数返回的生成器，封存的变量也是互相独立的。<br />
 我们的小例子中并没有用到变量，所以这里另外定义一个生成器来展示这个特点：</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">output:</span>
-<span class="sd">[2] test generator</span>
-<span class="sd">[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span>
-<span class="sd">[3] test generator</span>
-<span class="sd">[1, 2, 3, 5, 8, 13, 21, 34, 55, 89]</span>
 
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#D42"><span></span><span>output:</span><span></span></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#D42"><span></span><span>[2] test generator</span><span></span></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span></span><span>[0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>[3] test generator</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>[1, 2, 3, 5, 8, 13, 21, 34, 55, 89]</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span>Process finished with exit code 0</span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#777"># test generator2</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">fibonacci</span>():
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    a, b = [<span style="color:#00D">0</span>, <span style="color:#00D">1</span>]
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>    <span style="color:#080;font-weight:bold">yield</span> a
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    <span style="color:#080;font-weight:bold">yield</span> b
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    <span style="color:#080;font-weight:bold">while</span> <span style="color:#069">True</span>:
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        a, b = b, a+b
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>        tmp = <span style="color:#080;font-weight:bold">yield</span> b
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>        <span style="color:#777"># reset</span>
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>        <span style="color:#080;font-weight:bold">if</span> (tmp == <span style="color:#00D">0</span>):
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>            a, b = [<span style="color:#00D">0</span>, <span style="color:#00D">1</span>]
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>            <span style="color:#080;font-weight:bold">yield</span> a
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>            <span style="color:#080;font-weight:bold">yield</span> b
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>fib = fibonacci()
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span><span style="color:#080;font-weight:bold">print</span> <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[2] test generator</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span><span style="color:#080;font-weight:bold">print</span> ([fib.next() <span style="color:#080;font-weight:bold">for</span> x <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">range</span>(<span style="color:#00D">10</span>)])
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>
+<span class="line-numbers"><a href="#n31" name="n31">31</a></span>
+<span class="line-numbers"><a href="#n32" name="n32">32</a></span><span style="color:#080;font-weight:bold">print</span> <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">[3] test generator</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n33" name="n33">33</a></span>list = []
+<span class="line-numbers"><a href="#n34" name="n34">34</a></span>fib.send(<span style="color:#00D">0</span>)
+<span class="line-numbers"><a href="#n35" name="n35">35</a></span>fib.send(<span style="color:#00D">1</span>)
+<span class="line-numbers"><a href="#n36" name="n36">36</a></span><span style="color:#080;font-weight:bold">for</span> num <span style="color:#080;font-weight:bold">in</span> fib:
+<span class="line-numbers"><a href="#n37" name="n37">37</a></span>    <span style="color:#080;font-weight:bold">if</span> num &gt; <span style="color:#00D">100</span>:
+<span class="line-numbers"><a href="#n38" name="n38">38</a></span>        <span style="color:#080;font-weight:bold">break</span>;
+<span class="line-numbers"><a href="#n39" name="n39">39</a></span>    <span style="color:#369;font-weight:bold">list</span>.append(num)
+<span class="line-numbers"><strong><a href="#n40" name="n40">40</a></strong></span><span style="color:#080;font-weight:bold">print</span> <span style="color:#369;font-weight:bold">list</span>
+<span class="line-numbers"><a href="#n41" name="n41">41</a></span>    
+</pre></div>
+</div>
+</div>
 
-<span class="sd">Process finished with exit code 0</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="c"># test generator2</span>
-<span class="k">def</span> <span class="nf">fibonacci</span><span class="p">():</span>
-    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="k">yield</span> <span class="n">a</span>
-    <span class="k">yield</span> <span class="n">b</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">b</span>
-        <span class="c"># reset</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="k">yield</span> <span class="n">a</span>
-            <span class="k">yield</span> <span class="n">b</span>
-
-<span class="n">fib</span> <span class="o">=</span> <span class="n">fibonacci</span><span class="p">()</span>
-
-
-<span class="k">print</span> <span class="s">&quot;[2] test generator&quot;</span>
-<span class="k">print</span> <span class="p">([</span><span class="n">fib</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
-
-
-<span class="k">print</span> <span class="s">&quot;[3] test generator&quot;</span>
-<span class="nb">list</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">fib</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">fib</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="nb">list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-<span class="k">print</span> <span class="nb">list</span>
-</code></pre></div>
-<p>Python 2.5对生成器的增强实现了协程的其他特点，在这个版本中，生成器加入了如下方法：
-1. <strong>send</strong>(value):
+<p>Python 2.5对生成器的增强实现了协程的其他特点，在这个版本中，生成器加入了如下方法：<br />
+1. <strong>send</strong>(value):<br />
 send是除next外另一个恢复生成器的方法。Python 2.5中，yield语句变成了yield表达式，这意味着yield现在可以有一个值，而这个值就是在生成器的send方法被调用从而恢复执行时，调用send方法的参数。</p>
 
 <ol>
-<li><p>** close**():
-这个方法用于关闭生成器。对关闭的生成器后再次调用next或send将抛出StopIteration异常。</p></li>
-<li><p>** throw**(type, value=None, traceback=None):
-这个方法用于在生成器内部（生成器的当前挂起处，或未启动时在定义处）抛出一个异常。</p></li>
+  <li>
+    <p>** close**():<br />
+这个方法用于关闭生成器。对关闭的生成器后再次调用next或send将抛出StopIteration异常。</p>
+  </li>
+  <li>
+    <p>** throw**(type, value=None, traceback=None):<br />
+这个方法用于在生成器内部（生成器的当前挂起处，或未启动时在定义处）抛出一个异常。</p>
+  </li>
 </ol>
 
-<h3 id=">生成器表达式</h3>
+<h3>生成器表达式</h3>
 
 <p>生成器表达式也称作genexp，使用类似列表推倒的方式减少了序列代码的总量。它和常规生成器一样每次输出一个元素，所以整个序列和推导列表一样不会提前进行计算。</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
-<span class="c"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">0</span>
-<span class="sd">4</span>
-<span class="sd">16</span>
-<span class="sd">36</span>
-<span class="sd">64</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777">#!/usr/bin/env python</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#777"># -*- coding: utf-8 -*-</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>0</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>4</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span>16</span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span>36</span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span>64</span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#D42"><span></span><span>Process finished with exit code 0</span><span></span></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span><span style="color:#777"># section 2.2</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>iter = (x**<span style="color:#00D">2</span> <span style="color:#080;font-weight:bold">for</span> x <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">range</span>(<span style="color:#00D">10</span>) <span style="color:#080;font-weight:bold">if</span> x%<span style="color:#00D">2</span> == <span style="color:#00D">0</span>)
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span><span style="color:#080;font-weight:bold">for</span> el <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">iter</span>:
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="color:#080;font-weight:bold">print</span> el
+</pre></div>
+</div>
+</div>
 
-<span class="sd">Process finished with exit code 0</span>
-<span class="sd">&#39;&#39;&#39;</span>
+<h3>itertools模块</h3>
 
-<span class="c"># section 2.2</span>
-<span class="nb">iter</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">el</span>
-</code></pre></div>
-<h3 id="itertools">itertools模块</h3>
-
-<p>当python提供生成器特性后，就为实现常见模式提供了一个新的模块itertools。itertools覆盖了许多模式，例如islice、tee、groupby等。
+<p>当python提供生成器特性后，就为实现常见模式提供了一个新的模块itertools。itertools覆盖了许多模式，例如islice、tee、groupby等。<br />
 参照文档：<a href="https://docs.python.org/3/library/itertools.html">itertools — Functions creating iterators for efficient looping</a></p>
 
-<h4 id="islice">islice</h4>
+<h4>islice</h4>
 
 <p>定义</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-    <span class="c"># islice(&#39;ABCDEFG&#39;, 2) --&gt; A B</span>
-    <span class="c"># islice(&#39;ABCDEFG&#39;, 2, 4) --&gt; C D</span>
-    <span class="c"># islice(&#39;ABCDEFG&#39;, 2, None) --&gt; C D E F G</span>
-    <span class="c"># islice(&#39;ABCDEFG&#39;, 0, None, 2) --&gt; A C E G</span>
-    <span class="n">s</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">or</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">nexti</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nexti</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">element</span>
-            <span class="n">nexti</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
-</code></pre></div>
-<h4 id="tee">tee</h4>
 
-<p>往返式迭代器，迭代器将消费其处理的序列，但不会往回处理。
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">islice</span>(iterable, *args):
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    <span style="color:#777"># islice('ABCDEFG', 2) --&gt; A B</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#777"># islice('ABCDEFG', 2, 4) --&gt; C D</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#777"># islice('ABCDEFG', 2, None) --&gt; C D E F G</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#777"># islice('ABCDEFG', 0, None, 2) --&gt; A C E G</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    s = <span style="color:#369;font-weight:bold">slice</span>(*args)
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    it = <span style="color:#369;font-weight:bold">iter</span>(<span style="color:#369;font-weight:bold">range</span>(s.start <span style="color:#080;font-weight:bold">or</span> <span style="color:#00D">0</span>, s.stop <span style="color:#080;font-weight:bold">or</span> sys.maxsize, s.step <span style="color:#080;font-weight:bold">or</span> <span style="color:#00D">1</span>))
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    nexti = <span style="color:#369;font-weight:bold">next</span>(it)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    <span style="color:#080;font-weight:bold">for</span> i, element <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">enumerate</span>(iterable):
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>        <span style="color:#080;font-weight:bold">if</span> i == nexti:
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>            <span style="color:#080;font-weight:bold">yield</span> element
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>            nexti = <span style="color:#369;font-weight:bold">next</span>(it)
+</pre></div>
+</div>
+</div>
+
+<h4>tee</h4>
+
+<p>往返式迭代器，迭代器将消费其处理的序列，但不会往回处理。<br />
 Return n independent iterators from a single iterable. Equivalent to:</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-    <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-    <span class="n">deques</span> <span class="o">=</span> <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
-    <span class="k">def</span> <span class="nf">gen</span><span class="p">(</span><span class="n">mydeque</span><span class="p">):</span>
-        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">mydeque</span><span class="p">:</span>             <span class="c"># when the local deque is empty</span>
-                <span class="n">newval</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>       <span class="c"># fetch a new value and</span>
-                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deques</span><span class="p">:</span>        <span class="c"># load it to all the deques</span>
-                    <span class="n">d</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newval</span><span class="p">)</span>
-            <span class="k">yield</span> <span class="n">mydeque</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
-    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">gen</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">deques</span><span class="p">)</span>
-</code></pre></div>
-<p>Once tee() has made a split, the original iterable should not be used anywhere else; otherwise, the iterable could get advanced without the tee objects being informed.
+
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">tee</span>(iterable, n=<span style="color:#00D">2</span>):
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    it = <span style="color:#369;font-weight:bold">iter</span>(iterable)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    deques = [collections.deque() <span style="color:#080;font-weight:bold">for</span> i <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">range</span>(n)]
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">gen</span>(mydeque):
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>        <span style="color:#080;font-weight:bold">while</span> <span style="color:#069">True</span>:
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>            <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">not</span> mydeque:             <span style="color:#777"># when the local deque is empty</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>                newval = <span style="color:#369;font-weight:bold">next</span>(it)       <span style="color:#777"># fetch a new value and</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>                <span style="color:#080;font-weight:bold">for</span> d <span style="color:#080;font-weight:bold">in</span> deques:        <span style="color:#777"># load it to all the deques</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>                    d.append(newval)
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>            <span style="color:#080;font-weight:bold">yield</span> mydeque.popleft()
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#369;font-weight:bold">tuple</span>(gen(d) <span style="color:#080;font-weight:bold">for</span> d <span style="color:#080;font-weight:bold">in</span> deques)
+</pre></div>
+</div>
+</div>
+
+<p>Once tee() has made a split, the original iterable should not be used anywhere else; otherwise, the iterable could get advanced without the tee objects being informed.<br />
 This itertool may require significant auxiliary storage (depending on how much temporary data needs to be stored). In general, if one iterator uses most or all of the data before another iterator starts, it is faster to use list() instead of tee().</p>
 
-<h4 id="groupby">groupby</h4>
+<h4>groupby</h4>
 
-<p>类似Unix的uniq命令，可以对来自一个迭代器的重复元素进行分组，只要这些元素是相邻的，还可以提供一个函数执行元素的比较。否则将采用标识符进行比较。
+<p>类似Unix的uniq命令，可以对来自一个迭代器的重复元素进行分组，只要这些元素是相邻的，还可以提供一个函数执行元素的比较。否则将采用标识符进行比较。<br />
 应用：<code>RLE编码</code></p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">compress result:</span>
-<span class="sd">(&#39;h&#39;, 1)</span>
-<span class="sd">(&#39;e&#39;, 3)</span>
-<span class="sd">(&#39;l&#39;, 2)</span>
-<span class="sd">(&#39;o&#39;, 1)</span>
-<span class="sd">(&#39; &#39;, 1)</span>
-<span class="sd">(&#39;w&#39;, 1)</span>
-<span class="sd">(&#39;o&#39;, 1)</span>
-<span class="sd">(&#39;r&#39;, 1)</span>
-<span class="sd">(&#39;l&#39;, 1)</span>
-<span class="sd">(&#39;d&#39;, 32)</span>
-<span class="sd">decompress result:</span>
-<span class="sd">heeello worldddddddddddddddddddddddddddddddd</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="c">##RLE codec using groupby</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
-<span class="k">def</span> <span class="nf">rle_compress</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">((</span><span class="n">name</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">group</span><span class="p">)))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">group</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-<span class="k">def</span> <span class="nf">rle_decompress</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">ch</span><span class="o">*</span><span class="n">size</span> <span class="k">for</span> <span class="n">ch</span><span class="p">,</span><span class="n">size</span> <span class="ow">in</span> <span class="n">data</span><span class="p">)</span>
 
-<span class="n">dataStr</span> <span class="o">=</span> <span class="s">&#39;heeello worldddddddddddddddddddddddddddddddd&#39;</span>
-<span class="n">compressed</span> <span class="o">=</span> <span class="n">rle_compress</span><span class="p">(</span><span class="n">dataStr</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s">&quot;compress result:&quot;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">compressed</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777">#!/usr/bin/env python</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#777"># -*- coding: utf-8 -*-</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span></span><span>compress result:</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>('h', 1)</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>('e', 3)</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span>('l', 2)</span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span>('o', 1)</span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span>(' ', 1)</span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span>('w', 1)</span><span></span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#D42"><span></span><span>('o', 1)</span><span></span></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#D42"><span></span><span>('r', 1)</span><span></span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#D42"><span></span><span>('l', 1)</span><span></span></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span><span style="color:#D42"><span></span><span>('d', 32)</span><span></span></span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span><span style="color:#D42"><span></span><span>decompress result:</span><span></span></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span><span style="color:#D42"><span></span><span>heeello worldddddddddddddddddddddddddddddddd</span><span></span></span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span><span style="color:#777">##RLE codec using groupby</span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span><span style="color:#080;font-weight:bold">from</span> <span style="color:#B44;font-weight:bold">itertools</span> <span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">groupby</span>
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">rle_compress</span>(data):
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    <span style="color:#080;font-weight:bold">return</span> ((name,<span style="color:#369;font-weight:bold">len</span>(<span style="color:#369;font-weight:bold">list</span>(group))) <span style="color:#080;font-weight:bold">for</span> name,group <span style="color:#080;font-weight:bold">in</span> groupby(data))
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">rle_decompress</span>(data):
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>    <span style="color:#080;font-weight:bold">return</span> (ch*size <span style="color:#080;font-weight:bold">for</span> ch,size <span style="color:#080;font-weight:bold">in</span> data)
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>dataStr = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">heeello worldddddddddddddddddddddddddddddddd</span><span style="color:#710">'</span></span>
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>compressed = rle_compress(dataStr)
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>print(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">compress result:</span><span style="color:#710">&quot;</span></span>)
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span><span style="color:#080;font-weight:bold">for</span> data <span style="color:#080;font-weight:bold">in</span> <span style="color:#369;font-weight:bold">list</span>(compressed):
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span>    print(data)
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>
+<span class="line-numbers"><a href="#n31" name="n31">31</a></span>print(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">decompress result:</span><span style="color:#710">&quot;</span></span>)
+<span class="line-numbers"><a href="#n32" name="n32">32</a></span>compressed = rle_compress(dataStr)
+<span class="line-numbers"><a href="#n33" name="n33">33</a></span>decompressed = <span style="color:#369;font-weight:bold">list</span>(rle_decompress(compressed))
+<span class="line-numbers"><a href="#n34" name="n34">34</a></span>str=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#710">'</span></span>.join(decompressed)
+<span class="line-numbers"><a href="#n35" name="n35">35</a></span>print(<span style="color:#369;font-weight:bold">str</span>)
+</pre></div>
+</div>
+</div>
 
-<span class="k">print</span><span class="p">(</span><span class="s">&quot;decompress result:&quot;</span><span class="p">)</span>
-<span class="n">compressed</span> <span class="o">=</span> <span class="n">rle_compress</span><span class="p">(</span><span class="n">dataStr</span><span class="p">)</span>
-<span class="n">decompressed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rle_decompress</span><span class="p">(</span><span class="n">compressed</span><span class="p">))</span>
-<span class="nb">str</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decompressed</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
-</code></pre></div>
 <p>定义：</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="o">&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;python&quot;</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">groupby</span><span class="p">:</span>
-    <span class="c"># [k for k, g in groupby(&#39;AAAABBBCCDAABBB&#39;)] --&gt; A B C D A B</span>
-    <span class="c"># [list(g) for k, g in groupby(&#39;AAAABBBCCD&#39;)] --&gt; AAAA BBB CC D</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span> <span class="o">=</span> <span class="n">key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
-    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">it</span><span class="p">)</span>    <span class="c"># Exit on StopIteration</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grouper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tgtkey</span><span class="p">))</span>
-    <span class="k">def</span> <span class="nf">_grouper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tgtkey</span><span class="p">):</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">==</span> <span class="n">tgtkey</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">it</span><span class="p">)</span>    <span class="c"># Exit on StopIteration</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span><span class="p">)</span>
-</code></pre></div>
-<h3 id=">协同程序</h3>
 
-<p>参考文档：<a href="https://docs.python.org/3/library/asyncio-task.html">Tasks and coroutines</a>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>&lt;code <span style="color:#080;font-weight:bold">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">python</span><span style="color:#710">&quot;</span></span>&gt;<span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">groupby</span>:
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    <span style="color:#777"># [k for k, g in groupby('AAAABBBCCDAABBB')] --&gt; A B C D A B</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#777"># [list(g) for k, g in groupby('AAAABBBCCD')] --&gt; AAAA BBB CC D</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">__init__</span>(<span style="color:#069">self</span>, iterable, key=<span style="color:#069">None</span>):
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>        <span style="color:#080;font-weight:bold">if</span> key <span style="color:#080;font-weight:bold">is</span> <span style="color:#069">None</span>:
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>            key = <span style="color:#080;font-weight:bold">lambda</span> x: x
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        <span style="color:#069">self</span>.keyfunc = key
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        <span style="color:#069">self</span>.it = <span style="color:#369;font-weight:bold">iter</span>(iterable)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>        <span style="color:#069">self</span>.tgtkey = <span style="color:#069">self</span>.currkey = <span style="color:#069">self</span>.currvalue = <span style="color:#369;font-weight:bold">object</span>()
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">__iter__</span>(<span style="color:#069">self</span>):
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>        <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">self</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">__next__</span>(<span style="color:#069">self</span>):
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>        <span style="color:#080;font-weight:bold">while</span> <span style="color:#069">self</span>.currkey == <span style="color:#069">self</span>.tgtkey:
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>            <span style="color:#069">self</span>.currvalue = <span style="color:#369;font-weight:bold">next</span>(<span style="color:#069">self</span>.it)    <span style="color:#777"># Exit on StopIteration</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>            <span style="color:#069">self</span>.currkey = <span style="color:#069">self</span>.keyfunc(<span style="color:#069">self</span>.currvalue)
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>        <span style="color:#069">self</span>.tgtkey = <span style="color:#069">self</span>.currkey
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        <span style="color:#080;font-weight:bold">return</span> (<span style="color:#069">self</span>.currkey, <span style="color:#069">self</span>._grouper(<span style="color:#069">self</span>.tgtkey))
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">_grouper</span>(<span style="color:#069">self</span>, tgtkey):
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>        <span style="color:#080;font-weight:bold">while</span> <span style="color:#069">self</span>.currkey == tgtkey:
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>            <span style="color:#080;font-weight:bold">yield</span> <span style="color:#069">self</span>.currvalue
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>            <span style="color:#069">self</span>.currvalue = <span style="color:#369;font-weight:bold">next</span>(<span style="color:#069">self</span>.it)    <span style="color:#777"># Exit on StopIteration</span>
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>            <span style="color:#069">self</span>.currkey = <span style="color:#069">self</span>.keyfunc(<span style="color:#069">self</span>.currvalue)
+</pre></div>
+</div>
+</div>
+
+<h3>协同程序</h3>
+
+<p>参考文档：<a href="https://docs.python.org/3/library/asyncio-task.html">Tasks and coroutines</a><br />
 协同程序是可以挂起、恢复，并且有多个进入点的函数。</p>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
-<span class="c"># -*- coding: utf-8 -*-</span>
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">2015-04-21 15:06:25.863941</span>
-<span class="sd">2015-04-21 15:06:26.863998</span>
-<span class="sd">2015-04-21 15:06:27.864056</span>
-<span class="sd">2015-04-21 15:06:28.864113</span>
-<span class="sd">2015-04-21 15:06:29.864170</span>
-<span class="sd">2015-04-21 15:06:30.864227</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<div class="highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#777">#!/usr/bin/env python</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#777"># -*- coding: utf-8 -*-</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#D42"><span style="color:black">'''</span><span></span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:25.863941</span><span></span></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:26.863998</span><span></span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:27.864056</span><span></span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:28.864113</span><span></span></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:29.864170</span><span></span></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#D42"><span></span><span>2015-04-21 15:06:30.864227</span><span></span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#D42"><span></span><span></span></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#D42"><span></span><span style="color:black">'''</span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">asyncio</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span><span style="color:#080;font-weight:bold">import</span> <span style="color:#B44;font-weight:bold">datetime</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#777"># Decorator to mark coroutines.</span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span><span style="color:#B0B">@asyncio.coroutine</span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span><span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">display_date</span>(loop):
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    end_time = loop.time() + <span style="color:#60E">5.0</span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    <span style="color:#080;font-weight:bold">while</span> <span style="color:#069">True</span>:
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>        print(datetime.datetime.now())
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>        <span style="color:#080;font-weight:bold">if</span>(loop.time()+<span style="color:#60E">1.0</span>) &gt;= end_time:
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>            <span style="color:#080;font-weight:bold">break</span>
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>        <span style="color:#080;font-weight:bold">yield</span> <span style="color:#080;font-weight:bold">from</span> <span style="color:#B44;font-weight:bold">asyncio.sleep</span>(<span style="color:#00D">1</span>)
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>loop = asyncio.get_event_loop()
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span>loop.run_until_complete(display_date(loop))
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span>loop.close()
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>    
+</pre></div>
+</div>
+</div>
 
-
-<span class="c"># Decorator to mark coroutines.</span>
-<span class="nd">@asyncio.coroutine</span>
-<span class="k">def</span> <span class="nf">display_date</span><span class="p">(</span><span class="n">loop</span><span class="p">):</span>
-    <span class="n">end_time</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mf">5.0</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">loop</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">:</span>
-            <span class="k">break</span>
-        <span class="k">yield from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">display_date</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span>
-<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</code></pre></div>
-<h3 id="tips">Tips</h3>
+<h3>Tips</h3>
 
 <p><strong>保持代码简单，而不是数据</strong>: 拥有许多简单的处理序列值的可迭代函数。要比一个复杂的、每次计算一个值的函数更好</p>
+
 
   </article>
 

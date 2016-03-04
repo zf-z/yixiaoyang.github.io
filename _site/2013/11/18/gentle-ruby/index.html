@@ -93,7 +93,8 @@
     <p>在社区里面提到一个stackoverflows上的问题：写一个triangle(a,b,c)函数，判断是等边、等腰还是一般三角形，并且能在有一边小于等于零或两边之和小于第三边的情况抛出error。</p>
 
 <p>C风格（普通程序员）</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def triangle(a, b, c)
+
+<pre><code>def triangle(a, b, c)
   # WRITE THIS CODE
   if a==b &amp;&amp; a==c
     return :equilateral
@@ -112,20 +113,26 @@ end
 # Error class used in part 2.  No need to change this code.
 class TriangleError &lt; StandardError
 end
-</code></pre></div>
+</code></pre>
+
 <p>支持人数最高的：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">def triangle(a, b, c)
+
+<pre><code>def triangle(a, b, c)
   raise TriangleError if [a,b,c].min &lt;= 0
   x, y, z = [a,b,c].sort
   raise TriangleError if x + y &lt;= z
   [:equilateral,:isosceles,:scalene].fetch([a,b,c].uniq.size - 1)
 end
-</code></pre></div>
+</code></pre>
+
 <p>卧槽，你不要欺负我，才学了没两个月的愣头青最后一句愣是没看懂。。。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> [:equilateral,:isosceles,:scalene].fetch([a,b,c].uniq.size - 1)
-</code></pre></div>
+
+<pre><code> [:equilateral,:isosceles,:scalene].fetch([a,b,c].uniq.size - 1)
+</code></pre>
+
 <p>于是为了照顾咱们这些新手，社区有人提出了如下版本：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">triangle(X,Y,Z) -&gt;
+
+<pre><code>triangle(X,Y,Z) -&gt;
   case lists:usort([X,Y,Z]) of
     [0|_]                 -&gt; error;
     [_A,_B]               -&gt; isosceles;
@@ -133,7 +140,8 @@ end
     [A,B,C] when C &gt;= A+B -&gt; error;
     _                     -&gt; scalene
   end.
-</code></pre></div>
+</code></pre>
+
 <p>当然，这个问题不涉及算法复杂度，只是侧面地提醒一下编程习惯，以及，Ruby是多么简洁优雅的现代语言，c转过来的伤不起。</p>
 
 <p>原问题：<a href="http://stackoverflow.com/questions/3834203/ruby-koan-151-raising-exceptions">http://stackoverflow.com/questions/3834203/ruby-koan-151-raising-exceptions</a></p>

@@ -99,7 +99,8 @@
 <p><strong>（1）会话数据初始化：</strong></p>
 
 <p>在每次User model实例化时都生成一个随机token串，供会话使用，本例使用base64算法工具。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class User &lt; ActiveRecord::Base
+
+<pre><code>class User &lt; ActiveRecord::Base
   ...
   before_create :create_remember_token
 
@@ -116,15 +117,17 @@
     self.remember_token = User.encrypt(User.new_remember_token)
   end
 end
-</code></pre></div>
+</code></pre>
+
 <p><strong>（2）用户注册：</strong></p>
 
 <p>User_controller控制的用户注册操作create完成后，新用户的信息将被存入数据库，此时数据库中user的会话token是没有加密的。</p>
 
 <p><strong>（3）注册完成，直接登录：</strong></p>
 
-<p>调用sessions<em>helper sign</em>in方法自动登录。用户注册及自动登录代码片段：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">class UsersController &lt; ApplicationController
+<p>调用sessions_helper sign_in方法自动登录。用户注册及自动登录代码片段：</p>
+
+<pre><code>class UsersController &lt; ApplicationController
   ...
   # 添加session相关资源module
   protect_from_forgery with: :exception
@@ -137,16 +140,17 @@ end
   def create
     @user = User.new(user_params)
     if @user.save
-    flash[:success] = &quot;Creat Account Success,Welcome #{@user[:name]}!&quot;
+    flash[:success] = "Creat Account Success,Welcome #{@user[:name]}!"
 
     # 创建成功，处理session，定向到用户主界面
     sign_in @user
     redirect_to @user
     else
-    render &#39;new&#39;
+    render 'new'
   end
 end
-</code></pre></div>
+</code></pre>
+
 <p><strong>（4）sign in登录方法：</strong></p>
 
 <p>使用一个惟一的的随机串（使用base64生成保证冲突很小）作为下次会话的token存入浏览器cookie。然后将这个token加密（SHA1）存入数据库。</p>
@@ -155,28 +159,31 @@ end
 
 <p>Session完成攻击（Session Fixation）的攻击者利用的就是利用服务器的session不变机制，借他人之手获得认证和授权，然后冒充他人，利用XSS注入代码诱使用户使用伪造的<code>session token</code>。如果应用程序在用户首次访问它时为每一名用户建立一个匿名会话，这时往往就会出现会话固定漏洞。之后用户会在不知不觉中使用了这个没有完成验证的伪造的token访问服务器，服务器将会请求用户验证。然后，一旦用户登录，该会话即升级为通过验证的会话。最初，会话token并未被赋予任何访问权限，但在用户通过验证后，这个token也具有了该用户的访问权限。<code>_session固定攻击</code>示例如下所示:</p>
 
-<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/session_fixation.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/session_fixation.png" alt="session_fixation"></a></p>
+<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/session_fixation.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/session_fixation.png" alt="session_fixation" /></a></p>
 
 <p>简而言之，这种攻击的本质在于： <strong>WEB应用在认证后没有改写或者更新session，从而导致了认证前的session还能使用</strong>。</p>
 
 <p>本例中存入浏览器的cookie范例:</p>
 
-<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/027.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/027.png" alt="browser_cookie.png"></a></p>
+<p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/027.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/027.png" alt="browser_cookie.png" /></a></p>
 
-<p><strong>（5）下次自动登录：</strong>
+<p><strong>（5）下次自动登录：</strong><br />
 下次自动登录的用户就可以从 浏览器cookie 中取出token，加密后查询对比数据库，调用sign in方法自动登录，@ <strong>第（4）步</strong>。</p>
 
 <p><strong>（6）sign out方法：</strong></p>
 
 <p>首先经由路由到sessions controller的destroy操作，destroy调用sign out，它只需要作两件事，删除cookie数据、删除用户数据 delete logout操作的session处理示例：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">--- !ruby/hash:ActionController::Parameters
+
+<pre><code>--- !ruby/hash:ActionController::Parameters
 _method: delete
 authenticity_token: vZwmQCRSmkJbBl8CsSAARTFNVu4PtW58J3dv3qK7oN0=
 controller: sessions
 action: destroy
-</code></pre></div>
+</code></pre>
+
 <p>完成sign in， sign out的完整session_helper实现：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">=begin
+
+<pre><code>=begin
   如果要自动登入用户，就可以从 cookie 中取出token，加密后查询数据库。
   数据库之所以只保存加密后的token是因为，即便整个数据库都泄露了，攻击者
   也无法使用token登入网站。为了让token更安全，我们计划每次会话都生成不
@@ -224,17 +231,21 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 end
-</code></pre></div>
+</code></pre>
+
 <p><strong>（7）SSL：进一步的保障会话安全，推荐使用ssl</strong></p>
 
-<p><em>In Rails 3.1 and later, this could be accomplished by always forcing SSL connection in your application config file:</em> </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">config.force_ssl = true
-</code></pre></div>
+<p><em>In Rails 3.1 and later, this could be accomplished by always forcing SSL connection in your application config file:</em></p>
+
+<pre><code>config.force_ssl = true
+</code></pre>
+
 <p>最终实现效果:</p>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/10/029.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/10/029.png" alt="sign_in_out"></a></p>
+<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/10/029.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/10/029.png" alt="sign_in_out" /></a></p>
 
 <p>【附】git地址 ：<a href="https://github.com/yixiaoyang/ruby">https://github.com/yixiaoyang/ruby.git</a></p>
+
 
   </article>
 
