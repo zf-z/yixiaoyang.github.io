@@ -12,8 +12,8 @@ author:
   email:             leon_e@163.com
   
 # Build settings
-#markdown: kramdown
-markdown: redcarpet
+markdown: kramdown
+#markdown: redcarpet
 redcarpet: 
        extensions: ["fenced_code_blocks", "tables", "highlight", "with_toc_data", "strikethrough", "with_toc_data", "autolink"]
 permalink: /:year/:month/:day/:title/
