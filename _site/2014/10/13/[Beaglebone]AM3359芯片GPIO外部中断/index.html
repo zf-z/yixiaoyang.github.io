@@ -94,7 +94,7 @@
   <article class="post-content">
     <p>AM3359芯片的GPIO外部中断实现比较简单，可参照ti-sdk-am335x-evm-06.00.00.00官方SDK内核的<code>gpio_omap.c</code>中关于GPIO IRQ部分实现，基本上就是设置GPIO复用-&gt;设置input方向-&gt;使能中断-&gt;填写中断处理函数槽-&gt;清中断标记位等几个步骤。需要理解的异步通知fasync的使用，这是中断等信号传递到用户空间的常用方法。</p>
 
-<h4 id="驱动方面">驱动方面</h4>
+<h4 id=">驱动方面</h4>
 
 <ol>
 <li>在设备抽象的数据结构中增加一个<code>struct fasync_struct</code>的指针</li>
@@ -103,7 +103,7 @@
 <li>在驱动的release方法中调用前面定义的fasync函数fasync(-1, fd, 0)以删除释放通知。</li>
 </ol>
 
-<h4 id="应用层方面">应用层方面</h4>
+<h4 id=">应用层方面</h4>
 
 <ol>
 <li>利用signal或者sigaction设置SIGIO信号的处理函数</li>

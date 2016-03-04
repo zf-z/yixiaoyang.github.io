@@ -90,7 +90,7 @@
   <article class="post-content">
     <p>使用NIOS PIO中断响应外部信号</p>
 
-<h3 id="寄存器定义">寄存器定义</h3>
+<h3 id=">寄存器定义</h3>
 
 <p><a href="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png"><img src="http://cdn2.snapgram.co/imgs/2015/07/20/nios_pio_irq_def.png" alt="nios_pio_reg_def"></a></p>
 
@@ -100,11 +100,11 @@
 
 <p>The type of edge(s) to detect is fixed in hardware at system generation time. The edgecapture register only exists when the hardware is configured to capture edges. If the core is not configured to capture edges, reading from  edgecapture returns an undefined value, and writing to  edgecapture has no effect.</p>
 
-<h3 id="pio定义">PIO定义</h3>
+<h3 id="pio">PIO定义</h3>
 
 <p><a href="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png"><img src="http://cdn1.snapgram.co/imgs/2015/07/20/nios_pio_reg_def.png" alt="nios_pio_irq_def"></a></p>
 
-<h3 id="编程模式">编程模式</h3>
+<h3 id=">编程模式</h3>
 
 <ol>
 <li><p>使能中断。对mask寄存器对应位set。</p></li>
@@ -178,7 +178,7 @@
         <span class="n">IORD_ALTERA_AVALON_PIO_EDGE_CAP</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">);</span>
     <span class="p">}</span>
 </code></pre></div>
-<h3 id="测试">测试</h3>
+<h3 id=">测试</h3>
 
 <p>将pio irq接到pio output上，控制pio output的高低即可模拟外部中断信号的输入。</p>
 <div class="highlight"><pre><code class="language-cpp" data-lang="cpp"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>

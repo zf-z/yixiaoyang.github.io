@@ -88,11 +88,11 @@
 
 
   <article class="post-content">
-    <h3 id="gentoo常用命令">gentoo常用命令</h3>
+    <h3 id="gentoo">gentoo常用命令</h3>
 
 <p>emerg的常用用法</p>
 
-<h4 id="更新系统">更新系统</h4>
+<h4 id=">更新系统</h4>
 
 <ol>
 <li>更新系统并移除孤立依赖的软件包
@@ -103,7 +103,7 @@
 </code></li>
 </ol>
 
-<h4 id="emerge常用参数">emerge常用参数</h4>
+<h4 id="emerge">emerge常用参数</h4>
 
 <pre>
   -world | system， world范围更广，包含了system，这是两个set，前面不用加--或-
@@ -130,12 +130,12 @@
   --n noreplace 更新system，但先前安装的软件不予覆盖
 </pre>
 
-<h4 id="查找最快的mirror">查找最快的mirror</h4>
+<h4 id="mirror">查找最快的mirror</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text"># mirrorselect -s3 -b10 -o -D &gt;&gt; /etc/make.conf
 </code></pre></div>
 <p>此命令对每个mirror均下载100k文件，以此确定最快源，要注意修改/etc/make.conf</p>
 
-<h4 id="系统升级">系统升级</h4>
+<h4 id=">系统升级</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text"># emerge --sync 或 # emerge-webrsync （更新或称同步portage树）
 # emerge --update --deep --newuse world
 # emerge --depclean -pv
@@ -161,7 +161,7 @@
 <p>列出 glibc 包所包含文件
 <code># qlist glibc</code></p>
 
-<h4 id="etc-portage-package-应用举例">/etc/portage/package.*应用举例</h4>
+<h4 id="etc-portage-package">/etc/portage/package.*应用举例</h4>
 
 <p><strong>package.use</strong></p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">sys-apps/man-pages -nls sys-apps/pciutils -zlib media-libs/freetype bindist app-text/acroread linguas_zh_TW linguas_zh_CN linguas_en

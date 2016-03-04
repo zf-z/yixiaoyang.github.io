@@ -92,7 +92,7 @@
 
 
   <article class="post-content">
-    <h4 id="动机">动机</h4>
+    <h4 id=">动机</h4>
 
 <p>之前使用TI SDK提供的3.2标准内核，在和fpga进行高速通信时出现CPU 100%中断响应延迟严重（偶尔&gt;50ms）造成数据丢包。为达到严格的中断响应速度（&lt;10ms），亟需实时操作系统内核支持。方案有两个：</p>
 
@@ -102,7 +102,7 @@
 当前在不牺牲功能性的情况下直接打上内核补丁是最好的方案。</li>
 </ol>
 
-<h4 id="关于rt-preempt内核">关于RT-Preempt内核</h4>
+<h4 id="rt-preempt">关于RT-Preempt内核</h4>
 
 <p>The standard Linux kernel only meets soft real-time requirements: it provides basic POSIX operations for userspace time handling but has no guarantees for hard timing deadlines. With Ingo Molnar&#39;s Realtime Preemption patch (referenced to as RT-Preempt in this document) and Thomas Gleixner&#39;s generic clock event layer with high resolution support, the kernel gains <strong>hard realtime capabilities</strong>.</p>
 
@@ -223,15 +223,15 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 
 <span class="n">module_platform_driver</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_driver</span><span class="p">);</span>
 </code></pre></div>
-<h4 id="其他">其他</h4>
+<h4 id=">其他</h4>
 
 <p>3.2-Standard迁移到3.8-RT内核需要变化的驱动包括LCD7和GPMC驱动（包括DMA），两块驱动都以Device Tree Overlay的方法加载。此外，配套Device tree的U-Boot需要升级，老版本U-boot不支持Device Tree &amp; Overlay。</p>
 
-<h4 id="3-8内核实时性的检验">3.8内核实时性的检验</h4>
+<h4 id="3-8">3.8内核实时性的检验</h4>
 
 <p>因为正好有FPGA端需要处理的中断源，因此使用示波器跑一下脉宽就可以检验。</p>
 
-<h4 id="参考">参考</h4>
+<h4 id=">参考</h4>
 
 <ol>
 <li><a href="https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO">https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO</a></li>

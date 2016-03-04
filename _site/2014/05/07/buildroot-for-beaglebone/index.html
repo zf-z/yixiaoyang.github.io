@@ -103,7 +103,7 @@ bootloader image. Buildroot is useful mainly for people working with small or em
 CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
 system and eases the cross-compilation process.</p>
 
-<h4 id="why-buildroot？">Why BuildRoot？===</h4>
+<h4 id="why-buildroot">Why BuildRoot？===</h4>
 
 <p>首先是其对BeagleBone 的原生支持，不需要另行移植；其次是其大小，相较于Angstrom 与 Ubuntu 的体积来说，BuildRoot非常袖珍，除去大家都一样的bootloader 与 Kernel 不算，根文件系统只有4MB 左右，还包括了uClibc。当然我们可以在编译的时候指定第三方的编译环境，比如Ti SDK 或是 cross-N，libc 也可以使用诸如eglibc 和 标准的glibc，这都不是问题。更详细的介绍参见其官方网站 <a href="http://buildroot.uclibc.org/">http://buildroot.uclibc.org/</a> ，此项目到目前为止还在维护中。</p>
 
@@ -141,7 +141,7 @@ system and eases the cross-compilation process.</p>
 <li>create a root filesystem in selected formats. </li>
 </ul>
 
-<h4 id="目录结构">目录结构</h4>
+<h4 id=">目录结构</h4>
 
 <p>Buildroot output is stored in a single directory, output/. This directory contains several subdirectories:</p>
 
@@ -182,24 +182,24 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 </code></pre></div>
 <p>Then unmount the disk, and flash /dev/sdb</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
-<span class="nv">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="s">&lt;&lt;-__EOF__</span>
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
+<span class="nv">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span> <span class="s">&lt;&lt;-__EOF__</span>
 <span class="s">1,48,0xE,*</span>
 <span class="s">,,,-</span>
 <span class="s">__EOF__</span>
-<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> -n boot
-<span class="nv">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> -L rootfs
+<span class="nv">$ </span>sudo mkfs.vfat -F <span class="m">16</span> <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">1</span> -n boot
+<span class="nv">$ </span>sudo mkfs.ext4 <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> -L rootfs
 <span class="nv">$ </span>sudo mkdir -p /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/rootfs/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">1</span> /media/boot/
-<span class="nv">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> /media/rootfs/
+<span class="nv">$ </span>sudo mount <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">1</span> /media/boot/
+<span class="nv">$ </span>sudo mount <span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> /media/rootfs/
 <span class="nv">$ </span>sudo cp -v MLO  /media/boot/       
 <span class="nv">$ </span>sudo cp -v u-boot.img  /media/boot/
 <span class="nv">$ </span>sudo cp -v ./uEnv.txt /media/boot/
 <span class="nv">$ </span>sudo cp -v uImage  /media/boot/
 <span class="nv">$ </span>sudo mkdir -p /media/boot/dtbs/          
 <span class="nv">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
-<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
+<span class="nv">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK</span><span class="si">}</span><span class="m">2</span> <span class="nv">bs</span><span class="o">=</span>128k
 <span class="nv">$ </span>sync
 <span class="nv">$ </span>sudo umount /media/boot
 <span class="nv">$ </span>sudo umount /media/rootfs

@@ -94,7 +94,7 @@
 <li>生成器send函数理解</li>
 </ul>
 
-<h3 id="可迭代对象-迭代器">可迭代对象/迭代器</h3>
+<h3 id=">可迭代对象/迭代器</h3>
 
 <p>当你建立了一个列表，你可以逐项地读取这个列表，这叫做一个可迭代对象。他基于两个方法:
 1. <code>next()</code> 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常
@@ -127,7 +127,7 @@
 <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">MyIterator</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
     <span class="k">print</span> <span class="n">el</span>
 </code></pre></div>
-<h3 id="生成器">生成器</h3>
+<h3 id=">生成器</h3>
 
 <p><strong>生成器就是一种迭代器</strong>。 生成器使得需要返回一系列元素的函数所需的代码更加简单、高效。基于<code>yield</code>指令，可以暂停一个函数并返回中间结果，该函数将保存执行环境并可以在必要时恢复。</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="sd">&#39;&#39;&#39;</span>
@@ -213,7 +213,7 @@ send是除next外另一个恢复生成器的方法。Python 2.5中，yield语句
 这个方法用于在生成器内部（生成器的当前挂起处，或未启动时在定义处）抛出一个异常。</p></li>
 </ol>
 
-<h3 id="生成器表达式">生成器表达式</h3>
+<h3 id=">生成器表达式</h3>
 
 <p>生成器表达式也称作genexp，使用类似列表推倒的方式减少了序列代码的总量。它和常规生成器一样每次输出一个元素，所以整个序列和推导列表一样不会提前进行计算。</p>
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c">#!/usr/bin/env python</span>
@@ -234,7 +234,7 @@ send是除next外另一个恢复生成器的方法。Python 2.5中，yield语句
 <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">:</span>
     <span class="k">print</span> <span class="n">el</span>
 </code></pre></div>
-<h3 id="itertools模块">itertools模块</h3>
+<h3 id="itertools">itertools模块</h3>
 
 <p>当python提供生成器特性后，就为实现常见模式提供了一个新的模块itertools。itertools覆盖了许多模式，例如islice、tee、groupby等。
 参照文档：<a href="https://docs.python.org/3/library/itertools.html">itertools — Functions creating iterators for efficient looping</a></p>
@@ -338,7 +338,7 @@ This itertool may require significant auxiliary storage (depending on how much t
             <span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">it</span><span class="p">)</span>    <span class="c"># Exit on StopIteration</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">currkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keyfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">currvalue</span><span class="p">)</span>
 </code></pre></div>
-<h3 id="协同程序">协同程序</h3>
+<h3 id=">协同程序</h3>
 
 <p>参考文档：<a href="https://docs.python.org/3/library/asyncio-task.html">Tasks and coroutines</a>
 协同程序是可以挂起、恢复，并且有多个进入点的函数。</p>

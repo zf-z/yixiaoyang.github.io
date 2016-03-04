@@ -90,7 +90,7 @@
 
 <p>本wiki为Centos上部署git服务器提供文档。</p>
 
-<h4 id="基本软件安装">基本软件安装</h4>
+<h4 id=">基本软件安装</h4>
 
 <pre>
 $ yum install python python-setuptools
@@ -108,7 +108,7 @@ Connection to server.holocene-instrument.com closed.
 
 <p>大功告成，说明gitosis生效</p>
 
-<h4 id="添加用户（ssh）">添加用户（ssh）</h4>
+<h4 id="ssh">添加用户（ssh）</h4>
 
 <p>To add new users:
 - add a keys/USER.pub file
@@ -133,7 +133,7 @@ git push myserver master:refs/heads/master
 
 <p>That&#39;s it. If you now add others to members, they can use that repository too.</p>
 
-<h4 id="权限修改">权限修改</h4>
+<h4 id=">权限修改</h4>
 
 <p>提交本地工程到服务器，首先clonegitosis-admin项目到本地
 <pre>
@@ -166,7 +166,7 @@ members = yuan
 
 <p>服务端将同步有一个仓库了。</p>
 
-<h4 id="新建git库">新建git库</h4>
+<h4 id="git">新建git库</h4>
 
 <p>服务器端新建git空库</p>
 
@@ -210,13 +210,13 @@ denyCurrentBranch = ignore
 
 <span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-lt <span class="m">1</span> <span class="o">]</span> 
 <span class="k">then</span>
-    <span class="nb">echo</span> <span class="s2">&quot;Argument error:$# arguments&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Argument error:</span><span class="nv">$# </span><span class="s2">arguments&quot;</span>
     <span class="nb">exit</span>
 <span class="k">fi</span>
 
-<span class="nv">repo</span><span class="o">=</span><span class="s2">&quot;$1.git&quot;</span>
+<span class="nv">repo</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">.git&quot;</span>
 mkdir <span class="nv">$repo</span>
-<span class="nb">echo</span> <span class="s2">&quot;mkdir $repo&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;mkdir </span><span class="nv">$repo</span><span class="s2">&quot;</span>
 
 <span class="nb">cd</span> <span class="nv">$repo</span>
 git init --bare
@@ -225,7 +225,7 @@ date +<span class="s2">&quot;%Y-%m-%d %H:%M:%S&quot;</span> &gt;&gt; Readme.rm
 <span class="nb">echo</span> <span class="s2">&quot;by git.&quot;</span> &gt;&gt; Readme.rm
 
 
-<span class="nb">echo</span> <span class="s2">&quot;Create repo $repo succced~&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Create repo </span><span class="nv">$repo</span><span class="s2"> succced~&quot;</span>
 </code></pre></div>
 <p><strong>(4)Split subtree as new repo</strong></p>
 

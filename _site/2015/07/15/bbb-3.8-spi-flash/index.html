@@ -92,7 +92,7 @@
 
 
   <article class="post-content">
-    <h4 id="spi-flash芯片">Spi Flash芯片</h4>
+    <h4 id="spi-flash">Spi Flash芯片</h4>
 
 <p>由于制作JFSS2文件系统镜像、初始化需要芯片的详细sector size(page size)、erase size，因此需要详细的芯片类型和数据手册。我使用的SPI Flash芯片是“25Q128A 13E40”，是Micron的N25Q128A13ESE40E。几个重要参数需要弄清楚：</p>
 
@@ -128,11 +128,11 @@ Error: Min volume size supported is 104857600
 
 <p>F2FS文件系统不支持100M以下的设备。</p>
 
-<h4 id="jffs2简介">JFFS2简介</h4>
+<h4 id="jffs2">JFFS2简介</h4>
 
 <p>JFFS2 provides a filesystem directly on the flash, rather than emulating a block device. For more information, see the (JFFS2 PDF)[<a href="http://linux-mtd.infradead.org/%7Edwmw2/jffs2.pdf">http://linux-mtd.infradead.org/~dwmw2/jffs2.pdf</a>].</p>
 
-<h4 id="让内核支持选定的spi-flash">让内核支持选定的SPI Flash</h4>
+<h4 id="spi-flash">让内核支持选定的SPI Flash</h4>
 
 <ol>
 <li>添加kernel对jffs2的支持</li>
@@ -225,7 +225,7 @@ Symbol: MTD_M25P80 [=y]
 };
 </pre>
 
-<h4 id="buildroot-amp-busybox-amp-kernel加入mtd支持">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
+<h4 id="buildroot-amp-busybox-amp-kernel-mtd">buildroot &amp; busybox &amp; kernel加入mtd支持</h4>
 
 <p>首先加入mtd基本工具和flash<em>erase的支持，叫交叉编译出flash</em>erase工具用于格式化，mkfs.ubifs、mkfs.jffs2用于制作镜像。</p>
 
@@ -261,7 +261,7 @@ Symbol: BR2_PACKAGE_MTD_MKFSJFFS2 [=y]
   │   Selects: BR2_PACKAGE_ZLIB [=y] && BR2_PACKAGE_LZO [=y]        
 </pre>
 
-<h4 id="制作jffs2镜像">制作JFFS2镜像</h4>
+<h4 id="jffs2">制作JFFS2镜像</h4>
 
 <p>可以在Host机器上制作镜像，但一定得弄清楚上面提到的flash的几个特性，否则会出现<code>I cannot mount JFFS2 and see &quot;Magic bitmask 0x1985 not found&quot; messages</code>的常见错误。</p>
 

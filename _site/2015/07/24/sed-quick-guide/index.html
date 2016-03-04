@@ -137,7 +137,7 @@
 </tr>
 </tbody></table>
 
-<h3 id="文本间隔">文本间隔</h3>
+<h3 id=">文本间隔</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 在每一行后面增加一空行</span>
  sed G
 
@@ -160,7 +160,7 @@
  <span class="c"># 在匹配式样“regex”的行之前和之后各插入一空行</span>
  sed <span class="s1">&#39;/regex/{x;p;x;G;}&#39;</span>
 </code></pre></div>
-<h3 id="编号">编号</h3>
+<h3 id=">编号</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 为文件中的每一行进行编号（简单的左对齐方式）。这里使用了“制表符”</span>
  <span class="c"># （tab，见本文末尾关于&#39;\t&#39;的用法的描述）而不是空格来对齐边缘。</span>
  <span class="nv">sed</span> <span class="o">=</span> filename <span class="p">|</span> sed <span class="s1">&#39;N;s/\n/\t/&#39;</span>
@@ -174,20 +174,20 @@
  <span class="c"># 计算行数 （模拟 &quot;wc -l&quot;）</span>
  sed -n <span class="s1">&#39;$=&#39;</span>
 </code></pre></div>
-<h3 id="文本转换和替代">文本转换和替代</h3>
+<h3 id=">文本转换和替代</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># Unix环境：转换DOS的新行符（CR/LF）为Unix格式。</span>
  sed <span class="s1">&#39;s/.$//&#39;</span>                     <span class="c"># 假设所有行以CR/LF结束</span>
  sed <span class="s1">&#39;s/^M$//&#39;</span>                    <span class="c"># 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V</span>
  sed <span class="s1">&#39;s/\x0D$//&#39;</span>                  <span class="c"># ssed、gsed 3.02.80，及更高版本</span>
 
  <span class="c"># Unix环境：转换Unix的新行符（LF）为DOS格式。</span>
- sed <span class="s2">&quot;s/$/`echo -e \\\r`/&quot;</span>        <span class="c"># 在ksh下所使用的命令</span>
+ sed <span class="s2">&quot;s/</span><span class="nv">$/</span><span class="s2">`echo -e \\\r`/&quot;</span>        <span class="c"># 在ksh下所使用的命令</span>
  sed <span class="s1">&#39;s/$&#39;</span><span class="s2">&quot;/`echo \\\r`/&quot;</span>         <span class="c"># 在bash下所使用的命令</span>
- sed <span class="s2">&quot;s/$/`echo \\\r`/&quot;</span>           <span class="c"># 在zsh下所使用的命令</span>
+ sed <span class="s2">&quot;s/</span><span class="nv">$/</span><span class="s2">`echo \\\r`/&quot;</span>           <span class="c"># 在zsh下所使用的命令</span>
  sed <span class="s1">&#39;s/$/\r/&#39;</span>                    <span class="c"># gsed 3.02.80 及更高版本</span>
 
  <span class="c"># DOS环境：转换Unix新行符（LF）为DOS格式。</span>
- sed <span class="s2">&quot;s/$//&quot;</span>                      <span class="c"># 方法 1</span>
+ sed <span class="s2">&quot;s/</span><span class="nv">$/</span><span class="s2">/&quot;</span>                      <span class="c"># 方法 1</span>
  sed -n p                         <span class="c"># 方法 2</span>
 
  <span class="c"># DOS环境：转换DOS新行符（CR/LF）为Unix格式。</span>
@@ -267,7 +267,7 @@
  gsed <span class="s1">&#39;0~5G&#39;</span>                      <span class="c"># 只对GNU sed有效</span>
  sed <span class="s1">&#39;n;n;n;n;G;&#39;</span>                 <span class="c"># 其他sed</span>
 </code></pre></div>
-<h3 id="选择性地显示特定行">选择性地显示特定行</h3>
+<h3 id=">选择性地显示特定行</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 显示文件中的前10行 （模拟“head”的行为）</span>
  sed 10q
 
@@ -354,7 +354,7 @@
  <span class="c"># 显示两个正则表达式之间的文本（包含）</span>
  sed -n <span class="s1">&#39;/Iowa/,/Montana/p&#39;</span>       <span class="c"># 区分大小写方式</span>
 </code></pre></div>
-<h3 id="选择性地删除特定行">选择性地删除特定行</h3>
+<h3 id=">选择性地删除特定行</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 显示通篇文档，除了两个正则表达式之间的内容</span>
  sed <span class="s1">&#39;/Iowa/,/Montana/d&#39;</span>
 
@@ -412,7 +412,7 @@
  <span class="c"># 删除每个段落的最后一行</span>
  sed -n <span class="s1">&#39;/^$/{p;h;};/./{x;/./p;}&#39;</span>
 </code></pre></div>
-<h3 id="特殊应用">特殊应用</h3>
+<h3 id=">特殊应用</h3>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"> <span class="c"># 移除手册页（man page）中的nroff标记。在Unix System V或bash shell下使</span>
  <span class="c"># 用&#39;echo&#39;命令时可能需要加上 -e 选项。</span>
  sed <span class="s2">&quot;s/.`echo \\\b`//g&quot;</span>    <span class="c"># 外层的双括号是必须的（Unix环境）</span>
@@ -449,7 +449,7 @@
  <span class="c"># 第二种版本则可以放入一个带执行权限的shell脚本中。（由Rahul Dhesi的一</span>
  <span class="c"># 个脚本修改而来。）</span>
  sed <span class="s1">&#39;/^end/,/^begin/d&#39;</span> file1 file2 ... fileX <span class="p">|</span> uudecode   <span class="c"># vers. 1</span>
- sed <span class="s1">&#39;/^end/,/^begin/d&#39;</span> <span class="s2">&quot;$@&quot;</span> <span class="p">|</span> uudecode                    <span class="c"># vers. 2</span>
+ sed <span class="s1">&#39;/^end/,/^begin/d&#39;</span> <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span> <span class="p">|</span> uudecode                    <span class="c"># vers. 2</span>
 
  <span class="c"># 将文件中的段落以字母顺序排序。段落间以（一行或多行）空行分隔。GNU sed使用</span>
  <span class="c"># 字元“\v”来表示垂直制表符，这里用它来作为换行符的占位符——当然你也可以</span>

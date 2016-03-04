@@ -1,0 +1,45 @@
+<p>There is no a full HOWTO introducing whole system upgrading. I hope this simple document can help someone else.</p>
+
+<p>src: <a href="https://forums.gentoo.org/viewtopic-t-807345.html">https://forums.gentoo.org/viewtopic-t-807345.html</a></p>
+
+<ol>
+<li>sync portage tree(eix-sync is recommended)</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># eix-sync  
+</code></pre></div>
+<p>or</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># emerge --sync
+</code></pre></div>
+<ol>
+<li>upgrade whole system</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># emerge -avuDN --with-bdeps y --keep-going world   
+</code></pre></div>
+<ol>
+<li>make configuration file(s) up to date</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># etc-update    
+</code></pre></div>
+<p>or</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># dispatch-conf 
+</code></pre></div>
+<ol>
+<li>fix static library</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># lafilefixer --justfixit | grep -v skipping
+</code></pre></div>
+<ol>
+<li>uninstall useless packages</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># emerge -av --depclean 
+</code></pre></div>
+<ol>
+<li>Reverse dynamic library Dependency</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># revdep-rebuild
+</code></pre></div>
+<ol>
+<li>clean source code of the old packages</li>
+</ol>
+<div class="highlight"><pre><code class="language-text" data-lang="text"># eclean -d distfiles
+</code></pre></div>
