@@ -1,3 +1,19 @@
+---
+author: leon
+comments: true
+date: 2015-12-25 08:29:20+00:00
+layout: post
+title: 'Gentoo seven steps to upgrade' 
+categories:
+- shell
+
+tags:
+- shell
+- gentoo
+---
+
+
+
 There is no a full HOWTO introducing whole system upgrading. I hope this simple document can help someone else.
 
 src: https://forums.gentoo.org/viewtopic-t-807345.html
