@@ -5,9 +5,31 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Mar 2016 12:20:18 +0800</pubDate>
-    <lastBuildDate>Fri, 04 Mar 2016 12:20:18 +0800</lastBuildDate>
+    <pubDate>Sat, 05 Mar 2016 18:06:38 +0800</pubDate>
+    <lastBuildDate>Sat, 05 Mar 2016 18:06:38 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>[Qt] 关于Qt编译error: undefined reference to `vtable for xxx错误</title>
+        <description>&lt;p&gt;ref: &lt;a href=&quot;http://stackoverflow.com/questions/13121310/adding-signal-to-custom-qthread&quot;&gt;http://stackoverflow.com/questions/13121310/adding-signal-to-custom-qthread&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Make shure your class is in a different .cpp and .h file that are included in the MOC process generation. undefined reference to `vtable means that the moc cpp file is not generated.&lt;/p&gt;
+
+&lt;p&gt;In case you are using Qt Creator and when you compiled your project for the first time, you did not put “Q_OBJECT” in your header file, then the moc cpp file for your (qthread) cpp file was not generated. In this case, simply running “Clean All” and “Rebuild All” after putting “Q_OBJECT” in your header file will not work. You need to go to your build folder to manually delete the Qt generated “Makefile” and run “Rebuild All” or “Build All” again, your error message will be gone.&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 06 Mar 2016 02:03:25 +0800</pubDate>
+        <link>/2016/03/06/Qt-Undefine-VTable-error/</link>
+        <guid isPermaLink="true">/2016/03/06/Qt-Undefine-VTable-error/</guid>
+        
+        <category>c++</category>
+        
+        <category>Qt</category>
+        
+        
+        <category>cpp</category>
+        
+      </item>
     
       <item>
         <title>[Android] Android驱动开发二三事</title>
@@ -808,221 +830,6 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
         
         
         <category>ruby</category>
-        
-      </item>
-    
-      <item>
-        <title>[CPP] Boost库概要</title>
-        <description>&lt;p&gt;Boost和STL库是C++的血肉，C++的语言特性本身则是筋骨。现在在用的Qt库本身大而全，用起来方便，最重要的是跨平台，嵌入式用户交互方面的不二选择。&lt;/p&gt;
-
-&lt;p&gt;目前使用Boost库的需求不是很充分，因为Qt在大部分应用上都可以胜任。不过Boost以效率和稳定颇有声誉，作为C++标准化新特性的重要参考，可略作了解。&lt;/p&gt;
-
-&lt;h3&gt;文本处理&lt;/h3&gt;
-
-&lt;h4&gt;Boost.Regex&lt;/h4&gt;
-
-&lt;p&gt;解决大量匹配问题的正则表达式库。不必羡慕perl、awk和sed。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Spirit &amp;amp; Boost.Tokenizer&lt;/h4&gt;
-
-&lt;p&gt;Spirit是一个语法生成框架，可以使用其构建命令分析器以及简单的语言处理器。想想Bison和flex就明白了。&lt;/p&gt;
-
-&lt;h4&gt;Boost.String_algo&lt;/h4&gt;
-
-&lt;p&gt;可以视为String类的扩展算法工具集。提供大小写转换、空格清除、分割、查找替换等扩展算法工具。&lt;/p&gt;
-
-&lt;p&gt;###容器和算法&lt;/p&gt;
-
-&lt;p&gt;一些比较经典常用的数据结构和算法的实现。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Array&lt;/h4&gt;
-
-&lt;p&gt;有了Vector这玩意儿然并卵。除了基本的数组功能，提供类型安全而不牺牲性能，=_=，窃以为C++很多安全性的封装如智能指针，让用它的愚蠢程序员更加愚蠢，让用它的聪明程序员变得愚蠢。&lt;/p&gt;
-
-&lt;h4&gt;Boost.MultiArray&lt;/h4&gt;
-
-&lt;p&gt;多维容器。做矩阵计算的一定会喜欢。Vector二维以上数组声明都觉得麻烦。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Graph&lt;/h4&gt;
-
-&lt;p&gt;泛型图算法工具集，包含邻接链表、邻接矩阵和边列表。提供Dijsktra最短路径算法，K最小生成树算法、拓扑逻辑排序等经典算法。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Multi-index&lt;/h4&gt;
-
-&lt;p&gt;为底层容器提供多个索引，一个底层的容器可以有不同的排序方法和不同的访问语义。当std::set 和 std::map 不够用时,就可以用Boost.Multi-index,通常是在需要为查找元素而维护多个索引时。&lt;br /&gt;
-不太了解，做稍微复杂的数据索引时应该会用到。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Range&lt;/h4&gt;
-
-&lt;p&gt;用过Python/Ruby的Rang后秒懂。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Tunple&lt;/h4&gt;
-
-&lt;p&gt;STL的pair不支持n-tunples，一般用自定义struct或者class实现，这个类模板支持直接声明和使用,如函数返回类型或参数,并提供一个泛型的方法来访问tuple的元素。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Variant&lt;/h4&gt;
-
-&lt;p&gt;泛型类型的操作和转换。Qt中有类似的Qvariant。&lt;/p&gt;
-
-&lt;p&gt;###函数对象&lt;/p&gt;
-
-&lt;h4&gt;Boost.bind&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;bind简介&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这个是重头戏，bind、函数对象、signal/slot等特性经常会用。&lt;br /&gt;
-我觉得bind最重要的作用是：&lt;code&gt;改变参数的顺序&lt;/code&gt;，这使得我们可以少创建一些类似功能参数不同或者参数冗余的函数对象，减少代码量，使行为局部化。虽然标准库已经提供了一些可用的工具,如 bind1st 和 bind2nd, 但是这不够用，bind由此产生。&lt;/p&gt;
-
-&lt;p&gt;Bind是对标准库的绑定器 bind1st和bind2nd的泛化,返回值是一个函数对象。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;bind范例&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n4&quot; name=&quot;n4&quot;&gt;4&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;algorithm&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n5&quot; name=&quot;n5&quot;&gt;5&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n6&quot; name=&quot;n6&quot;&gt;6&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;quot;boost/bind.hpp&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n7&quot; name=&quot;n7&quot;&gt;7&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n8&quot; name=&quot;n8&quot;&gt;8&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;class&lt;/span&gt; &lt;span style=&quot;color:#B06;font-weight:bold&quot;&gt;status&lt;/span&gt; {
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n9&quot; name=&quot;n9&quot;&gt;9&lt;/a&gt;&lt;/span&gt;    std::&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; name;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n10&quot; name=&quot;n10&quot;&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;bool&lt;/span&gt; ok;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n11&quot; name=&quot;n11&quot;&gt;11&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;public&lt;/span&gt;:
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n12&quot; name=&quot;n12&quot;&gt;12&lt;/a&gt;&lt;/span&gt;    status(&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;const&lt;/span&gt; std::&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt;&amp;amp; name):name(name),ok(&lt;span style=&quot;color:#069&quot;&gt;true&lt;/span&gt;) {}
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n13&quot; name=&quot;n13&quot;&gt;13&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;void&lt;/span&gt; break_it() {
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n14&quot; name=&quot;n14&quot;&gt;14&lt;/a&gt;&lt;/span&gt;        ok=&lt;span style=&quot;color:#069&quot;&gt;false&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n15&quot; name=&quot;n15&quot;&gt;15&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n16&quot; name=&quot;n16&quot;&gt;16&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;bool&lt;/span&gt; is_broken() &lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;const&lt;/span&gt; {
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n17&quot; name=&quot;n17&quot;&gt;17&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; ok;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n18&quot; name=&quot;n18&quot;&gt;18&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n19&quot; name=&quot;n19&quot;&gt;19&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;void&lt;/span&gt; report() &lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;const&lt;/span&gt; {
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n20&quot; name=&quot;n20&quot;&gt;20&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;        std::cout &amp;lt;&amp;lt; name &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt; is &lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &amp;lt;&amp;lt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n21&quot; name=&quot;n21&quot;&gt;21&lt;/a&gt;&lt;/span&gt;                    (ok ? &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;working nominally&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;:&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;terribly broken&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;) &amp;lt;&amp;lt; &lt;span style=&quot;color:#D20&quot;&gt;&#39;\n&#39;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n22&quot; name=&quot;n22&quot;&gt;22&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n23&quot; name=&quot;n23&quot;&gt;23&lt;/a&gt;&lt;/span&gt;};
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n24&quot; name=&quot;n24&quot;&gt;24&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n25&quot; name=&quot;n25&quot;&gt;25&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;void&lt;/span&gt; bind_test()
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n26&quot; name=&quot;n26&quot;&gt;26&lt;/a&gt;&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n27&quot; name=&quot;n27&quot;&gt;27&lt;/a&gt;&lt;/span&gt;    std::vector&amp;lt;status&amp;gt; statuses;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n28&quot; name=&quot;n28&quot;&gt;28&lt;/a&gt;&lt;/span&gt;    statuses.push_back(status(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;status 1&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;));
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n29&quot; name=&quot;n29&quot;&gt;29&lt;/a&gt;&lt;/span&gt;    statuses.push_back(status(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;status 2&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;));
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n30&quot; name=&quot;n30&quot;&gt;30&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;    statuses.push_back(status(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;status 3&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;));
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n31&quot; name=&quot;n31&quot;&gt;31&lt;/a&gt;&lt;/span&gt;    statuses.push_back(status(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;status 4&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;));
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n32&quot; name=&quot;n32&quot;&gt;32&lt;/a&gt;&lt;/span&gt;    statuses[&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;].break_it();
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n33&quot; name=&quot;n33&quot;&gt;33&lt;/a&gt;&lt;/span&gt;    statuses[&lt;span style=&quot;color:#00D&quot;&gt;2&lt;/span&gt;].break_it();
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n34&quot; name=&quot;n34&quot;&gt;34&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n35&quot; name=&quot;n35&quot;&gt;35&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;#if 0&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n36&quot; name=&quot;n36&quot;&gt;36&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;    // 这个循环正确地完成了任务,但它是冗长、低效的(由于要多次调用statuses.end()),并且不象使用标准库算&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n37&quot; name=&quot;n37&quot;&gt;37&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;    // 法for_each那样清楚地表明意图。为了用for_each 来替换这个循环,我们需要用一个适配器来对vector元素&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n38&quot; name=&quot;n38&quot;&gt;38&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;    // 调用成员函数report。这时,由于元素是以值的方式保存的,我们需要的是适配器mem_fun_ref&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n39&quot; name=&quot;n39&quot;&gt;39&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;    for (std::vector&amp;lt;status&amp;gt;::iterator it=statuses.begin();&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n40&quot; name=&quot;n40&quot;&gt;40&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;        it!=statuses.end();++it) {&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n41&quot; name=&quot;n41&quot;&gt;41&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;        it-&amp;gt;report();&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n42&quot; name=&quot;n42&quot;&gt;42&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;    }&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n43&quot; name=&quot;n43&quot;&gt;43&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;#else&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n44&quot; name=&quot;n44&quot;&gt;44&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#777&quot;&gt;// for_each(str.begin(), str.end(), (mem_fun(&amp;amp;funtest::doSth),this));&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n45&quot; name=&quot;n45&quot;&gt;45&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#777&quot;&gt;// 把str中的每个元素作为参数送到第三个参数（是个函数的指针）所指向的函数。&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n46&quot; name=&quot;n46&quot;&gt;46&lt;/a&gt;&lt;/span&gt;    std::for_each( statuses.begin(),statuses.end(),
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n47&quot; name=&quot;n47&quot;&gt;47&lt;/a&gt;&lt;/span&gt;                    boost::bind(&amp;amp;status::report,_1));
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n48&quot; name=&quot;n48&quot;&gt;48&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#endif&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n49&quot; name=&quot;n49&quot;&gt;49&lt;/a&gt;&lt;/span&gt;}
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n50&quot; name=&quot;n50&quot;&gt;50&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n51&quot; name=&quot;n51&quot;&gt;51&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; main(&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; , &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;char&lt;/span&gt; **)
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n52&quot; name=&quot;n52&quot;&gt;52&lt;/a&gt;&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n53&quot; name=&quot;n53&quot;&gt;53&lt;/a&gt;&lt;/span&gt;    bind_test();
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n54&quot; name=&quot;n54&quot;&gt;54&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n55&quot; name=&quot;n55&quot;&gt;55&lt;/a&gt;&lt;/span&gt;}
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上面&lt;code&gt;std::for_each( statuses.begin(),statuses.end(),boost::bind(&amp;amp;status::report,_1));&lt;/code&gt;中的那一个占位符让人很迷惑。&lt;br /&gt;
-实际上，类成员函数的绑定不同于匿名函数的绑定，成员函数必须有一个父对象或者指针，才能经过this进行调用，而匿名函数可以直接进行()操作,&lt;br /&gt;
-因此bind需要“牺牲”一位占位符要求用户提供类的实例、指针或者引用，用过对象作为第一个参数来调用成员函数。&lt;br /&gt;
-即&lt;code&gt;bind(&amp;amp;x::func,x,_1,_2...)&lt;/code&gt;最多只能绑定8位参数。&lt;/p&gt;
-
-&lt;p&gt;假设我们有一个类&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;class&lt;/span&gt; &lt;span style=&quot;color:#B06;font-weight:bold&quot;&gt;ClassA&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;public&lt;/span&gt;:
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; f(&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; a, &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; b){&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; a+b;}
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n4&quot; name=&quot;n4&quot;&gt;4&lt;/a&gt;&lt;/span&gt;};
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;以下三种绑定都是成立的&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ClassA obj, &amp;amp;obj_ref=obj;
-ClassA *obj_ptr = &amp;amp;obj
-
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj, _1, 20)(10) &amp;lt;&amp;lt; endl;
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj_ref, _1, _2)(10,20) &amp;lt;&amp;lt; endl;
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj_ptr, _1, _2)(10,20) &amp;lt;&amp;lt; endl;
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;bind的内部实现&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;bind的实现主要依靠：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对()运算符的重载&lt;/li&gt;
-  &lt;li&gt;空间内置占位符变量&lt;/li&gt;
-  &lt;li&gt;函数对象的调用&lt;/li&gt;
-  &lt;li&gt;泛型支持&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;看了实现解析并没有说的那么&lt;code&gt;黑魔法&lt;/code&gt;。要说黑魔法，lamba才算是。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;其他&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;boost::bind() 返回的函数对象会保存要绑定的实参. 而且总是拷贝一份以值的方式保存..&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4&gt;Boost.signals2&lt;/h4&gt;
-
-&lt;p&gt;signals2基于signals实现的一个线程安全信号/插槽模型。主要功能类似Qt的信号/插槽模型，对于事件处理系统相当有用。&lt;/p&gt;
-
-&lt;h3&gt;并发处理&lt;/h3&gt;
-
-&lt;h4&gt;thread&lt;/h4&gt;
-
-&lt;p&gt;支持最广泛的windows和posix线程，所以跨平台能力比较好，包含创建销毁等待、线程（组）管理、同步等基本功能，多线程封装的库虽然能够简化编程过程，但是写好并发程序其实是另外一回事。就像一个拿好刀的厨师不一定能做出一手好菜一样。&lt;/p&gt;
-
-&lt;h4&gt;asio&lt;/h4&gt;
-
-&lt;p&gt;asio主要关注网络通信。使用大量的类封装了socket api，提供了一些cpp接口的网络编程接口，支持tcp/icmp/udp等常用协议。总而言之，使用asio可以大量简化、可靠的socket同步/异步编程类，比用C从最小服务器/客户端程序写起要好很多，我们不需要一遍遍造毫无创意的轮子。&lt;/p&gt;
-
-&lt;h3&gt;其他&lt;/h3&gt;
-
-&lt;p&gt;有个支持python的扩展库–写过python的人应该直到python可以用cpp扩展，两者的区别就一个是在cpp程序里调用python程序，一个是使用cpp实现/重写自定义python组件并调用。&lt;/p&gt;
-
-&lt;h3&gt;关于boost和Cpp&lt;/h3&gt;
-
-&lt;p&gt;Boost库给总是给我一种古怪的感觉。cpp是一门糟糕的设计语言，但是在很多系统层应用场合，无法使用更加高级的解释性语言的情况下，cpp比c更有生产力而不输效率。&lt;/p&gt;
-
-&lt;p&gt;参考书籍:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Boost documents&lt;/li&gt;
-  &lt;li&gt;Boost程序库完全开发指南&lt;/li&gt;
-  &lt;li&gt;Beyond the C++ Standard Library&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Mon, 03 Aug 2015 03:30:25 +0800</pubDate>
-        <link>/2015/08/03/boost-learning/</link>
-        <guid isPermaLink="true">/2015/08/03/boost-learning/</guid>
-        
-        <category>c++</category>
-        
-        <category>boost</category>
-        
-        
-        <category>cpp</category>
         
       </item>
     
