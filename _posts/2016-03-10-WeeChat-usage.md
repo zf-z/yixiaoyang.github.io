@@ -1,3 +1,15 @@
+---
+author: leon
+comments: true
+date: 2016-03-08 18:03:25+00:00
+layout: post
+title: '[工具] WeeChat/IRC 存活指南' 
+categories:
+- shell
+tags:
+- shell
+---
+
 # WeeChat存活指南
 
 1. 设置nicks,username,realname

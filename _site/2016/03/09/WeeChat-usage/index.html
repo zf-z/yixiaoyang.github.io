@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>[工具] WeeChat/IRC 存活指南</title>
+  <meta name="description" content="WeeChat存活指南">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2016/03/09/WeeChat-usage/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/AboutMe/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message/">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">[工具] WeeChat/IRC 存活指南</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">shell</span>
+	
+  
+  <span class="post-meta">2016-03-09 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <h1>WeeChat存活指南</h1>
+
+<ol>
+  <li>
+    <p>设置nicks,username,realname
+‘’’
+/set irc.server.freenode.nicks “leon_e”
+/set irc.server.freenode.username “leon_e”
+/set irc.server.freenode.realname “leon_e”
+‘’’</p>
+  </li>
+  <li>
+    <p>添加一个proxy服务器 <code class="highlighter-rouge">/proxy add shadowsocks 127.0.0.1 1080</code></p>
+  </li>
+</ol>
+
+<p>#服务器
+# freenode #ubuntu-cn #g0v.tw</p>
+
+<p>常 用 基 本 命 令 命令用途说明 命 令 使 用 举 例</p>
+
+<p>/links 列服务器连接信息 /links</p>
+
+<p>/list 列出所有聊天室 /list</p>
+
+<p>/nick 名字 更换名字 /nick 林桃子67</p>
+
+<p>/ns register 密码 注册名字 /ns regiser 123456</p>
+
+<p>/pass 密码 验证名字密码 /pass 123456</p>
+
+<p>/ns set password 新密码 修改名字密码 /ns set password 654321</p>
+
+<p>/mode 自己名字 +/-i 设置昵称是否隐藏 /mode 林桃子67 +/-i</p>
+
+<p>/mode 自己名字 +/-s 是否收服务器信息 /mode 是我 +/-s</p>
+
+<p>/run 文件名 运行程序或文件 /run jpbot.exe</p>
+
+<p>/whois 名字 查看网友的信息 /whois 是我</p>
+
+<p>/userhost 名字 查看网友的IP地址 /userhost 是我</p>
+
+<p>/ns info 名字 查名字注册信息 /ns info 名字</p>
+
+<p>/ns status 名字 查询用户状态 /ns status 名字</p>
+
+<p>/who 看看谁在线上 /who</p>
+
+<p>/who #房间名 看看谁在房间中 /who #林桃子67的房间</p>
+
+<p>/names #房间名 列房间中所有用户 /names #日本女性的房间</p>
+
+<p>/me 要说的话 使用动作表情 /me 大家好，今天你IRC了么</p>
+
+<p>/say 要说的话 在当前频道说话 /say 老公，想我了吗</p>
+
+<p>/notice 名字 要说的话 向某人发出通告 /notice 远方的风 有事找你</p>
+
+<p>/query 名字 发送信息 开小窗和他私聊 /query 夕阳天使 hi，久违了你</p>
+
+<p>/privmsg 名字 发送信息 开小窗发送信息 /privmsg 天使源 hi，久违了你</p>
+
+<p>/msg 他的名字 信息内容 给他悄悄发送信息 /msg 于天 你好!</p>
+
+<p>/msg 房间名字 信息内容 向房间全体成员说 /msg #日语角 大家好!</p>
+
+<p>/omsg #房间名字 要发的信息 仅对屋中的@说话 /omsg #日语角 见吴山了没有</p>
+
+<p>/amsg 要发的信息 多个频道同发信息 /amsg 我老公在那里呢</p>
+
+<p>/onotice 房间名字 要发的话 在该屋对所有op说 /onotice #日语角 水素死翘了</p>
+
+<p>/close -m 关闭所有小窗聊天 /close -m</p>
+
+<p>/ignore 他的名字 忽略你讨厌的人 /ignore 杨过,shll,</p>
+
+<p>/ignore -T * 忽略别人CTCP查询 /ignore -T *</p>
+
+<p>　　 /join #房间名 加入一个房间 /join #林桃子67的房间</p>
+
+<p>/away 给出离开的原因 离开并给出原因 /away 对不起GG，我男友来了</p>
+
+<p>/away 取消离开设置 /away</p>
+
+<p>/part #房间名 退出信息 退出当前房间 /part #日语角 bye大家</p>
+
+<p>/partall 退出信息 退出所有房间 /partall byeall</p>
+
+<p>/quit 退出信息 退出IRC退出连接 /quit 今天实在是累了，bye</p>
+
+<p>/exit 退出信息 关闭irc并退出 /exit 睡觉觉去了</p>
+
+<p>/disconnect 退出信息 与服务器断开连接 /disconnect 我是故意断线的</p>
+
+<p>/server bj.irc.263.net 6667 更换irc服务器 /server bj.irc.263.net 6667</p>
+
+<p>/cs register #房间名字 密码 你对房间的描述 注册自己的房间 /cs register #</p>
+
+<p>林桃子67的房间 123456 我是桃子67我怕谁</p>
+
+<p>/topic #房间名字 主题内容 更改房间主题 /topic #日语角 欢迎你朋友</p>
+
+<p>/invite 他的名字 #房间名 邀请别人来房间 /invite 紫丁香花 #日语角</p>
+
+<p>/kick #房间名 他的名字 把人踢出房间 /kick #林桃子67的房间 PC100</p>
+
+<p>/mode #房间名 +/-b 他的名字 把某人禁止/解禁 /mode #林桃子67的房间 +/-b  然采</p>
+
+<p>/mode #房间名 +/-o 朋友名字 给朋友加/减帽子 /mode #林桃子67的房间 +/-o  然采</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>/auto -r on</td>
+      <td>off</td>
+      <td>他的名字 #频道名字 自动朋友加/减帽 /auto -r [on然采 ]#林桃子67的房间 出错了</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>/mode #房间名 +/-l 人数 设置限制房间人数 /mode #日语角 +/-l 100</p>
+
+<p>/mode #房间名字 +/-n 禁不禁止外部信息 /mode #日语角 +/-n</p>
+
+<p>/mode #房间名字+/-m 限制发言仅@/+说 /mode #房间名字 +/-m</p>
+
+<p>/mode #房间名字 +/-i 设置邀请模式 /mode #日语角 +/-i</p>
+
+<p>/mode #房间名字 +/-p 是否设置私有模式 /mode #日语角 +/-p</p>
+
+<p>/mode #房间名字 +/-s 是否设置秘密模式 /mode #日语角 +/-s</p>
+
+<p>/mode #房间名字 +/-t 是否只@能改主题 /mode #日语角 +/-t</p>
+
+<p>/mode #房间名 +k 密码 给房间加密码 /mode #日语角 +k 123456</p>
+
+<p>/join #房间名 密码 进入有密码的房间 /join #日语角 123456</p>
+
+<p>/channel 调出频道模式设置 /channel</p>
+
+<p>/cs info #房间名字 查看频道注册信息 /cs info #日语角</p>
+
+<h2>#</h2>
+
+<p>nickserv 昵称服务</p>
+
+<p>更换昵称 /nick 你要换的新名字</p>
+
+<p>注册昵称 /ns register 密码 邮箱</p>
+
+<p>认证昵称 /ns identify 名字密码</p>
+
+<p>这个也认证昵称 /pass 名字密码</p>
+
+<p>昵称保护 /ns set kill on/off</p>
+
+<p>昵称安全 /ns set secure on/off</p>
+
+<p>昵称保密 /ns set private on/off</p>
+
+<p>修改密码 /ns set password 新密码</p>
+
+<p>昵称邮箱 /ns set email 你的邮箱</p>
+
+<p>昵称主页 /ns set url http://52irc.org</p>
+
+<p>隐藏邮件 /ns set hide emall On/off</p>
+
+<p>隐藏网络地址 /ns set hide usermask On/off</p>
+
+<p>隐藏退出信息 /ns set hide quit On/off</p>
+
+<p>杀掉盗用你名字者 /ns ghost 你的妮称 密码</p>
+
+<p>注销昵称 /ns drop 你的妮称（得先认证）</p>
+
+<h2>#</h2>
+
+<p>chanserv 频道服务</p>
+
+<p>查看房间信息 /cs info #频道名字</p>
+
+<p>注册房间 /cs register #频道名字 密码 简介</p>
+
+<p>认证你的房主身份 /cs identify #频道名字 频道密码</p>
+
+<p>设置房间的主页 /cs set #频道名字 url 主页地址</p>
+
+<p>设置房间的邮箱 /cs set #频道名字 email 邮件地址</p>
+
+<p>设置房间的主题 /cs set #频道名字 topic 主题内容</p>
+
+<p>保留房间的主题 /cs set #频道名字 keeptopic on/off</p>
+
+<p>锁定房间的主题 /cs set #频道名字 topiclock on/off</p>
+
+<p>设置新的房间主人 /cs set #频道名字 founder 新任房主</p>
+
+<p>设置房间的新密码 /cs set #频道名字 password 频道密码</p>
+
+<p>设置房间安全控制 /cs set #频道名字 secure on/off</p>
+
+<p>设置房间管理员控制 /cs set #频道名字 secureops on/off</p>
+
+<h2>#</h2>
+
+<p>memoserv 留言服务</p>
+
+<p>列表所有留言 /ms list</p>
+
+<p>列表最新留言 /ms list new</p>
+
+<p>阅读最新留言 /ms read last</p>
+
+<p>阅读特定留言 /ms read 留言号码</p>
+
+<p>删除指定的留言 /ms del 留言号码</p>
+
+<p>删除所有的留言 /ms del all</p>
+
+<p>给人发送留言 /ms send 对方妮称 留言内容</p>
+
+<h2>#</h2>
+
+<p>chanserv 频道服务</p>
+
+<p>设置频道进入信息 /cs set #频道名字 entrymsg 所设置信息</p>
+
+<p>用服务器给客人加帽子 /cs op #频道名字 对方名字</p>
+
+<p>服务器摘掉某人的帽子 /cs deop #频道名字 对方名字</p>
+
+<p>让服务器为自已解ban /cs unban #频道名字</p>
+
+<p>增加一人到房踢列表/cs akick #频道名字 add 对方名字</p>
+
+<p>删除一人到房踢列表/cs akick #频道名字 del 对方名字</p>
+
+<p>查看房踢列表/cs akick #频道名字 list</p>
+
+<p>清除房间的所有ban /cs clear #频道名字 bans</p>
+
+<p>清除房间的模式设置 /cs clear #频道名字 modes</p>
+
+<p>清除房间的所有帽子 /cs clear #频道名字 ops</p>
+
+<p>清除房间的所有用户 /cs clear #频道名字users</p>
+
+<p>注销房间 /cs drop #频道名字</p>
+
+<h1>#</h1>
+
+<p>CTCP查询命令</p>
+
+<p>查对方反映速度 /ctcp 对方名字 ping</p>
+
+<p>查对方当地时间 /ctcp 对方名字 time</p>
+
+<p>查对方软件版本 /ctcp 对方名字 version</p>
+
+<p>查对方的用户信息 /ctcp 对方名字userinfo</p>
+
+<p>查对方的用户信息 /ctcp 对方名字 clientinfo</p>
+
+<h2>#</h2>
+<p>##</p>
+
+
+  </article>
+
+</div>
+
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>
