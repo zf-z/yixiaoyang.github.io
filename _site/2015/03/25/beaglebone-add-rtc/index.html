@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>[Python] 小型爬虫uSpider实现</title>
-  <meta name="description" content="最近用python实现了一个小型爬虫，爬个博客没问题。github地址： https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">
+  <title>[Beaglebone] 添加外接RTC DS1307支持</title>
+  <meta name="description" content="AM335X RTC的电源要求是1.8V，而市面上常用的纽扣电池一般是3.3v，因此Beaglebon上使用TPS65217X电源芯片的LDO转了一下。实际使用时这个芯片不是很稳定坏过两次，所以改成了若干个独立时钟电源芯片搭建，CPU的MPU、CORE供电分别为1.1v、1.1v即降频到800MHZ。如此一来，A...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2015/07/29/python-spider/">
+  <link rel="canonical" href="/2015/03/25/beaglebone-add-rtc/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -75,83 +75,122 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">[Python] 小型爬虫uSpider实现</h1>
+    <h1 class="post-title">[Beaglebone] 添加外接RTC DS1307支持</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">python</span>
+	  <span class="tags_span">Beaglebone</span>
 	
-	  <span class="tags_span">爬虫</span>
+	  <span class="tags_span">C</span>
+	
+	  <span class="tags_span">Linux</span>
+	
+	  <span class="tags_span">嵌入式</span>
 	
   
-  <span class="post-meta">2015-07-29 • leon</span>
+  <span class="post-meta">2015-03-25 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <p>最近用python实现了一个小型爬虫，爬个博客没问题。
-github地址： <a href="https://github.com/yixiaoyang/pyScripts/tree/master/uSpider">https://github.com/yixiaoyang/pyScripts/tree/master/uSpider</a></p>
+    <p>AM335X RTC的电源要求是1.8V，而市面上常用的纽扣电池一般是3.3v，因此Beaglebon上使用TPS65217X电源芯片的LDO转了一下。实际使用时这个芯片不是很稳定坏过两次，所以改成了若干个独立时钟电源芯片搭建，CPU的MPU、CORE供电分别为1.1v、1.1v即降频到800MHZ。如此一来，AM335X供电也就比较麻烦，可能需要额外的LDO转换，相比之下，使用外接单独的RTC芯片处理反而方便。</p>
 
-<p>爬虫主要由三部分构成：</p>
+<p>使用的外接RTC为DS1307，通过i2c-2接口挂在总线。硬件连接完毕后需要做两件事：</p>
 
-<h3>分析器（parser）</h3>
+<p><strong>1. 去除原AM335X RTC的驱动和检测</strong>
+如果不去除，uboot启动失败，kernel出现panic。对于uboot，找到CONFIG_SPL_AM33XX_ENABLE_RTC32K_OSC和CONFIG_POWER_TPS65217定义，注释掉; 对于kernel，在所有devicetree和overlay里找到tc@44e3e000 定义并注释掉即可。原RTC硬件定义：
+<code class="highlighter-rouge">
+    rtc@44e3e000 {
+    compatible = "ti,da830-rtc";
+    reg = &lt;0x44e3e000 0x1000&gt;;
+    interrupts = &lt;75
+                76&gt;;
+    ti,hwmods = "rtc";
+};
+</code></p>
 
-<p>作为url生产者角色和doc的消费者角色，通过正则表达式解析下载文件中的链接产生url。由于解析速度较快，建议单线程。</p>
+<p><strong>2. 添加新器件DS1307驱动</strong></p>
 
-<h3>下载器（downloader）</h3>
+<p>添加此器件驱动需要两步：</p>
 
-<p>作为url消费者角色和doc的生产者角色。从网络下载文件时间不可预知，速度较慢，建议使用多进程</p>
+<p>a). Device Tree添加硬件描述，将器件同RTC驱动关联</p>
 
-<h3>控制台（console）</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>/*
+ * i2c0: Not exposed in the expansion headers
+ * i2c1: pins P9 17,18 (and 24,26)
+ * i2c2: pins P9 19,20 (and 21,22)
+ * 
+ * Pin assignments
+ *
+ * Module     Connector
+ * SCL     -&gt; P9.19
+ * SDA     &lt;- P9.20
+ * SQW     &lt;- NC
+ *
+ */
+/dts-v1/;
+/plugin/;
 
-<p>报告当前的抓取情况，并维护url资源和doc资源。</p>
+/{
+	compatible = "ti,beaglebone", "ti,beaglebone-black";
 
-<ol>
-  <li>
-    <p>url资源</p>
+	/* identification */
+	part-number = "BB-BONE-RTC-01";
+	version = "00A1";
+	
+	/* state the resources this cape uses */
+	exclusive-use =
+        /* the pin header uses */
+        "P9.20",	/* i2c2_sda */
+        "P9.19",	/* i2c2_scl */
+        /* the hardware ip uses */
+        "i2c2";
+		
+	fragment@0 {
+		target = &lt;&amp;am33xx_pinmux&gt;;
+		__overlay__ {
+			bb_i2c2_pins: pinmux_bb_i2c2_pins {
+				pinctrl-single,pins = &lt;
+                    0x178 0x73  // spi0_d1.i2c2_sda,  SLEWCTRL_SLOW | IMPUT_PULLUP | MODE3
+                    0x17c 0x73  // spi0_cs0.i2c2_scl, SLEWCTRL_SLOW | INPUT_PULLUP | MODE3
+				&gt;;
+			};
+		};
+	};
 
-    <p>url资源由parser解析已经下载的文件内容后提取站点链接产生。如果url对应的文件已经存在，则表示此url已经下载过了，不再将其加入urls集合。</p>
-  </li>
-  <li>
-    <p>document资源</p>
+	fragment@1 {
+		target = &lt;&amp;i2c2&gt;;
 
-    <p>downloader获取一条url后开始下载资源，下载完毕即在本地生成对应文件，每个站点文件为一个doc资源，parser将对每个未解析的doc文件资源进行链接提取。资源的同步使用两把资源锁。每个线程获取一条资源后需要将woker引用计数＋1表示仍有线程在对资源进行工作，当线程使用完资源后worker引用计数-1。当所有资源为空且资源计数为0（没有工作线程在引用资源）时，说明整个站点的解析和下载工作完成，此时线程可以此检测done状态退出，主进程随后join退出。</p>
-  </li>
-</ol>
+		__overlay__ {
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = &lt;&amp;bb_i2c2_pins&gt;;
+			
+			/* this is the configuration part */
+			clock-frequency = &lt;100000&gt;;	
+			
+			/* shut up DTC warnings */
+			#address-cells = &lt;1&gt;;
+			#size-cells = &lt;0&gt;;
 
-<h3>其他</h3>
+			rtc@68 {
+				compatible = "dallas,ds1307";
+				reg = &lt;0x68&gt;;
+			};
+		};
+	};	
+};
+</code></pre>
+</div>
 
-<ol>
-  <li>
-    <p>资源缓冲大小</p>
+<p>b). Kernel添加对应驱动：在内核menuconfig搜索DS1307就可找到。</p>
 
-    <p>暂未设置资源缓冲大小，必要时需要加以限制防止在抓取大型站点时内存耗尽运行速率下降。</p>
-  </li>
-  <li>
-    <p>相关站点抓取</p>
-
-    <p>现有的程序仅广度优先遍历抓取一个站点内容，对其他站点的资源并没有抓取。后期对其他站点需要抓取一个深度的资源（直接引用资源）。</p>
-  </li>
-  <li>
-    <p>robots协议</p>
-
-    <p>暂未考虑robots协议相关内容，是一只并不十分友好的spider。</p>
-  </li>
-  <li>
-    <p>大名鼎鼎scrapy</p>
-  </li>
-  <li>
-    <p>大型网站爬取过程中的问题</p>
-    <ul>
-      <li>去重问题，如果内存上的set不够用？</li>
-      <li>集群化，如何进行分布式爬取</li>
-      <li>爬取深度和权重，如何对资源的过滤</li>
-    </ul>
-  </li>
-</ol>
+<p>重新编译uboot、内核进入系统后应该能够看到/dev/crt0设备文件描述符，可使用hwclock命令对其进行读写。再配合ntpd进程网络更新时间即可保持最新的系统时间。
+把最新的时间写入RTC：<code class="highlighter-rouge">hwclock -w -f /dev/rtc0</code>
+读取RTC时间：<code class="highlighter-rouge">hwclock -r -f /dev/rtc0</code></p>
 
   </article>
 
