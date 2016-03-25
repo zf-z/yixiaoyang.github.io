@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -98,14 +98,14 @@
 
 <ol>
   <li>Standard Linux -&gt; RTOS Linux</li>
-  <li>Standard Linux -&gt; other RTOS( RT-Thread, freeRTOS,uc/os-ii等)<br />
+  <li>Standard Linux -&gt; other RTOS( RT-Thread, freeRTOS,uc/os-ii等)
 当前在不牺牲功能性的情况下直接打上内核补丁是最好的方案。</li>
 </ol>
 
-<p>####关于RT-Preempt内核<br />
+<p>####关于RT-Preempt内核
 The standard Linux kernel only meets soft real-time requirements: it provides basic POSIX operations for userspace time handling but has no guarantees for hard timing deadlines. With Ingo Molnar’s Realtime Preemption patch (referenced to as RT-Preempt in this document) and Thomas Gleixner’s generic clock event layer with high resolution support, the kernel gains <strong>hard realtime capabilities</strong>.</p>
 
-<p>The RT-Preempt patch has raised quite some interest throughout the industry. Its clean design and consequent aim towards mainline integration makes it an interesting option for hard and firm realtime applications, reaching from professional audio to industrial control.<br />
+<p>The RT-Preempt patch has raised quite some interest throughout the industry. Its clean design and consequent aim towards mainline integration makes it an interesting option for hard and firm realtime applications, reaching from professional audio to industrial control.
 …</p>
 
 <p>The RT-Preempt patch converts Linux into a fully preemptible kernel. The magic is done with:</p>
@@ -120,7 +120,7 @@ The standard Linux kernel only meets soft real-time requirements: it provides ba
 
 <p>git：https://github.com/beagleboard/kernel/tree/3.8-rt，beagleboard官方维护内核库</p>
 
-<p>####Device Tree<br />
+<p>####Device Tree
 Device Tree在ARM社区的推行来源于Linus对长期以来内核代码里ARM架构上充斥的相关板级驱动代码、平台相关的垃圾代码无情谩骂，长久以来arch/arm/目录下的诸多platform级描述对内核来说就是一堆×××，因此ARM社区借鉴了PowerPC社区Device Tree概念。</p>
 
 <p><strong>“The Device Tree is a data structure for describing hardware. Rather than hard coding every detail of a device into an operating system, many aspect of the hardware can be described in a data structure that is passed to the operating system at boot time.”</strong></p>
@@ -129,125 +129,119 @@ Device Tree在ARM社区的推行来源于Linus对长期以来内核代码里ARM�
 
 <p><strong>原platform驱动模型下的实现</strong></p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777">/* In the foo_platform_data.h file:*/</span>
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#080;font-weight:bold">struct</span> foo_platform_data {
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    u32 bar;
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>};
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#777">/* In the board file:*/</span>
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#080;font-weight:bold">struct</span> foo_platform_data foo_pdata {
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    .bar        = <span style="color:#00D">5</span>,
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>};
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#080;font-weight:bold">struct</span> platform_device foo_dev {
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    .name = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">foo</span><span style="color:#710">&quot;</span></span>,
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    .id = -<span style="color:#00D">1</span>,
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>    .dev.platform_data = &amp;foo_pdata,
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>};
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#777">/* And in the board setup function*/</span>
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>platform_device_register(&amp;foo_dev);
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span><span style="color:#777">/* The driver gets access to the platform data in the probe function.*/</span>
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> foo_probe(<span style="color:#080;font-weight:bold">struct</span> platform_device *pdev)
-<span class="line-numbers"><a href="#n22" name="n22">22</a></span>{
-<span class="line-numbers"><a href="#n23" name="n23">23</a></span>    <span style="color:#080;font-weight:bold">struct</span> foo_platform_data *pdata;
-<span class="line-numbers"><a href="#n24" name="n24">24</a></span>    pdata = pdev-&gt;dev.platform_data;
-<span class="line-numbers"><a href="#n25" name="n25">25</a></span>    <span style="color:#080;font-weight:bold">if</span> (pdata == <span style="color:#069">NULL</span>) <span style="color:#777">/* ERROR */</span>
-<span class="line-numbers"><a href="#n26" name="n26">26</a></span>    ...
-<span class="line-numbers"><a href="#n27" name="n27">27</a></span>
-<span class="line-numbers"><a href="#n28" name="n28">28</a></span>    <span style="color:#777">/* access pdata-&gt;bar for configuration */</span>
-<span class="line-numbers"><a href="#n29" name="n29">29</a></span>    ...
-<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>}
-<span class="line-numbers"><a href="#n31" name="n31">31</a></span>
-<span class="line-numbers"><a href="#n32" name="n32">32</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">struct</span> platform_driver foo_driver = {
-<span class="line-numbers"><a href="#n33" name="n33">33</a></span>    .probe = foo_probe,
-<span class="line-numbers"><a href="#n34" name="n34">34</a></span>    ....
-<span class="line-numbers"><a href="#n35" name="n35">35</a></span>    .driver = {
-<span class="line-numbers"><a href="#n36" name="n36">36</a></span>            .name = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">foo</span><span style="color:#710">&quot;</span></span>,
-<span class="line-numbers"><a href="#n37" name="n37">37</a></span>    },
-<span class="line-numbers"><a href="#n38" name="n38">38</a></span>   ...
-<span class="line-numbers"><a href="#n39" name="n39">39</a></span>};
-<span class="line-numbers"><strong><a href="#n40" name="n40">40</a></strong></span>
-<span class="line-numbers"><a href="#n41" name="n41">41</a></span>module_platform_driver(&amp;foo_driver);
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/* In the foo_platform_data.h file:*/</span>
+<span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="p">{</span>
+    <span class="n">u32</span> <span class="n">bar</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/* In the board file:*/</span>
+<span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="n">foo_pdata</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">bar</span>        <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">platform_device</span> <span class="n">foo_dev</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">.</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foo_pdata</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="cm">/* And in the board setup function*/</span>
+<span class="n">platform_device_register</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_dev</span><span class="p">);</span>
+
+<span class="cm">/* The driver gets access to the platform data in the probe function.*/</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">foo_probe</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+    <span class="n">pdata</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="cm">/* ERROR */</span>
+    <span class="p">...</span>
+
+    <span class="cm">/* access pdata-&gt;bar for configuration */</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">platform_driver</span> <span class="n">foo_driver</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">probe</span> <span class="o">=</span> <span class="n">foo_probe</span><span class="p">,</span>
+    <span class="p">....</span>
+    <span class="p">.</span><span class="n">driver</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">,</span>
+    <span class="p">},</span>
+   <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">module_platform_driver</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_driver</span><span class="p">);</span>
+</code></pre>
 </div>
 
 <p><strong>设备树下的实现</strong></p>
 
-<p>This method no longer works; in a DT based system what you have to do come up with device driver bindings, which contain the configuration the driver requires.<br />
+<p>This method no longer works; in a DT based system what you have to do come up with device driver bindings, which contain the configuration the driver requires.
 You must add a device node in board.dts under the on-chip-peripherals(OCP) device node:</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>foo {
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span>    compatible = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">corp,foo</span><span style="color:#710">&quot;</span></span>;
-<span class="line-numbers"><a href="#n3" name="n3">3</a></span>    bar = &lt;<span style="color:#00D">5</span>&gt;;
-<span class="line-numbers"><a href="#n4" name="n4">4</a></span>};
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="p">{</span>
+    <span class="n">compatible</span> <span class="o">=</span> <span class="s">"corp,foo"</span><span class="p">;</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">5</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre>
 </div>
 
 <p>No change in the board file (generic anyway) needs to be made, but the device driver must be updated to support the DT method, with something similar to the following:</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">struct</span> foo_platform_data *
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>foo_parse_dt(<span style="color:#080;font-weight:bold">struct</span> platform_device *pdev)
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>{
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>   <span style="color:#080;font-weight:bold">struct</span> device_node *node = pdev-&gt;dev.of_node;
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>   <span style="color:#080;font-weight:bold">struct</span> foo_platform_data *pdata;
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>   pdata = devm_kzalloc(&amp;pdev-&gt;dev, <span style="color:#080;font-weight:bold">sizeof</span>(*pdata), GFP_KERNEL);
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>   <span style="color:#080;font-weight:bold">if</span> (pdata == <span style="color:#069">NULL</span>)
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>           <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">NULL</span>; <span style="color:#777">/* out of memory */</span>
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span>   <span style="color:#777">/* no such property */</span>
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>   <span style="color:#080;font-weight:bold">if</span> (of_property_read_u32(node, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">bar</span><span style="color:#710">&quot;</span></span>, &amp;pdata-&gt;bar) != <span style="color:#00D">0</span>)
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>           <span style="color:#080;font-weight:bold">return</span> <span style="color:#069">NULL</span>;
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>   <span style="color:#777">/* pdata-&gt;bar is filled in with 5 */</span>
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>   <span style="color:#080;font-weight:bold">return</span> pdata;
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>}
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#0a8;font-weight:bold">int</span> foo_probe(<span style="color:#080;font-weight:bold">struct</span> platform_device *pdev)
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>{
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    <span style="color:#080;font-weight:bold">struct</span> foo_platform_data *pdata;
-<span class="line-numbers"><a href="#n22" name="n22">22</a></span>    
-<span class="line-numbers"><a href="#n23" name="n23">23</a></span>    pdata = pdev-&gt;dev.platform_data;
-<span class="line-numbers"><a href="#n24" name="n24">24</a></span>    <span style="color:#080;font-weight:bold">if</span> (pdata == <span style="color:#069">NULL</span>) <span style="color:#777">/* ERROR */</span>
-<span class="line-numbers"><a href="#n25" name="n25">25</a></span>            ...
-<span class="line-numbers"><a href="#n26" name="n26">26</a></span>
-<span class="line-numbers"><a href="#n27" name="n27">27</a></span>    <span style="color:#777">/* access pdata-&gt;bar for configuration */</span>
-<span class="line-numbers"><a href="#n28" name="n28">28</a></span>    ...
-<span class="line-numbers"><a href="#n29" name="n29">29</a></span>}
-<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>
-<span class="line-numbers"><a href="#n31" name="n31">31</a></span><span style="color:#088;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">struct</span> platform_driver foo_driver = {
-<span class="line-numbers"><a href="#n32" name="n32">32</a></span>    .probe = foo_probe,
-<span class="line-numbers"><a href="#n33" name="n33">33</a></span>    ....
-<span class="line-numbers"><a href="#n34" name="n34">34</a></span>    .driver = {
-<span class="line-numbers"><a href="#n35" name="n35">35</a></span>            .name = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">foo</span><span style="color:#710">&quot;</span></span>,
-<span class="line-numbers"><a href="#n36" name="n36">36</a></span>    },
-<span class="line-numbers"><a href="#n37" name="n37">37</a></span>    ...
-<span class="line-numbers"><a href="#n38" name="n38">38</a></span>};
-<span class="line-numbers"><a href="#n39" name="n39">39</a></span>
-<span class="line-numbers"><strong><a href="#n40" name="n40">40</a></strong></span>module_platform_driver(&amp;foo_driver);
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span>
+<span class="nf">foo_parse_dt</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="k">struct</span> <span class="n">device_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">;</span>
+   <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+
+   <span class="n">pdata</span> <span class="o">=</span> <span class="n">devm_kzalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">pdata</span><span class="p">),</span> <span class="n">GFP_KERNEL</span><span class="p">);</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+           <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span> <span class="cm">/* out of memory */</span>
+
+   <span class="cm">/* no such property */</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">of_property_read_u32</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pdata</span><span class="o">-&gt;</span><span class="n">bar</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+           <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+
+   <span class="cm">/* pdata-&gt;bar is filled in with 5 */</span>
+   <span class="k">return</span> <span class="n">pdata</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">foo_probe</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span><span class="n">pdata</span><span class="p">;</span>
+    
+    <span class="n">pdata</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">platform_data</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="cm">/* ERROR */</span>
+            <span class="p">...</span>
+
+    <span class="cm">/* access pdata-&gt;bar for configuration */</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="k">struct</span> <span class="n">platform_driver</span> <span class="n">foo_driver</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">.</span><span class="n">probe</span> <span class="o">=</span> <span class="n">foo_probe</span><span class="p">,</span>
+    <span class="p">....</span>
+    <span class="p">.</span><span class="n">driver</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="n">module_platform_driver</span><span class="p">(</span><span class="o">&amp;</span><span class="n">foo_driver</span><span class="p">);</span>
+</code></pre>
 </div>
 
-<p>####其他<br />
+<p>####其他
 3.2-Standard迁移到3.8-RT内核需要变化的驱动包括LCD7和GPMC驱动（包括DMA），两块驱动都以Device Tree Overlay的方法加载。此外，配套Device tree的U-Boot需要升级，老版本U-boot不支持Device Tree &amp; Overlay。</p>
 
 <p>####3.8内核实时性的检验</p>
 
 <p>因为正好有FPGA端需要处理的中断源，因此使用示波器跑一下脉宽就可以检验。</p>
 
-<p>####参考<br />
-1. https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO<br />
-2. https://github.com/beagleboard/kernel/tree/3.8-rt<br />
-3. http://elinux.org/BeagleBone_and_the_3.8_Kernel<br />
-4. http://devicetree.org/mediawiki/index.php?title=Device_Tree_Usage<br />
+<p>####参考
+1. https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO
+2. https://github.com/beagleboard/kernel/tree/3.8-rt
+3. http://elinux.org/BeagleBone_and_the_3.8_Kernel
+4. http://devicetree.org/mediawiki/index.php?title=Device_Tree_Usage
 5. http://valentfx.com/wiki/index.php?title=LOGI_-_BBB_GPMC_Bus-_HW</p>
 
 

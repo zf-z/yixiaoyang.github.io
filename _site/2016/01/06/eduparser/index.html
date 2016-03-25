@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -94,7 +94,7 @@
 
 <h3>依赖</h3>
 
-<pre><code>python 2.7.10
+<div class="highlighter-rouge"><pre class="highlight"><code>python 2.7.10
 beautifulsoup4==4.4.1
 lxml==3.4.4（remove）
 requests==2.8.1
@@ -104,18 +104,21 @@ pytesseract
 tesseract-ocr（图像识别）
 wand(imageMagic的绑定)
 </code></pre>
+</div>
 
 <h3>其他库</h3>
 
-<pre><code>ImageMagic
+<div class="highlighter-rouge"><pre class="highlight"><code>ImageMagic
 media-libs/leptonica
 app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training工具）
 </code></pre>
+</div>
 
 <h3>OCR训练工具</h3>
 
-<pre><code>jTessBoxEditor
+<div class="highlighter-rouge"><pre class="highlight"><code>jTessBoxEditor
 </code></pre>
+</div>
 
 <h3>基本使用</h3>
 
@@ -134,7 +137,7 @@ app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training�
   <li>
     <p>按照设置规则文件抓取目标内容,规则内容如下：</p>
 
-    <p><code>
+    <p><code class="highlighter-rouge">
      # 目标所在的区域的tag和attrs（属性）
      self.zone_tag = ''
      self.zone_attr = {}
@@ -172,7 +175,7 @@ app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training�
 
 <p>json中的主要数据结构如下所示：</p>
 
-<pre><code>"__classname__": "Academy",     表示数据的类型，自动写好的
+<div class="highlighter-rouge"><pre class="highlight"><code>"__classname__": "Academy",     表示数据的类型，自动写好的
 "__module__": "models",         表示类的模块，自动写好的
 "departments": {                [*] 找到一个学院的所有教师名单的索引页面，并填写进去,这个页面将用来解析employee（在职员工）
                                 格式为名字：网址
@@ -203,18 +206,19 @@ departmentsRule结构暂时不用管，没用到
     "parents": [],              [*]这个也是重点，目标的父标签，用于缩小解析范围的
     "select": [],                忽略永不到                              
     "tag_name": "a",            [*]目标tag，这个也是重点    
-    "zone_attr": {"id":"main"}, [*]目标tag的属性，这个也是重点，如&lt;a class="link"&gt;中的class属性为link，所以规则为{"class":"link"}
-    "zone_tag": "div"           [*]目标区域tag，这个也是重点，（标签，如&lt;table&gt;，&lt;html&gt;，&lt;p&gt;都是标签），zone用于缩小网站目标范围，过滤冗余信息
+    "zone_attr": {"id":"main"}, [*]目标tag的属性，这个也是重点，如<span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"link"</span><span class="nt">&gt;</span>中的class属性为link，所以规则为{"class":"link"}
+    "zone_tag": "div"           [*]目标区域tag，这个也是重点，（标签，如<span class="nt">&lt;table&gt;</span>，<span class="nt">&lt;html&gt;</span>，<span class="nt">&lt;p&gt;</span>都是标签），zone用于缩小网站目标范围，过滤冗余信息
 },
 
 "sname": "math",                  学院简称
 "url": "http://www.math.pku.edu.cn/",    学院主页，自动解析出来的
 "web_engine": "urllib2"             一般用urllib2,对于特定的js网站，需要用selen
 </code></pre>
+</div>
 
 <p>####菜单</p>
 
-<pre><code>menu0 = '''
+<div class="highlighter-rouge"><pre class="highlight"><code>menu0 = '''
 q. 退出
 p. 打印所有大学名单
 1. 抓取211名单到json文件
@@ -224,34 +228,37 @@ p. 打印所有大学名单
 5. 自动猜测并分析出学校的院系导航链接
 6. 抓取院系的名称和主页
 </code></pre>
+</div>
 
 <ol>
-  <li>out目录下如果存在<code>china211.json</code>则将其大学目录数据导入。如果不存在，可运行<code>python run.py</code>选择菜单1从hao123抓取。</li>
-  <li>编辑<code>china985.json</code>，删除不感兴趣的大学。如仅保留985+理工。</li>
+  <li>out目录下如果存在<code class="highlighter-rouge">china211.json</code>则将其大学目录数据导入。如果不存在，可运行<code class="highlighter-rouge">python run.py</code>选择菜单1从hao123抓取。</li>
+  <li>编辑<code class="highlighter-rouge">china985.json</code>，删除不感兴趣的大学。如仅保留985+理工。</li>
   <li>运行</li>
 </ol>
 
-<pre><code>    $ python run.py
+<div class="highlighter-rouge"><pre class="highlight"><code>    $ python run.py
     选择6菜单
     选择学校
     选择院系
     开始解析
 </code></pre>
+</div>
 
 <h3>数据结构</h3>
 
-<pre><code>China211
+<div class="highlighter-rouge"><pre class="highlight"><code>China211
 collges + rule
 academies
 Department
 employees
 </code></pre>
+</div>
 
 <p>####Parser</p>
 
 <p>Parser主要有两种，一种是SimpleAParser对于简单的链接+简历url正文的教师队伍介绍页面进行解析。一种是SimpleTableParser对表格式的教师队伍介绍页面进行解析。</p>
 
-<pre><code>l_parsers = {
+<div class="highlighter-rouge"><pre class="highlight"><code>l_parsers = {
     "Parser": Parser,
     "Hao123_211_Parser": Hao123_211_Parser,
     "SimpleAParser": SimpleAParser,
@@ -259,6 +266,7 @@ employees
     "SimpleTableParser":SimpleTableParser
 }
 </code></pre>
+</div>
 
 <p>####Models</p>
 
@@ -275,11 +283,11 @@ employees
 <h3>其他</h3>
 
 <ol>
-  <li>JSon”陷阱”  <br />
- 对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现<code>循环解析</code>的问题。</li>
-  <li>BeautifulSoup解析器  <br />
+  <li>JSon”陷阱”<br />
+ 对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现<code class="highlighter-rouge">循环解析</code>的问题。</li>
+  <li>BeautifulSoup解析器<br />
  社区推荐优先使用lxml，主要是速度较快。但是使用时发现有时解析不到目标，改为python自带的”html-parser”。后期将分析原因，或者向社区提交bug</li>
-  <li>中英文名转换<br />
+  <li>中英文名转换
  主要是中文转英文名，使用了pypinyin库</li>
 </ol>
 

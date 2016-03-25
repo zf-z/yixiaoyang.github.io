@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -124,7 +124,7 @@
 
 <h4>Boost.Multi-index</h4>
 
-<p>为底层容器提供多个索引，一个底层的容器可以有不同的排序方法和不同的访问语义。当std::set 和 std::map 不够用时,就可以用Boost.Multi-index,通常是在需要为查找元素而维护多个索引时。<br />
+<p>为底层容器提供多个索引，一个底层的容器可以有不同的排序方法和不同的访问语义。当std::set 和 std::map 不够用时,就可以用Boost.Multi-index,通常是在需要为查找元素而维护多个索引时。
 不太了解，做稍微复杂的数据索引时应该会用到。</p>
 
 <h4>Boost.Range</h4>
@@ -145,91 +145,87 @@
 
 <p><strong>bind简介</strong></p>
 
-<p>这个是重头戏，bind、函数对象、signal/slot等特性经常会用。<br />
-我觉得bind最重要的作用是：<code>改变参数的顺序</code>，这使得我们可以少创建一些类似功能参数不同或者参数冗余的函数对象，减少代码量，使行为局部化。虽然标准库已经提供了一些可用的工具,如 bind1st 和 bind2nd, 但是这不够用，bind由此产生。</p>
+<p>这个是重头戏，bind、函数对象、signal/slot等特性经常会用。
+我觉得bind最重要的作用是：<code class="highlighter-rouge">改变参数的顺序</code>，这使得我们可以少创建一些类似功能参数不同或者参数冗余的函数对象，减少代码量，使行为局部化。虽然标准库已经提供了一些可用的工具,如 bind1st 和 bind2nd, 但是这不够用，bind由此产生。</p>
 
 <p>Bind是对标准库的绑定器 bind1st和bind2nd的泛化,返回值是一个函数对象。</p>
 
 <p><strong>bind范例</strong></p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;iostream&gt;</span>
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;string&gt;</span>
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;vector&gt;</span>
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&lt;algorithm&gt;</span>
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span><span style="color:#579">#include</span> <span style="color:#B44;font-weight:bold">&quot;boost/bind.hpp&quot;</span>
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">status</span> {
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    std::<span style="color:#0a8;font-weight:bold">string</span> name;
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    <span style="color:#0a8;font-weight:bold">bool</span> ok;
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#088;font-weight:bold">public</span>:
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    status(<span style="color:#088;font-weight:bold">const</span> std::<span style="color:#0a8;font-weight:bold">string</span>&amp; name):name(name),ok(<span style="color:#069">true</span>) {}
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    <span style="color:#088;font-weight:bold">void</span> break_it() {
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>        ok=<span style="color:#069">false</span>;
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    }
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    <span style="color:#0a8;font-weight:bold">bool</span> is_broken() <span style="color:#088;font-weight:bold">const</span> {
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        <span style="color:#080;font-weight:bold">return</span> ok;
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    }
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    <span style="color:#088;font-weight:bold">void</span> report() <span style="color:#088;font-weight:bold">const</span> {
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>        std::cout &lt;&lt; name &lt;&lt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20"> is </span><span style="color:#710">&quot;</span></span> &lt;&lt;
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span>                    (ok ? <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">working nominally</span><span style="color:#710">&quot;</span></span>:<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">terribly broken</span><span style="color:#710">&quot;</span></span>) &lt;&lt; <span style="color:#D20">'\n'</span>;
-<span class="line-numbers"><a href="#n22" name="n22">22</a></span>    }
-<span class="line-numbers"><a href="#n23" name="n23">23</a></span>};
-<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
-<span class="line-numbers"><a href="#n25" name="n25">25</a></span><span style="color:#088;font-weight:bold">void</span> bind_test()
-<span class="line-numbers"><a href="#n26" name="n26">26</a></span>{
-<span class="line-numbers"><a href="#n27" name="n27">27</a></span>    std::vector&lt;status&gt; statuses;
-<span class="line-numbers"><a href="#n28" name="n28">28</a></span>    statuses.push_back(status(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">status 1</span><span style="color:#710">&quot;</span></span>));
-<span class="line-numbers"><a href="#n29" name="n29">29</a></span>    statuses.push_back(status(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">status 2</span><span style="color:#710">&quot;</span></span>));
-<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>    statuses.push_back(status(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">status 3</span><span style="color:#710">&quot;</span></span>));
-<span class="line-numbers"><a href="#n31" name="n31">31</a></span>    statuses.push_back(status(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">status 4</span><span style="color:#710">&quot;</span></span>));
-<span class="line-numbers"><a href="#n32" name="n32">32</a></span>    statuses[<span style="color:#00D">1</span>].break_it();
-<span class="line-numbers"><a href="#n33" name="n33">33</a></span>    statuses[<span style="color:#00D">2</span>].break_it();
-<span class="line-numbers"><a href="#n34" name="n34">34</a></span>
-<span class="line-numbers"><a href="#n35" name="n35">35</a></span><span style="color:#777">#if 0</span>
-<span class="line-numbers"><a href="#n36" name="n36">36</a></span><span style="color:#777">    // 这个循环正确地完成了任务,但它是冗长、低效的(由于要多次调用statuses.end()),并且不象使用标准库算</span>
-<span class="line-numbers"><a href="#n37" name="n37">37</a></span><span style="color:#777">    // 法for_each那样清楚地表明意图。为了用for_each 来替换这个循环,我们需要用一个适配器来对vector元素</span>
-<span class="line-numbers"><a href="#n38" name="n38">38</a></span><span style="color:#777">    // 调用成员函数report。这时,由于元素是以值的方式保存的,我们需要的是适配器mem_fun_ref</span>
-<span class="line-numbers"><a href="#n39" name="n39">39</a></span><span style="color:#777">    for (std::vector&lt;status&gt;::iterator it=statuses.begin();</span>
-<span class="line-numbers"><strong><a href="#n40" name="n40">40</a></strong></span><span style="color:#777">        it!=statuses.end();++it) {</span>
-<span class="line-numbers"><a href="#n41" name="n41">41</a></span><span style="color:#777">        it-&gt;report();</span>
-<span class="line-numbers"><a href="#n42" name="n42">42</a></span><span style="color:#777">    }</span>
-<span class="line-numbers"><a href="#n43" name="n43">43</a></span><span style="color:#777">#else</span>
-<span class="line-numbers"><a href="#n44" name="n44">44</a></span>    <span style="color:#777">// for_each(str.begin(), str.end(), (mem_fun(&amp;funtest::doSth),this));</span>
-<span class="line-numbers"><a href="#n45" name="n45">45</a></span>    <span style="color:#777">// 把str中的每个元素作为参数送到第三个参数（是个函数的指针）所指向的函数。</span>
-<span class="line-numbers"><a href="#n46" name="n46">46</a></span>    std::for_each( statuses.begin(),statuses.end(),
-<span class="line-numbers"><a href="#n47" name="n47">47</a></span>                    boost::bind(&amp;status::report,_1));
-<span class="line-numbers"><a href="#n48" name="n48">48</a></span><span style="color:#579">#endif</span>
-<span class="line-numbers"><a href="#n49" name="n49">49</a></span>}
-<span class="line-numbers"><strong><a href="#n50" name="n50">50</a></strong></span>
-<span class="line-numbers"><a href="#n51" name="n51">51</a></span><span style="color:#0a8;font-weight:bold">int</span> main(<span style="color:#0a8;font-weight:bold">int</span> , <span style="color:#0a8;font-weight:bold">char</span> **)
-<span class="line-numbers"><a href="#n52" name="n52">52</a></span>{
-<span class="line-numbers"><a href="#n53" name="n53">53</a></span>    bind_test();
-<span class="line-numbers"><a href="#n54" name="n54">54</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#00D">0</span>;
-<span class="line-numbers"><a href="#n55" name="n55">55</a></span>}
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+</span>
+<span class="cp">#include "boost/bind.hpp"
+</span>
+<span class="k">class</span> <span class="nc">status</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>
+    <span class="n">bool</span> <span class="n">ok</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">status</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">name</span><span class="p">)</span><span class="o">:</span><span class="n">name</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="n">ok</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="kt">void</span> <span class="n">break_it</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">ok</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">bool</span> <span class="n">is_broken</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ok</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">report</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">" is "</span> <span class="o">&lt;&lt;</span>
+                    <span class="p">(</span><span class="n">ok</span> <span class="o">?</span> <span class="s">"working nominally"</span><span class="o">:</span><span class="s">"terribly broken"</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">bind_test</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">status</span><span class="o">&gt;</span> <span class="n">statuses</span><span class="p">;</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">"status 1"</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">"status 2"</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">"status 3"</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">status</span><span class="p">(</span><span class="s">"status 4"</span><span class="p">));</span>
+    <span class="n">statuses</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">break_it</span><span class="p">();</span>
+    <span class="n">statuses</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">break_it</span><span class="p">();</span>
+
+<span class="c">#if 0
+    // 这个循环正确地完成了任务,但它是冗长、低效的(由于要多次调用statuses.end()),并且不象使用标准库算
+    // 法for_each那样清楚地表明意图。为了用for_each 来替换这个循环,我们需要用一个适配器来对vector元素
+    // 调用成员函数report。这时,由于元素是以值的方式保存的,我们需要的是适配器mem_fun_ref
+    for (std::vector&lt;status&gt;::iterator it=statuses.begin();
+        it!=statuses.end();++it) {
+        it-&gt;report();
+    }
+#else</span>
+    <span class="c1">// for_each(str.begin(), str.end(), (mem_fun(&amp;funtest::doSth),this));
+</span>    <span class="c1">// 把str中的每个元素作为参数送到第三个参数（是个函数的指针）所指向的函数。
+</span>    <span class="n">std</span><span class="o">::</span><span class="n">for_each</span><span class="p">(</span> <span class="n">statuses</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">statuses</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+                    <span class="n">boost</span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="o">&amp;</span><span class="n">status</span><span class="o">::</span><span class="n">report</span><span class="p">,</span><span class="n">_1</span><span class="p">));</span>
+<span class="cp">#endif
+</span><span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">bind_test</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
 </div>
 
-<p>上面<code>std::for_each( statuses.begin(),statuses.end(),boost::bind(&amp;status::report,_1));</code>中的那一个占位符让人很迷惑。<br />
-实际上，类成员函数的绑定不同于匿名函数的绑定，成员函数必须有一个父对象或者指针，才能经过this进行调用，而匿名函数可以直接进行()操作,<br />
-因此bind需要“牺牲”一位占位符要求用户提供类的实例、指针或者引用，用过对象作为第一个参数来调用成员函数。<br />
-即<code>bind(&amp;x::func,x,_1,_2...)</code>最多只能绑定8位参数。</p>
+<p>上面<code class="highlighter-rouge">std::for_each( statuses.begin(),statuses.end(),boost::bind(&amp;status::report,_1));</code>中的那一个占位符让人很迷惑。
+实际上，类成员函数的绑定不同于匿名函数的绑定，成员函数必须有一个父对象或者指针，才能经过this进行调用，而匿名函数可以直接进行()操作,
+因此bind需要“牺牲”一位占位符要求用户提供类的实例、指针或者引用，用过对象作为第一个参数来调用成员函数。
+即<code class="highlighter-rouge">bind(&amp;x::func,x,_1,_2...)</code>最多只能绑定8位参数。</p>
 
 <p>假设我们有一个类</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">ClassA</span>{
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#088;font-weight:bold">public</span>:
-<span class="line-numbers"><a href="#n3" name="n3">3</a></span>    <span style="color:#0a8;font-weight:bold">int</span> f(<span style="color:#0a8;font-weight:bold">int</span> a, <span style="color:#0a8;font-weight:bold">int</span> b){<span style="color:#080;font-weight:bold">return</span> a+b;}
-<span class="line-numbers"><a href="#n4" name="n4">4</a></span>};
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ClassA</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">){</span><span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">;}</span>
+<span class="p">};</span>
+</code></pre>
 </div>
 <p>以下三种绑定都是成立的</p>
 
-<pre><code>ClassA obj, &amp;obj_ref=obj;
+<div class="highlighter-rouge"><pre class="highlight"><code>ClassA obj, &amp;obj_ref=obj;
 ClassA *obj_ptr = &amp;obj
 
 cout &lt;&lt; bind(&amp;obj::f, obj, _1, 20)(10) &lt;&lt; endl;
@@ -237,6 +233,7 @@ cout &lt;&lt; bind(&amp;obj::f, obj_ref, _1, _2)(10,20) &lt;&lt; endl;
 cout &lt;&lt; bind(&amp;obj::f, obj_ptr, _1, _2)(10,20) &lt;&lt; endl;
 
 </code></pre>
+</div>
 
 <p><strong>bind的内部实现</strong></p>
 
@@ -249,7 +246,7 @@ cout &lt;&lt; bind(&amp;obj::f, obj_ptr, _1, _2)(10,20) &lt;&lt; endl;
   <li>泛型支持</li>
 </ol>
 
-<p>看了实现解析并没有说的那么<code>黑魔法</code>。要说黑魔法，lamba才算是。</p>
+<p>看了实现解析并没有说的那么<code class="highlighter-rouge">黑魔法</code>。要说黑魔法，lamba才算是。</p>
 
 <p><strong>其他</strong></p>
 

@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -96,60 +96,69 @@
   <li>sync portage tree(eix-sync is recommended)</li>
 </ol>
 
-<pre><code># eix-sync  
+<div class="highlighter-rouge"><pre class="highlight"><code># eix-sync  
 </code></pre>
+</div>
 
 <p>or</p>
 
-<pre><code># emerge --sync
+<div class="highlighter-rouge"><pre class="highlight"><code># emerge --sync
 </code></pre>
+</div>
 
 <ol>
   <li>upgrade whole system</li>
 </ol>
 
-<pre><code># emerge -avuDN --with-bdeps y --keep-going world   
+<div class="highlighter-rouge"><pre class="highlight"><code># emerge -avuDN --with-bdeps y --keep-going world   
 </code></pre>
+</div>
 
 <ol>
   <li>make configuration file(s) up to date</li>
 </ol>
 
-<pre><code># etc-update    
+<div class="highlighter-rouge"><pre class="highlight"><code># etc-update    
 </code></pre>
+</div>
 
 <p>or</p>
 
-<pre><code># dispatch-conf 
+<div class="highlighter-rouge"><pre class="highlight"><code># dispatch-conf 
 </code></pre>
+</div>
 
 <ol>
   <li>fix static library</li>
 </ol>
 
-<pre><code># lafilefixer --justfixit | grep -v skipping
+<div class="highlighter-rouge"><pre class="highlight"><code># lafilefixer --justfixit | grep -v skipping
 </code></pre>
+</div>
 
 <ol>
   <li>uninstall useless packages</li>
 </ol>
 
-<pre><code># emerge -av --depclean 
+<div class="highlighter-rouge"><pre class="highlight"><code># emerge -av --depclean 
 </code></pre>
+</div>
 
 <ol>
   <li>Reverse dynamic library Dependency</li>
 </ol>
 
-<pre><code># revdep-rebuild
+<div class="highlighter-rouge"><pre class="highlight"><code># revdep-rebuild
 </code></pre>
+</div>
 
 <ol>
   <li>clean source code of the old packages</li>
 </ol>
 
-<pre><code># eclean -d distfiles
+<div class="highlighter-rouge"><pre class="highlight"><code># eclean -d distfiles
 </code></pre>
+</div>
 
   </article>
 

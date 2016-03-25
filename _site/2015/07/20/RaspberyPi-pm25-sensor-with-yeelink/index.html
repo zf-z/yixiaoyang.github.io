@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -107,36 +107,36 @@
   <li>
     <p>设置wp_suplication</p>
 
-    <p>主要在<code>/etc/wpa_supplicant.conf</code>文件中设置无限ssid和密码，网关和dns看需要设置。</p>
+    <p>主要在<code class="highlighter-rouge">/etc/wpa_supplicant.conf</code>文件中设置无限ssid和密码，网关和dns看需要设置。</p>
   </li>
   <li>
     <p>Python读取PM2.5传感器数值</p>
 
     <p>读出的数据已经被转成数字信号了，可以直接拿来换算。代码如下：</p>
 
-    <p>```python<br />
- #! /usr/bin/env python  <br />
+    <p>```python
+ #! /usr/bin/env python<br />
  # -<em>- coding: utf-8 -</em>-</p>
 
-    <p>#<br />
- # email sent app<br />
- # by leon@2015-07-09<br />
- #<br />
- # curl -d “{"value":50}” -H “U-ApiKey: my_key” ‘my_url’<br />
- #<br />
- import time<br />
- import json<br />
+    <p>#
+ # email sent app
+ # by leon@2015-07-09
+ #
+ # curl -d “{"value":50}” -H “U-ApiKey: my_key” ‘my_url’
+ #
+ import time
+ import json
  import requests</p>
 
-    <p># example: http://api.yeelink.net/v1.1/device/115088/sensor/144111/datapoints<br />
- class YeelinkHelper:<br />
-     url = ‘http://api.yeelink.net/v1.1’<br />
-     key = ‘’<br />
-     hdr = ‘’<br />
-     dev = ‘’<br />
+    <p># example: http://api.yeelink.net/v1.1/device/115088/sensor/144111/datapoints
+ class YeelinkHelper:
+     url = ‘http://api.yeelink.net/v1.1’
+     key = ‘’
+     hdr = ‘’
+     dev = ‘’
      sensors = []</p>
 
-    <pre><code> def __init__(self,key,dev,sensors):
+    <div class="highlighter-rouge"><pre class="highlight"><code> def __init__(self,key,dev,sensors):
      self.key = key
      self.dev = dev
      self.sensors = sensors
@@ -154,6 +154,7 @@
              print(self.hdr)
              print(json.dumps(data))
 </code></pre>
+    </div>
 
     <p>```</p>
   </li>
@@ -162,59 +163,59 @@
 
     <p>yeelink的IOT（物联网）服务可添加简单的传感器数值，由平台保存数据并进行可视化。其上传格式可参见开发者API手册。上传部分代码如下：</p>
 
-    <p>```python<br />
- #! /usr/bin/env python<br />
+    <p>```python
+ #! /usr/bin/env python
  # -<em>- coding: utf-8 -</em>-</p>
 
-    <p>#<br />
- # pms module detect<br />
- # by leon@2015-07-09<br />
- # <br />
+    <p>#
+ # pms module detect
+ # by leon@2015-07-09
+ # 
  #</p>
 
     <p># -<em>- coding: utf-8 -</em>-</p>
 
-    <p>import serial<br />
+    <p>import serial
  from yeelink import YeelinkHelper</p>
 
-    <p># global enum<br />
- DATALEN     = 10<br />
- SBYTE       = 0xaa<br />
- EBYTE       = 0xab<br />
- HDR_IDX     = 0     #0xaa<br />
- CMD_IDX     = 1<br />
- PM25L_IDX   = 2<br />
- PM25H_IDX   = 3<br />
- PM10L_IDX   = 4<br />
- PM10H_IDX   = 5<br />
- R1_IDX      = 6<br />
- R2_IDX      = 7<br />
- CHK_IDX     = 8<br />
+    <p># global enum
+ DATALEN     = 10
+ SBYTE       = 0xaa
+ EBYTE       = 0xab
+ HDR_IDX     = 0     #0xaa
+ CMD_IDX     = 1
+ PM25L_IDX   = 2
+ PM25H_IDX   = 3
+ PM10L_IDX   = 4
+ PM10H_IDX   = 5
+ R1_IDX      = 6
+ R2_IDX      = 7
+ CHK_IDX     = 8
  END_IDX     = 9     #0xab</p>
 
-    <p># yeelink <br />
- YEELINK_API_KAY = ‘my_key’<br />
- YEELINK_DEV = ‘115167’<br />
- # pm2.5, pm10, cpu_temp<br />
+    <p># yeelink 
+ YEELINK_API_KAY = ‘my_key’
+ YEELINK_DEV = ‘115167’
+ # pm2.5, pm10, cpu_temp
  YEELINK_SENSORS = [‘144020’,’144022’,’144483’]</p>
 
-    <p>class RPiDev:<br />
-     @staticmethod<br />
-     def get_cpu_temp():<br />
-         cpu_temp_file = open( “/sys/class/thermal/thermal_zone0/temp” )<br />
-         cpu_temp = cpu_temp_file.read()<br />
-         cpu_temp_file.close()<br />
+    <p>class RPiDev:
+     @staticmethod
+     def get_cpu_temp():
+         cpu_temp_file = open( “/sys/class/thermal/thermal_zone0/temp” )
+         cpu_temp = cpu_temp_file.read()
+         cpu_temp_file.close()
          return float(cpu_temp)/1000</p>
 
-    <p>class PmsMod:<br />
-     def <strong>init</strong>(self,p,ydev):<br />
-         self.port = p<br />
-         self.idx = 0<br />
-         self.maxLen = DATALEN<em>2<br />
-         self.datas = [0]</em>self.maxLen<br />
+    <p>class PmsMod:
+     def <strong>init</strong>(self,p,ydev):
+         self.port = p
+         self.idx = 0
+         self.maxLen = DATALEN<em>2
+         self.datas = [0]</em>self.maxLen
          self.ydev = ydev</p>
 
-    <pre><code> def getPm25(self,pos):
+    <div class="highlighter-rouge"><pre class="highlight"><code> def getPm25(self,pos):
      offset = pos*DATALEN + PM25L_IDX
      return float(self.datas[offset]+256*self.datas[offset+1])/10;
     
@@ -250,12 +251,13 @@
                  count = 0
              self.idx = 0
 </code></pre>
+    </div>
 
-    <p>if <strong>name</strong> == “<strong>main</strong>”:<br />
-     ydev1 = YeelinkHelper(YEELINK_API_KAY,YEELINK_DEV,YEELINK_SENSORS)<br />
-     port = serial.Serial(“/dev/ttyAMA0”,baudrate=9600,bytesize=8,parity=’N’,stopbits=1,xonxoff=0,timeout=3.0)<br />
-     mod = PmsMod(port,ydev1)<br />
-     mod.collect()<br />
+    <p>if <strong>name</strong> == “<strong>main</strong>”:
+     ydev1 = YeelinkHelper(YEELINK_API_KAY,YEELINK_DEV,YEELINK_SENSORS)
+     port = serial.Serial(“/dev/ttyAMA0”,baudrate=9600,bytesize=8,parity=’N’,stopbits=1,xonxoff=0,timeout=3.0)
+     mod = PmsMod(port,ydev1)
+     mod.collect()
      port.close()</p>
 
     <p>```</p>

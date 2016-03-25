@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -110,9 +110,9 @@ Connection to server.holocene-instrument.com closed.
 
 <h4>添加用户（ssh）</h4>
 
-<p>To add new users:<br />
-- add a keys/USER.pub file<br />
-- authorize them to read/write repositories as needed (or just authorize the group @all)<br />
+<p>To add new users:
+- add a keys/USER.pub file
+- authorize them to read/write repositories as needed (or just authorize the group @all)
 To create new repositories, just authorize writing to them and push. It’s that simple! For example: let’s assume your username is jdoe and you want to create a repository myproject. In your clone of gitosis-admin, edit gitosis.conf and add:</p>
 <pre>
 [group myteam]
@@ -198,34 +198,32 @@ denyCurrentBranch = ignore
 
 <p><strong>(3)自己写的库创建脚本</strong></p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>#!/bin/bash
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>#
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>#
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span># log:
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>#     1.    create, 11Jan14
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>if [ $# -lt 1 ] 
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>then
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    echo &quot;Argument error:$# arguments&quot;
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    exit
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>fi
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>repo=&quot;$1.git&quot;
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>mkdir $repo
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>echo &quot;mkdir $repo&quot;
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>cd $repo
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>git init --bare
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>touch Readme.rm
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span>date +&quot;%Y-%m-%d %H:%M:%S&quot; &gt;&gt; Readme.rm
-<span class="line-numbers"><a href="#n22" name="n22">22</a></span>echo &quot;by git.&quot; &gt;&gt; Readme.rm
-<span class="line-numbers"><a href="#n23" name="n23">23</a></span>
-<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
-<span class="line-numbers"><a href="#n25" name="n25">25</a></span>echo &quot;Create repo $repo succced~&quot;
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#</span>
+<span class="c">#</span>
+<span class="c"># log:</span>
+<span class="c"># 	1.	create, 11Jan14</span>
+
+
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$# </span>-lt 1 <span class="o">]</span> 
+<span class="k">then
+	</span><span class="nb">echo</span> <span class="s2">"Argument error:</span><span class="nv">$# </span><span class="s2">arguments"</span>
+	<span class="nb">exit
+</span><span class="k">fi
+
+</span><span class="nv">repo</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">.git"</span>
+mkdir <span class="nv">$repo</span>
+<span class="nb">echo</span> <span class="s2">"mkdir </span><span class="nv">$repo</span><span class="s2">"</span>
+
+<span class="nb">cd</span> <span class="nv">$repo</span>
+git init --bare
+touch Readme.rm
+date +<span class="s2">"%Y-%m-%d %H:%M:%S"</span> &gt;&gt; Readme.rm
+<span class="nb">echo</span> <span class="s2">"by git."</span> &gt;&gt; Readme.rm
+
+
+<span class="nb">echo</span> <span class="s2">"Create repo </span><span class="nv">$repo</span><span class="s2"> succced~"</span>
+</code></pre>
 </div>
 
 <p><strong>(4)Split subtree as new repo</strong></p>
@@ -234,14 +232,14 @@ denyCurrentBranch = ignore
 
 <p><strong>(5)如何恢复误删除的git文件</strong></p>
 
-<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 具体做法 git checkout file 同时恢复多个被删除的文件： <br />
-<code>bash
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 具体做法 git checkout file 同时恢复多个被删除的文件： 
+<code class="highlighter-rouge">bash
 git ls-files -d | xargs -i git checkout {}
 </code></p>
 
 <ul>
-  <li>Q1: 如果是不小心执行了git reset，还有办法取消吗？ A:git reflog 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</li>
-  <li>Q2: 怎样找回历史版本中删除的文件？ A:先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt; </code>就可以恢复</li>
+  <li>Q1: 如果是不小心执行了git reset，还有办法取消吗？ A:git reflog 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code class="highlighter-rouge">git reset –hard</code> 到那个 hash 即可。</li>
+  <li>Q2: 怎样找回历史版本中删除的文件？ A:先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code class="highlighter-rouge">commit_id</code>，那么<code class="highlighter-rouge">git checkout [commit_id] – &lt;path_to_file&gt; </code>就可以恢复</li>
 </ul>
 
 <h3>Reference</h3>

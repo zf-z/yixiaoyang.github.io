@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -101,7 +101,7 @@
 <h4>Linux 3.2 or linux 3.8</h4>
 
 <blockquote>
-  <p>之前在制作uboot时使用的linux 3.8内核由于device tree支持的问题，导致打印starting kernel启动内核失败。Linus Torvalds在2011年3月17日的ARM Linux邮件列表宣称“this whole ARM thing is a f*cking pain in the ass”，引发ARM Linux社区的地震，随后ARM社区进行了一系列的重大修正。在过去的ARM Linux中，arch/arm/plat-xxx和arch/arm/mach-xxx中充斥着大量的垃圾代码，相当多数的代码只是在描述板级细节，而 这些板级细节对于内核来讲，不过是垃圾，如板上的platform设备、resource、<code>i2c_board_info</code>、<code>spi_board_info</code> 以及各种硬件的<code>platform_data</code>。读者有兴趣可以统计下常见的s3c2410、s3c6410等板级目录，代码量在数万行。社区必须改变这种局面，于是PowerPC等其他体系架构下已经使用的Flattened Device Tree（FDT）进入ARM社区的视野。Device Tree是一种描述硬件的数据结构，它起源于 OpenFirmware (OF)。在Linux 2.6中，ARM架构的板极硬件细节过多地被硬编码在arch/arm/plat-xxx和arch/arm/mach-xxx，采用Device Tree后，许多硬件的细节可以直接透过它传递给Linux，而不再需要在kernel中进行大量的冗余编码。</p>
+  <p>之前在制作uboot时使用的linux 3.8内核由于device tree支持的问题，导致打印starting kernel启动内核失败。Linus Torvalds在2011年3月17日的ARM Linux邮件列表宣称“this whole ARM thing is a f*cking pain in the ass”，引发ARM Linux社区的地震，随后ARM社区进行了一系列的重大修正。在过去的ARM Linux中，arch/arm/plat-xxx和arch/arm/mach-xxx中充斥着大量的垃圾代码，相当多数的代码只是在描述板级细节，而 这些板级细节对于内核来讲，不过是垃圾，如板上的platform设备、resource、<code class="highlighter-rouge">i2c_board_info</code>、<code class="highlighter-rouge">spi_board_info</code> 以及各种硬件的<code class="highlighter-rouge">platform_data</code>。读者有兴趣可以统计下常见的s3c2410、s3c6410等板级目录，代码量在数万行。社区必须改变这种局面，于是PowerPC等其他体系架构下已经使用的Flattened Device Tree（FDT）进入ARM社区的视野。Device Tree是一种描述硬件的数据结构，它起源于 OpenFirmware (OF)。在Linux 2.6中，ARM架构的板极硬件细节过多地被硬编码在arch/arm/plat-xxx和arch/arm/mach-xxx，采用Device Tree后，许多硬件的细节可以直接透过它传递给Linux，而不再需要在kernel中进行大量的冗余编码。</p>
 </blockquote>
 
 <h4>Q&amp;A</h4>
@@ -141,13 +141,14 @@ ffffffff        Generic OMAP3 (Flattened Device Tree)
   </li>
 </ul>
 
-<pre><code>bootfile=uImage
+<div class="highlighter-rouge"><pre class="highlight"><code>bootfile=uImage
 devtree=/dtbs/am335x-bone.dtb
 kloadaddr=0x80007fc0
 dtboot=run mmcargs; fatload mmc ${mmcdev}:1 ${kloadaddr} ${bootfile} ; fatload mmc ${mmcdev}:1 ${fdtaddr} ${devtree} ; bootm ${kloadaddr} - ${fdtaddr}
 uenvcmd=run dtboot
 optargs=consoleblank=0
 </code></pre>
+</div>
 
 <p><strong>(2)VFS: Cannot open root device “mmcblk0p2”</strong></p>
 
@@ -175,7 +176,7 @@ udhcpd: Disabled. Edit /etc/default/udhcpd to enable it.
 
 <p>The modern BeagleBone kernels are Maintained by Koen Kooi and are available on the 3.8 branch at https://github.com/beagleboard/kernel/tree/3.8 . This repo contains a set of patches and a script which downloads a mainline kernel and then patches it appropriately. Exact steps for building it are in the README.</p>
 
-<p><code>cp /opt/beaglebone/firmware/bin_am335x-pm-firmware.bin firmware/am335x-pm-firmware.bin</code></p>
+<p><code class="highlighter-rouge">cp /opt/beaglebone/firmware/bin_am335x-pm-firmware.bin firmware/am335x-pm-firmware.bin</code></p>
 
 <h3>Reference</h3>
 <ul>

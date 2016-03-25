@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -96,10 +96,10 @@ GNU/Linux
 <h3>Buildroot for Beaglebone</h3>
 
 <h4>Waht’s BuildRoot</h4>
-<p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. <br />
-Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a <br />
-bootloader image. Buildroot is useful mainly for people working with small or embedded systems, using various <br />
-CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded<br />
+<p>Buildroot is a set of Makefiles and patches that makes it easy to generate a complete embedded Linux system. 
+Buildroot can generate any or all of a cross-compilation toolchain,a root filesystem, a kernel image and a 
+bootloader image. Buildroot is useful mainly for people working with small or embedded systems, using various 
+CPU architectures (x86, ARM, MIPS, PowerPC, etc.) : it automates the building process of your embedded
 system and eases the cross-compilation process.</p>
 
 <h4>Why BuildRoot？===</h4>
@@ -109,20 +109,18 @@ system and eases the cross-compilation process.</p>
 <h4>System requirements</h4>
 <p>Install required packages following ‘Mandatory packagesin’ section in document。</p>
 
-<p><code>$ sudo apt-get install binutils build-essential g++ gcc perl  cpio rsync ncurses-dev</code></p>
+<p><code class="highlighter-rouge">$ sudo apt-get install binutils build-essential g++ gcc perl  cpio rsync ncurses-dev</code></p>
 
 <h4>Config and Build</h4>
 <p>Use the beaglebone_defconfig</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>$ make beaglebone_defconfig
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span>$ makemenuconfig
-</pre></div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>make beaglebone_defconfig
+<span class="gp">$ </span>makemenuconfig
+</code></pre>
 </div>
-</div>
-<p>Select following options：<br />
-- Toolchain -&gt; C library (glibc)<br />
-- System configuration -&gt; remount root filesystem read-write during boot 此选项用于在boot后重新挂载可读写文件系统<br />
+<p>Select following options：
+- Toolchain -&gt; C library (glibc)
+- System configuration -&gt; remount root filesystem read-write during boot 此选项用于在boot后重新挂载可读写文件系统
 - Target packages -&gt; Filesystem and flash utilities 添加nfs组件从host机器上传输文件</p>
 
 <table>
@@ -130,7 +128,7 @@ system and eases the cross-compilation process.</p>
     <tr>
       <td>You can also using “make linux-menuconfig</td>
       <td>glibc-menuconfig</td>
-      <td>busybox-menuconfig” to config linux kernel or glibc or busybox.Then you can begin download source by <code>$ make source</code></td>
+      <td>busybox-menuconfig” to config linux kernel or glibc or busybox.Then you can begin download source by <code class="highlighter-rouge">$ make source</code></td>
     </tr>
   </tbody>
 </table>
@@ -175,92 +173,87 @@ am335x  am3517crane  beagle  dra7xx  evm  omap1510inn  omap2420h4  omap5912osk  
 [linux-devkit]:/opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00&gt; make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 </pre>
 
-<p>编译最后会出现问题mkimage的问题，应该是ubuntu环境下TI提供的mkimage工具不兼容导致，解决办法：<code>$ apt-get install uboot-mkimage</code></p>
+<p>编译最后会出现问题mkimage的问题，应该是ubuntu环境下TI提供的mkimage工具不兼容导致，解决办法：<code class="highlighter-rouge">$ apt-get install uboot-mkimage</code></p>
 
 <p>然后修改makefile将mkimage前的路径去掉，使用系统默认的mkimage，或者直接mkimage</p>
 
-<pre><code>$: mkimage -T omapimage -a 0x402F0400 -d /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/spl/u-boot-spl.bin /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/MLO
+<div class="highlighter-rouge"><pre class="highlight"><code>$: mkimage -T omapimage -a 0x402F0400 -d /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/spl/u-boot-spl.bin /opt/ti-sdk-am335x/board-support/u-boot-2013.01.01-psp06.00.00.00/am335x/MLO
 make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 </code></pre>
+</div>
 
 <h3>Make the bootable MicroSD Card for Beaglebone</h3>
 <p>First Check your disk and find SD card, <strong>/dev/sdb</strong> for example:</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>$ sudo emerge dosfstools
-<span class="line-numbers"><a href="#n2" name="n2">2</a></span>$ sudo fdisk -l
-<span class="line-numbers"><a href="#n3" name="n3">3</a></span>$ export DISK=/dev/sdb
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo emerge dosfstools
+<span class="gp">$ </span>sudo fdisk -l
+<span class="gp">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdb
+</code></pre>
 </div>
 
 <p>Then unmount the disk, and flash /dev/sdb</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>$ export DISK=/dev/sdc
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>$ sudo dd if=/dev/zero of=${DISK} bs=1M count=16
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>$ sudo sfdisk --in-order --Linux --unit M ${DISK} &lt;&lt;-__EOF__
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>1,48,0xE,*
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>,,,-
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>__EOF__
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>$ sudo mkfs.vfat -F 16 ${DISK}1 -n boot
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>$ sudo mkfs.ext4 ${DISK}2 -L rootfs
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>$ sudo mkdir -p /media/boot/
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>$ sudo mkdir -p /media/rootfs/
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span>$ sudo mount ${DISK}1 /media/boot/
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>$ sudo mount ${DISK}2 /media/rootfs/
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>$ sudo cp -v MLO  /media/boot/       
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>$ sudo cp -v u-boot.img  /media/boot/
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>$ sudo cp -v ./uEnv.txt /media/boot/
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>$ sudo cp -v uImage  /media/boot/
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>$ sudo mkdir -p /media/boot/dtbs/          
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>$ sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>$ sudo dd if=rootfs.ext4 of=${DISK}2 bs=128k
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>$ sync
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span>$ sudo umount /media/boot
-<span class="line-numbers"><a href="#n22" name="n22">22</a></span>$ sudo umount /media/rootfs
-<span class="line-numbers"><a href="#n23" name="n23">23</a></span>$ exit
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
+<span class="gp">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
+<span class="gp">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="sh">&lt;&lt;-__EOF__
+1,48,0xE,*
+,,,-
+__EOF__
+</span><span class="gp">$ </span>sudo mkfs.vfat -F 16 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 -n boot
+<span class="gp">$ </span>sudo mkfs.ext4 <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 -L rootfs
+<span class="gp">$ </span>sudo mkdir -p /media/boot/
+<span class="gp">$ </span>sudo mkdir -p /media/rootfs/
+<span class="gp">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>1 /media/boot/
+<span class="gp">$ </span>sudo mount <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 /media/rootfs/
+<span class="gp">$ </span>sudo cp -v MLO  /media/boot/       
+<span class="gp">$ </span>sudo cp -v u-boot.img  /media/boot/
+<span class="gp">$ </span>sudo cp -v ./uEnv.txt /media/boot/
+<span class="gp">$ </span>sudo cp -v uImage  /media/boot/
+<span class="gp">$ </span>sudo mkdir -p /media/boot/dtbs/          
+<span class="gp">$ </span>sudo cp -v am335x-bone.dtb  /media/boot/dtbs/
+<span class="gp">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>rootfs.ext4 <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span>2 <span class="nv">bs</span><span class="o">=</span>128k
+<span class="gp">$ </span>sync
+<span class="gp">$ </span>sudo umount /media/boot
+<span class="gp">$ </span>sudo umount /media/rootfs
+<span class="gp">$ </span><span class="nb">exit</span>
+</code></pre>
 </div>
 
-<p>Following pages may helpful:<br />
+<p>Following pages may helpful:
 <a href="http://linux-sunxi.org/Bootable_SD_card">http://linux-sunxi.org/Bootable_SD_card</a></p>
 
 <p>现在SD卡被分成两个区，一个LBA vfat区放置boot相关文件，一个ext4放置文件系统等。现在将文件系统强制拷贝到第二个分区，因为文件系统带有分区信息，因此可以直接dd拷贝1</p>
 
-<p><code>$ sudo dd if=rootfs.ext2 of=/dev/sdc2 bs=128k</code></p>
+<p><code class="highlighter-rouge">$ sudo dd if=rootfs.ext2 of=/dev/sdc2 bs=128k</code></p>
 
-<p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：<br />
-<code>uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
+<p>因为uImage放到了第一个分区中才导致uBoot加载不了kernel，但可以使用uEnv.txt进行启动的配置，uEnv.txt拷贝到第一分区，内容如下：
+<code class="highlighter-rouge">uenvcmd=if fatload mmc 0 0x80200000 uImage; then run mmcboot; fi;</code></p>
 
 <h3>USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
 <p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>cat &gt; /etc/udev/rules.d/73-beaglebone.rules &lt;&lt;EOF
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>ACTION==&quot;add&quot;, SUBSYSTEM==&quot;usb&quot;, ENV{DEVTYPE}==&quot;usb_interface&quot;, \
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>        ATTRS{idVendor}==&quot;0403&quot;, ATTRS{idProduct}==&quot;a6d0&quot;, \
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>        DRIVER==&quot;&quot;, RUN+=&quot;/sbin/modprobe -b ftdi_sio&quot;
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>ACTION==&quot;add&quot;, SUBSYSTEM==&quot;drivers&quot;, \
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        ENV{DEVPATH}==&quot;/bus/usb-serial/drivers/ftdi_sio&quot;, \
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>        ATTR{new_id}=&quot;0403 a6d0&quot;
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>
-<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \
-<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    ATTRS{interface}==&quot;BeagleBone&quot;, \
-<span class="line-numbers"><a href="#n12" name="n12">12</a></span>        ATTRS{bInterfaceNumber}==&quot;00&quot;, \
-<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    SYMLINK+=&quot;beaglebone-jtag&quot;
-<span class="line-numbers"><a href="#n14" name="n14">14</a></span>
-<span class="line-numbers"><a href="#n15" name="n15">15</a></span>ACTION==&quot;add&quot;, KERNEL==&quot;ttyUSB*&quot;, \
-<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    ATTRS{interface}==&quot;BeagleBone&quot;, \
-<span class="line-numbers"><a href="#n17" name="n17">17</a></span>        ATTRS{bInterfaceNumber}==&quot;01&quot;, \
-<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    SYMLINK+=&quot;beaglebone-serial&quot;
-<span class="line-numbers"><a href="#n19" name="n19">19</a></span>EOF
-<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>
-<span class="line-numbers"><a href="#n21" name="n21">21</a></span>sudo udevadm control --reload-rules
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="sh">&lt;&lt;EOF
+ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_interface", \
+        ATTRS{idVendor}=="0403", ATTRS{idProduct}=="a6d0", \
+        DRIVER=="", RUN+="/sbin/modprobe -b ftdi_sio"
+
+ACTION=="add", SUBSYSTEM=="drivers", \
+        ENV{DEVPATH}=="/bus/usb-serial/drivers/ftdi_sio", \
+        ATTR{new_id}="0403 a6d0"
+
+ACTION=="add", KERNEL=="ttyUSB*", \
+    ATTRS{interface}=="BeagleBone", \
+        ATTRS{bInterfaceNumber}=="00", \
+    SYMLINK+="beaglebone-jtag"
+
+ACTION=="add", KERNEL=="ttyUSB*", \
+    ATTRS{interface}=="BeagleBone", \
+        ATTRS{bInterfaceNumber}=="01", \
+    SYMLINK+="beaglebone-serial"
+EOF
+
+</span>sudo udevadm control --reload-rules
+</code></pre>
 </div>
 
 <h3>Using Sitara Linux SDK</h3>

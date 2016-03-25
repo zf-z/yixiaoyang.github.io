@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -101,7 +101,7 @@
   <li>
     <p>替换所有特定后缀的文件中的字符串，无正则</p>
 
-    <p><code>bash
+    <p><code class="highlighter-rouge">bash
  find -type f -name "*.markdown" | xargs sed -i 's/${oldstr}/${newstr}/g'
 </code></p>
   </li>
@@ -110,10 +110,10 @@
 <h3>awk</h3>
 <ol>
   <li>
-    <p>awk工作模式<br />
+    <p>awk工作模式
  awk被设计成数据流方式处理，内建很多基本的语法，因此使用起来非常灵活和强大，常用作字符处理。最基本的awk命令模式类似：</p>
 
-    <p><code>awk ' BEGIN{  print "start" } pattern { commands } END{ print "end" }  file</code></p>
+    <p><code class="highlighter-rouge">awk ' BEGIN{  print "start" } pattern { commands } END{ print "end" }  file</code></p>
 
     <blockquote>
       <p>How it Works? The awk command works in the following manner:</p>
@@ -127,7 +127,7 @@
 
     <p>awk首先调用BEGIN区块，然后逐行处理流，按照相应的匹配模式作相应的处理动作，最后调用END区块。 一个简单的行数计数用法如下：</p>
 
-    <p><code>awk 'BEGIN {i=0} {i++} END {print i}' filename</code></p>
+    <p><code class="highlighter-rouge">awk 'BEGIN {i=0} {i++} END {print i}' filename</code></p>
   </li>
   <li>
     <p>特殊变量</p>
@@ -171,28 +171,28 @@
   <li>git恢复已经删除的文件</li>
 </ol>
 
-<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 <br />
-具体做法 <code>git checkout file</code> 同时恢复多个被删除的文件：<code>git ls-files -d | xargs -i git checkout {}</code></p>
+<p>直接从本地把文件checkout出来就可以了，用不着从远程服务器上pull下来，因为，所有的历史版本你的本地都有的。 
+具体做法 <code class="highlighter-rouge">git checkout file</code> 同时恢复多个被删除的文件：<code class="highlighter-rouge">git ls-files -d | xargs -i git checkout {}</code></p>
 
-<p>在使用Git的过程中，有时可能会有一些误操作 比如：执行<code>checkout -f</code> 或 <code>reset -hard</code> 或 <code>branch -d</code>删除一个分支 结果造成本地（远程）的分支或某些commit丢失 可以通过reflog来进行恢复，前提是丢失的分支或commit信息没有被<code>git gc</code>清除 一般情况下，gc对那些无用的object会保留很长时间后才清除的 reflog是git提供的一个内部工具，用于记录对git仓库进行的各种操作,可以使用<code>git reflog show</code>或<code>git log -g</code>命令来看到所有的操作日志。恢复的过程很简单：通过<code>git log -g</code>命令来找到我们需要恢复的信息对应的<code>commit_id</code>，可以通过提交的时间和日期来辨别。</p>
+<p>在使用Git的过程中，有时可能会有一些误操作 比如：执行<code class="highlighter-rouge">checkout -f</code> 或 <code class="highlighter-rouge">reset -hard</code> 或 <code class="highlighter-rouge">branch -d</code>删除一个分支 结果造成本地（远程）的分支或某些commit丢失 可以通过reflog来进行恢复，前提是丢失的分支或commit信息没有被<code class="highlighter-rouge">git gc</code>清除 一般情况下，gc对那些无用的object会保留很长时间后才清除的 reflog是git提供的一个内部工具，用于记录对git仓库进行的各种操作,可以使用<code class="highlighter-rouge">git reflog show</code>或<code class="highlighter-rouge">git log -g</code>命令来看到所有的操作日志。恢复的过程很简单：通过<code class="highlighter-rouge">git log -g</code>命令来找到我们需要恢复的信息对应的<code class="highlighter-rouge">commit_id</code>，可以通过提交的时间和日期来辨别。</p>
 
 <p>一个好的办法是运行：</p>
 
 <ol>
-  <li><code>git log –since="2 weeks ago" – myfile</code> 可以2个星期期间的myfile历史；</li>
-  <li><code>git log –branches="develop"</code> 可以查看develop的commit</li>
-  <li>通过<code>git branch recover_branch[新分支] commit_id</code>来建立一个新的分支</li>
+  <li><code class="highlighter-rouge">git log –since="2 weeks ago" – myfile</code> 可以2个星期期间的myfile历史；</li>
+  <li><code class="highlighter-rouge">git log –branches="develop"</code> 可以查看develop的commit</li>
+  <li>通过<code class="highlighter-rouge">git branch recover_branch[新分支] commit_id</code>来建立一个新的分支</li>
 </ol>
 
-<p>这样，我们就把丢失的东西给恢复到了<code>recover_branch</code>分支上了。</p>
+<p>这样，我们就把丢失的东西给恢复到了<code class="highlighter-rouge">recover_branch</code>分支上了。</p>
 
-<p><strong>Q1:</strong> 如果是不小心执行了<code>git reset</code>，还有办法取消吗？</p>
+<p><strong>Q1:</strong> 如果是不小心执行了<code class="highlighter-rouge">git reset</code>，还有办法取消吗？</p>
 
-<p><strong>A1:</strong> <code>git reflog</code> 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code>git reset –hard</code> 到那个 hash 即可。</p>
+<p><strong>A1:</strong> <code class="highlighter-rouge">git reflog</code> 查看操作历史，找到之前 HEAD 的 hash 值，然后 <code class="highlighter-rouge">git reset –hard</code> 到那个 hash 即可。</p>
 
 <p><strong>Q2:</strong> 怎样找回历史版本中删除的文件？</p>
 
-<p><strong>A2:</strong> 先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code>commit_id</code>，那么<code>git checkout [commit_id] – &lt;path_to_file&gt;</code> 就可以恢复</p>
+<p><strong>A2:</strong> 先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： <code class="highlighter-rouge">commit_id</code>，那么<code class="highlighter-rouge">git checkout [commit_id] – &lt;path_to_file&gt;</code> 就可以恢复</p>
 
 <h3>Diff &amp; Patch</h3>
 
@@ -200,17 +200,17 @@
   <li>
     <p>diff</p>
 
-    <p><code>bash
+    <p><code class="highlighter-rouge">bash
  cd your-kernel-tree
  cd ..
  diff -Narup org-kernel-source your-kernel-tree &gt; kernel.patch
-</code><br />
+</code>
 -x 过滤掉所比较目录中一些不想比较的文件类型，可以使用其他的pattern。实际上如果需要过滤的文件类型比较多的时候，使用-x这个选项就有点麻烦了，查看了文档之后，diff提供了更加方便的参数过滤文件。 -X excludefile 忽略在excludefile中的文件类型，注意每种文件占一行 pallying patches</p>
   </li>
   <li>
     <p>patch</p>
 
-    <p><code>bash
+    <p><code class="highlighter-rouge">bash
  cd kernel-source
  patch -p1 &lt; ../kernel.patch
  patch -R -p1 &lt; ../kernel.patch
@@ -222,7 +222,7 @@
 
 <p>gentoo下经常使用的软件包查询管理工具</p>
 
-<pre><code>eix_tag  
+<div class="highlighter-rouge"><pre class="highlight"><code>eix_tag  
 update-eix-remote update 可以查到未下载的overlay里的东西  
 equery uses XXX    查询XXX包带的USE标志  
 equery hasuse X    查询使用X这个USE标志的包  
@@ -273,19 +273,20 @@ eix -T, --test-obsolete 测试陈旧的包
 eix -l, --pipe   
 eix -!, --not    
 </code></pre>
+</div>
 
 <p>非常有用的FORMAT</p>
 
-<p>Application:  <br />
-   FORMAT=’{downgrade}%{FORMAT_COMPACT}{}’ eix -I  <br />
-   This  will  print  all installed packages for which there are downgrade recommendations.  Note that  <br />
-   the compact format is used to output the packages: We  cannot  use  FORMAT=’{downgrade}%{FORMAT}{}’  <br />
-   because  this  would be a self-reference.  However, if you want to use the default FORMAT layout to  <br />
+<p>Application:<br />
+   FORMAT=’{downgrade}%{FORMAT_COMPACT}{}’ eix -I<br />
+   This  will  print  all installed packages for which there are downgrade recommendations.  Note that<br />
+   the compact format is used to output the packages: We  cannot  use  FORMAT=’{downgrade}%{FORMAT}{}’<br />
+   because  this  would be a self-reference.  However, if you want to use the default FORMAT layout to<br />
    output the packages, we can use FORMAT_COMPACT to wrap around FORMAT:</p>
 
-<p>FORMAT_COMPACT=’{downgrade}%{FORMAT}{}’ eix -cI  <br />
-   This is as above, but the matching packages will be printed with the default (non-compact)  format.  <br />
-   The  option  -c  is  needed  so  that eix will use our FORMAT_COMPACT variable as the format string  <br />
+<p>FORMAT_COMPACT=’{downgrade}%{FORMAT}{}’ eix -cI<br />
+   This is as above, but the matching packages will be printed with the default (non-compact)  format.<br />
+   The  option  -c  is  needed  so  that eix will use our FORMAT_COMPACT variable as the format string<br />
    (which we “misused” as a “wrapper” for FORMAT in this example).</p>
 
 

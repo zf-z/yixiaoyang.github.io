@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -96,15 +96,15 @@
 
 <p>由于制作JFSS2文件系统镜像、初始化需要芯片的详细sector size(page size)、erase size，因此需要详细的芯片类型和数据手册。我使用的SPI Flash芯片是“25Q128A 13E40”，是Micron的N25Q128A13ESE40E。几个重要参数需要弄清楚：</p>
 
-<p><strong>Erase capability</strong><br />
-– Subsector erase 4KB uniform granularity blocks<br />
-– Sector erase 64KB uniform granularity blocks<br />
+<p><strong>Erase capability</strong>
+– Subsector erase 4KB uniform granularity blocks
+– Sector erase 64KB uniform granularity blocks
 – Full-chip erase</p>
 
-<p><strong>Memory Management</strong><br />
-简而言之是256<em>64KB=256</em>16*4096 bytes的结构。<br />
-- erase size: 64KB<br />
-- sector size: 64kb<br />
+<p><strong>Memory Management</strong>
+简而言之是256<em>64KB=256</em>16*4096 bytes的结构。
+- erase size: 64KB
+- sector size: 64kb
 - subsector size: 4096b</p>
 
 <blockquote>
@@ -127,10 +127,10 @@ Error: Min volume size supported is 104857600
 </pre>
 <p>F2FS文件系统不支持100M以下的设备。</p>
 
-<p>####JFFS2简介<br />
+<p>####JFFS2简介
 JFFS2 provides a filesystem directly on the flash, rather than emulating a block device. For more information, see the (JFFS2 PDF)[http://linux-mtd.infradead.org/~dwmw2/jffs2.pdf].</p>
 
-<p>####让内核支持选定的SPI Flash<br />
+<p>####让内核支持选定的SPI Flash
 1. 添加kernel对jffs2的支持</p>
 
 <pre>
@@ -162,8 +162,8 @@ Symbol: MTD_M25P80 [=y]
 </pre>
 
 <ol>
-  <li>添加SPI0 Flash到Device Tree     <br />
-  设备树不再赘述。SPI设备的cape可参考<code>BB-BONE-SPI0-00A0.dts</code></li>
+  <li>添加SPI0 Flash到Device Tree   <br />
+  设备树不再赘述。SPI设备的cape可参考<code class="highlighter-rouge">BB-BONE-SPI0-00A0.dts</code></li>
 </ol>
 
 <pre>
@@ -256,48 +256,48 @@ Symbol: BR2_PACKAGE_MTD_MKFSJFFS2 [=y]
   │   Selects: BR2_PACKAGE_ZLIB [=y] &amp;&amp; BR2_PACKAGE_LZO [=y]        
 </pre>
 
-<p>####制作JFFS2镜像<br />
-可以在Host机器上制作镜像，但一定得弄清楚上面提到的flash的几个特性，否则会出现<code>I cannot mount JFFS2 and see "Magic bitmask 0x1985 not found" messages</code>的常见错误。<br />
-&gt;参考： (http://www.linux-mtd.infradead.org/faq/jffs2.html)[http://www.linux-mtd.infradead.org/faq/jffs2.html]<br />
-&gt;<br />
-&gt;I cannot mount JFFS2 and see “Magic bitmask 0x1985 not found” messages<br />
-&gt;If you cannot mount your JFFS2 file system and you see many messages like<br />
-&gt;jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00000024: 0x2b10 instead<br />
-&gt;…<br />
-&gt;<br />
-&gt;Further such events for this erase block will not be printed<br />
-&gt;<br />
-&gt;this means that the data on your flash device is not a valid JFFS2 file system. There is no single solution for this problem, but we will try to provide you some ideas how to fix this.<br />
-&gt;<br />
-&gt;The first question you should try to answer is “why the data on my flash device is incorrect so that JFFS2 rejects to deal with it?”. There are may be a plenty of reasons, e.g.:<br />
-&gt;<br />
-&gt;    you flash driver is severely buggy so it reads trash instead of valid data;<br />
-&gt;    you flashed some trash instead of a valid JFFS2 image;<br />
-&gt;    you did not manage to flash JFFS2 image correctly so that you ended up with garbage on your flash, although the original image was perfectly fine;<br />
-&gt;    you forgot to erase your flash before flashing it, etc.<br />
-&gt;<br />
-&gt;Anyways, JFFS2 wouldn’t complain if it was able to find correct data. As it does complain, there is something wrong with the data it reads.<br />
-&gt;<br />
-&gt;One common mistake is to use /dev/mtdX or /dev/mtdblockX devices to flash JFFS2 images on NAND flashes. E.g.<br />
-&gt;cp jffs2_fs.img /dev/mtd2<br />
-&gt;<br />
-&gt;This is incorrect because when dealing with NAND flashes one has to skip bad eraseblocks and write only in NAND page size chunks. Please, use the nandwrite utility instead.<br />
-&gt;<br />
-&gt;Also please, do not forget to erase your flash before flashing the image. You may use the flash_eraseall utility for this. And it makes sense to make sure the erase functionality actually works by reading the erased MTD device back and checking that only 0xFF bytes were read.<br />
-&gt;<br />
-&gt;You may try to check if your flash driver works correctly and if you flashed the file system image correctly by means of reading the flash back after you have flashed your image, and compare the read image with the original one. Please, use the nandread utility to read from NAND flashes.<br />
-&gt;<br />
+<p>####制作JFFS2镜像
+可以在Host机器上制作镜像，但一定得弄清楚上面提到的flash的几个特性，否则会出现<code class="highlighter-rouge">I cannot mount JFFS2 and see "Magic bitmask 0x1985 not found" messages</code>的常见错误。
+&gt;参考： (http://www.linux-mtd.infradead.org/faq/jffs2.html)[http://www.linux-mtd.infradead.org/faq/jffs2.html]
+&gt;
+&gt;I cannot mount JFFS2 and see “Magic bitmask 0x1985 not found” messages
+&gt;If you cannot mount your JFFS2 file system and you see many messages like
+&gt;jffs2_scan_eraseblock(): Magic bitmask 0x1985 not found at 0x00000024: 0x2b10 instead
+&gt;…
+&gt;
+&gt;Further such events for this erase block will not be printed
+&gt;
+&gt;this means that the data on your flash device is not a valid JFFS2 file system. There is no single solution for this problem, but we will try to provide you some ideas how to fix this.
+&gt;
+&gt;The first question you should try to answer is “why the data on my flash device is incorrect so that JFFS2 rejects to deal with it?”. There are may be a plenty of reasons, e.g.:
+&gt;
+&gt;    you flash driver is severely buggy so it reads trash instead of valid data;
+&gt;    you flashed some trash instead of a valid JFFS2 image;
+&gt;    you did not manage to flash JFFS2 image correctly so that you ended up with garbage on your flash, although the original image was perfectly fine;
+&gt;    you forgot to erase your flash before flashing it, etc.
+&gt;
+&gt;Anyways, JFFS2 wouldn’t complain if it was able to find correct data. As it does complain, there is something wrong with the data it reads.
+&gt;
+&gt;One common mistake is to use /dev/mtdX or /dev/mtdblockX devices to flash JFFS2 images on NAND flashes. E.g.
+&gt;cp jffs2_fs.img /dev/mtd2
+&gt;
+&gt;This is incorrect because when dealing with NAND flashes one has to skip bad eraseblocks and write only in NAND page size chunks. Please, use the nandwrite utility instead.
+&gt;
+&gt;Also please, do not forget to erase your flash before flashing the image. You may use the flash_eraseall utility for this. And it makes sense to make sure the erase functionality actually works by reading the erased MTD device back and checking that only 0xFF bytes were read.
+&gt;
+&gt;You may try to check if your flash driver works correctly and if you flashed the file system image correctly by means of reading the flash back after you have flashed your image, and compare the read image with the original one. Please, use the nandread utility to read from NAND flashes.
+&gt;
 &gt;You can also do the following experiment to make sure JFFS2 works well. Erase your MTD device and mount it to JFFS2. You will end up with an empty file system. Copy some files to the JFFS2 file system and unmount it. Then mount it again and see if it mounts without problems. If it does, this is most probably not a JFFS2 bug.</p>
 
 <ol>
   <li>
-    <p>制作镜像     <br />
-<code>/usr/sbin/mkfs.jffs2  -n -r ./spiflash_128BBits -e 0x10000 -s 0x10000 -l  -p 0x1000000  -o flash0.0x10000_0x10000.img -v</code><br />
+    <p>制作镜像   <br />
+<code class="highlighter-rouge">/usr/sbin/mkfs.jffs2  -n -r ./spiflash_128BBits -e 0x10000 -s 0x10000 -l  -p 0x1000000  -o flash0.0x10000_0x10000.img -v</code>
 此处page size为64kb，erase size为4k也是flash支持的最小度量的erase单位。</p>
   </li>
   <li>
-    <p>格式化flash     <br />
-<code># flash_erase -j /dev/mtd0  0 256</code><br />
+    <p>格式化flash   <br />
+<code class="highlighter-rouge"># flash_erase -j /dev/mtd0  0 256</code>
 此处按照256块（每块64k）进行格式化</p>
   </li>
   <li>
@@ -305,18 +305,16 @@ Symbol: BR2_PACKAGE_MTD_MKFSJFFS2 [=y]
   </li>
 </ol>
 
-<div class="highlighter-coderay"><div class="CodeRay">
-  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span># dd if= ./flash0.   of=/dev/mtdblock0
-<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>flash0.0x10000_0x10000.img  flash0.jffs2.img
-<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>flash0.0x1000_0x10000.img
-<span class="line-numbers"> <a href="#n4" name="n4">4</a></span># dd if=./flash0.0x1000_0x10000.img    of=/dev/mtdblock0
-<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>16+0 records in
-<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>16+0 records out
-<span class="line-numbers"> <a href="#n7" name="n7">7</a></span># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/
-<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>[  362.309070] jffs2: notice: (198) jffs2_build_xattr_subsystem: complete building xattr subsystem, 0 of xdatum (0 unchecked, 0 orphan) and 0 of xref (0 dead, 0 orphan) found.
-<span class="line-numbers"> <a href="#n9" name="n9">9</a></span># 
-</pre></div>
-</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># dd if= ./flash0.   of=/dev/mtdblock0</span>
+flash0.0x10000_0x10000.img  flash0.jffs2.img
+flash0.0x1000_0x10000.img
+<span class="c"># dd if=./flash0.0x1000_0x10000.img    of=/dev/mtdblock0</span>
+16+0 records <span class="k">in
+</span>16+0 records out
+<span class="c"># mount -t jffs2 /dev/mtdblock0  /mnt/mtd0/</span>
+<span class="o">[</span>  362.309070] jffs2: notice: <span class="o">(</span>198<span class="o">)</span> jffs2_build_xattr_subsystem: <span class="nb">complete </span>building xattr subsystem, 0 of xdatum <span class="o">(</span>0 unchecked, 0 orphan<span class="o">)</span> and 0 of xref <span class="o">(</span>0 dead, 0 orphan<span class="o">)</span> found.
+<span class="c"># </span>
+</code></pre>
 </div>
 
 <p>至此，flash设备成功挂载到用户空间的文件系统中去了。</p>

@@ -45,7 +45,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/AboutMe.html">关于我</a>
+          <a class="page-link" href="/AboutMe/">关于我</a>
           
         
           
@@ -55,7 +55,7 @@
           
         
           
-          <a class="page-link" href="/message.html">留言板</a>
+          <a class="page-link" href="/message/">留言板</a>
           
         
       </div>
@@ -97,8 +97,8 @@
 <p>半年前使用BBW（White版本）将eeprom物理损坏或者内容导致无法启动，原因暂不确定，现在使用正常的BBB板用I2C将eeprom重新连接起来进行擦写。</p>
 
 <blockquote>
-  <p>BBB SRM文档的说明  <br />
-A single 4KB EEPROM is provided on I2C0 that holds the board information. This information includes board name, serial number, and revision information. This is the not the same as the one used on the original BeagleBone. The device was changed for cost reduction reasons. It has a test point to allow the device to be programmed and otherwise to provide write protection when not grounded.<br />
+  <p>BBB SRM文档的说明<br />
+A single 4KB EEPROM is provided on I2C0 that holds the board information. This information includes board name, serial number, and revision information. This is the not the same as the one used on the original BeagleBone. The device was changed for cost reduction reasons. It has a test point to allow the device to be programmed and otherwise to provide write protection when not grounded.
 ..</p>
 </blockquote>
 
@@ -135,7 +135,7 @@ A single 4KB EEPROM is provided on I2C0 that holds the board information. This i
     <tr>
       <td>Serial Number</td>
       <td>12</td>
-      <td>Serial number of the board. This is a 12 character string which is:<code>WWYY4P16nnnn</code> where: WW = 2 digit week of the year of production YY = 2 digit year of production BBBK = BeagleBone Black nnnn = incrementing board number</td>
+      <td>Serial number of the board. This is a 12 character string which is:<code class="highlighter-rouge">WWYY4P16nnnn</code> where: WW = 2 digit week of the year of production YY = 2 digit year of production BBBK = BeagleBone Black nnnn = incrementing board number</td>
     </tr>
     <tr>
       <td>Configuration Option</td>
@@ -195,12 +195,12 @@ ff ff ff ff ff ff ff ff
   <p>This particular chip has 3 pins used for chip select addressing. However, those 3 pins alone don’t make up the address. They are part of a hard coded binary prefix of ‘1010’. So, if you ground the three pins, the address really becomes ‘1010000’, which is address 0x50 in hex. It will be important to know this address later. The chip also has a write protect pin. Because I want to write to it, I need to connect that to ground according to the datasheet. Connect up the chip Vss and Vdd and that covers all 8 pins of the chip. Pretty simple.</p>
 </blockquote>
 
-<p>我使用Raspberry Pi作为烧写器，配置内核添加“i2c-dev,i2c-bcm2708”两个模块：<code>CONFIG_I2C_CHARDEV=M</code>和<code>CONFIG_I2C_BCM2708=M</code>，并将<code>I2C_BCM2708_BAUDRATE</code>设置成200k速率。</p>
+<p>我使用Raspberry Pi作为烧写器，配置内核添加“i2c-dev,i2c-bcm2708”两个模块：<code class="highlighter-rouge">CONFIG_I2C_CHARDEV=M</code>和<code class="highlighter-rouge">CONFIG_I2C_BCM2708=M</code>，并将<code class="highlighter-rouge">I2C_BCM2708_BAUDRATE</code>设置成200k速率。</p>
 
-<p>###I2C Tools<br />
-使用buildroot工具配置<code>BR2_PACKAGE_I2C_TOOLS=y</code>，添加i2cget/i2cset等工具支持.</p>
+<p>###I2C Tools
+使用buildroot工具配置<code class="highlighter-rouge">BR2_PACKAGE_I2C_TOOLS=y</code>，添加i2cget/i2cset等工具支持.</p>
 
-<pre><code># modprobe i2c_bcm2708
+<div class="highlighter-rouge"><pre class="highlight"><code># modprobe i2c_bcm2708
 # modprobe i2c_dev
 # ls /dev/i2c*
 /dev/i2c-1
@@ -240,6 +240,7 @@ No size specified (using byte-data access)
 # i2cset -y 1 0x50 2 0x33
 # i2cset -y 1 0x50 3 0xEE
 </code></pre>
+</div>
 
 
   </article>

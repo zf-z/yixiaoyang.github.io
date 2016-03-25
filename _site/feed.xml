@@ -5,9 +5,287 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 05 Mar 2016 18:06:38 +0800</pubDate>
-    <lastBuildDate>Sat, 05 Mar 2016 18:06:38 +0800</lastBuildDate>
-    <generator>Jekyll v2.5.3</generator>
+    <pubDate>Wed, 23 Mar 2016 17:05:50 +0800</pubDate>
+    <lastBuildDate>Wed, 23 Mar 2016 17:05:50 +0800</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Weechat Usage</title>
+        <description>&lt;h1&gt;WeeChat存活指南&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;设置nicks,username,realname
+‘’’
+/set irc.server.freenode.nicks “leon_e”
+/set irc.server.freenode.username “leon_e”
+/set irc.server.freenode.realname “leon_e”
+‘’’&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;添加一个proxy服务器 &lt;code class=&quot;highlighter-rouge&quot;&gt;/proxy add shadowsocks 127.0.0.1 1080&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;#服务器
+# freenode #ubuntu-cn #g0v.tw&lt;/p&gt;
+
+&lt;p&gt;常 用 基 本 命 令 命令用途说明 命 令 使 用 举 例&lt;/p&gt;
+
+&lt;p&gt;/links 列服务器连接信息 /links&lt;/p&gt;
+
+&lt;p&gt;/list 列出所有聊天室 /list&lt;/p&gt;
+
+&lt;p&gt;/nick 名字 更换名字 /nick 林桃子67&lt;/p&gt;
+
+&lt;p&gt;/ns register 密码 注册名字 /ns regiser 123456&lt;/p&gt;
+
+&lt;p&gt;/pass 密码 验证名字密码 /pass 123456&lt;/p&gt;
+
+&lt;p&gt;/ns set password 新密码 修改名字密码 /ns set password 654321&lt;/p&gt;
+
+&lt;p&gt;/mode 自己名字 +/-i 设置昵称是否隐藏 /mode 林桃子67 +/-i&lt;/p&gt;
+
+&lt;p&gt;/mode 自己名字 +/-s 是否收服务器信息 /mode 是我 +/-s&lt;/p&gt;
+
+&lt;p&gt;/run 文件名 运行程序或文件 /run jpbot.exe&lt;/p&gt;
+
+&lt;p&gt;/whois 名字 查看网友的信息 /whois 是我&lt;/p&gt;
+
+&lt;p&gt;/userhost 名字 查看网友的IP地址 /userhost 是我&lt;/p&gt;
+
+&lt;p&gt;/ns info 名字 查名字注册信息 /ns info 名字&lt;/p&gt;
+
+&lt;p&gt;/ns status 名字 查询用户状态 /ns status 名字&lt;/p&gt;
+
+&lt;p&gt;/who 看看谁在线上 /who&lt;/p&gt;
+
+&lt;p&gt;/who #房间名 看看谁在房间中 /who #林桃子67的房间&lt;/p&gt;
+
+&lt;p&gt;/names #房间名 列房间中所有用户 /names #日本女性的房间&lt;/p&gt;
+
+&lt;p&gt;/me 要说的话 使用动作表情 /me 大家好，今天你IRC了么&lt;/p&gt;
+
+&lt;p&gt;/say 要说的话 在当前频道说话 /say 老公，想我了吗&lt;/p&gt;
+
+&lt;p&gt;/notice 名字 要说的话 向某人发出通告 /notice 远方的风 有事找你&lt;/p&gt;
+
+&lt;p&gt;/query 名字 发送信息 开小窗和他私聊 /query 夕阳天使 hi，久违了你&lt;/p&gt;
+
+&lt;p&gt;/privmsg 名字 发送信息 开小窗发送信息 /privmsg 天使源 hi，久违了你&lt;/p&gt;
+
+&lt;p&gt;/msg 他的名字 信息内容 给他悄悄发送信息 /msg 于天 你好!&lt;/p&gt;
+
+&lt;p&gt;/msg 房间名字 信息内容 向房间全体成员说 /msg #日语角 大家好!&lt;/p&gt;
+
+&lt;p&gt;/omsg #房间名字 要发的信息 仅对屋中的@说话 /omsg #日语角 见吴山了没有&lt;/p&gt;
+
+&lt;p&gt;/amsg 要发的信息 多个频道同发信息 /amsg 我老公在那里呢&lt;/p&gt;
+
+&lt;p&gt;/onotice 房间名字 要发的话 在该屋对所有op说 /onotice #日语角 水素死翘了&lt;/p&gt;
+
+&lt;p&gt;/close -m 关闭所有小窗聊天 /close -m&lt;/p&gt;
+
+&lt;p&gt;/ignore 他的名字 忽略你讨厌的人 /ignore 杨过,shll,&lt;/p&gt;
+
+&lt;p&gt;/ignore -T * 忽略别人CTCP查询 /ignore -T *&lt;/p&gt;
+
+&lt;p&gt;　　 /join #房间名 加入一个房间 /join #林桃子67的房间&lt;/p&gt;
+
+&lt;p&gt;/away 给出离开的原因 离开并给出原因 /away 对不起GG，我男友来了&lt;/p&gt;
+
+&lt;p&gt;/away 取消离开设置 /away&lt;/p&gt;
+
+&lt;p&gt;/part #房间名 退出信息 退出当前房间 /part #日语角 bye大家&lt;/p&gt;
+
+&lt;p&gt;/partall 退出信息 退出所有房间 /partall byeall&lt;/p&gt;
+
+&lt;p&gt;/quit 退出信息 退出IRC退出连接 /quit 今天实在是累了，bye&lt;/p&gt;
+
+&lt;p&gt;/exit 退出信息 关闭irc并退出 /exit 睡觉觉去了&lt;/p&gt;
+
+&lt;p&gt;/disconnect 退出信息 与服务器断开连接 /disconnect 我是故意断线的&lt;/p&gt;
+
+&lt;p&gt;/server bj.irc.263.net 6667 更换irc服务器 /server bj.irc.263.net 6667&lt;/p&gt;
+
+&lt;p&gt;/cs register #房间名字 密码 你对房间的描述 注册自己的房间 /cs register #&lt;/p&gt;
+
+&lt;p&gt;林桃子67的房间 123456 我是桃子67我怕谁&lt;/p&gt;
+
+&lt;p&gt;/topic #房间名字 主题内容 更改房间主题 /topic #日语角 欢迎你朋友&lt;/p&gt;
+
+&lt;p&gt;/invite 他的名字 #房间名 邀请别人来房间 /invite 紫丁香花 #日语角&lt;/p&gt;
+
+&lt;p&gt;/kick #房间名 他的名字 把人踢出房间 /kick #林桃子67的房间 PC100&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名 +/-b 他的名字 把某人禁止/解禁 /mode #林桃子67的房间 +/-b  然采&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名 +/-o 朋友名字 给朋友加/减帽子 /mode #林桃子67的房间 +/-o  然采&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;/auto -r on&lt;/td&gt;
+      &lt;td&gt;off&lt;/td&gt;
+      &lt;td&gt;他的名字 #频道名字 自动朋友加/减帽 /auto -r [on然采 ]#林桃子67的房间 出错了&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;/mode #房间名 +/-l 人数 设置限制房间人数 /mode #日语角 +/-l 100&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字 +/-n 禁不禁止外部信息 /mode #日语角 +/-n&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字+/-m 限制发言仅@/+说 /mode #房间名字 +/-m&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字 +/-i 设置邀请模式 /mode #日语角 +/-i&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字 +/-p 是否设置私有模式 /mode #日语角 +/-p&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字 +/-s 是否设置秘密模式 /mode #日语角 +/-s&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名字 +/-t 是否只@能改主题 /mode #日语角 +/-t&lt;/p&gt;
+
+&lt;p&gt;/mode #房间名 +k 密码 给房间加密码 /mode #日语角 +k 123456&lt;/p&gt;
+
+&lt;p&gt;/join #房间名 密码 进入有密码的房间 /join #日语角 123456&lt;/p&gt;
+
+&lt;p&gt;/channel 调出频道模式设置 /channel&lt;/p&gt;
+
+&lt;p&gt;/cs info #房间名字 查看频道注册信息 /cs info #日语角&lt;/p&gt;
+
+&lt;h2&gt;#&lt;/h2&gt;
+
+&lt;p&gt;nickserv 昵称服务&lt;/p&gt;
+
+&lt;p&gt;更换昵称 /nick 你要换的新名字&lt;/p&gt;
+
+&lt;p&gt;注册昵称 /ns register 密码 邮箱&lt;/p&gt;
+
+&lt;p&gt;认证昵称 /ns identify 名字密码&lt;/p&gt;
+
+&lt;p&gt;这个也认证昵称 /pass 名字密码&lt;/p&gt;
+
+&lt;p&gt;昵称保护 /ns set kill on/off&lt;/p&gt;
+
+&lt;p&gt;昵称安全 /ns set secure on/off&lt;/p&gt;
+
+&lt;p&gt;昵称保密 /ns set private on/off&lt;/p&gt;
+
+&lt;p&gt;修改密码 /ns set password 新密码&lt;/p&gt;
+
+&lt;p&gt;昵称邮箱 /ns set email 你的邮箱&lt;/p&gt;
+
+&lt;p&gt;昵称主页 /ns set url http://52irc.org&lt;/p&gt;
+
+&lt;p&gt;隐藏邮件 /ns set hide emall On/off&lt;/p&gt;
+
+&lt;p&gt;隐藏网络地址 /ns set hide usermask On/off&lt;/p&gt;
+
+&lt;p&gt;隐藏退出信息 /ns set hide quit On/off&lt;/p&gt;
+
+&lt;p&gt;杀掉盗用你名字者 /ns ghost 你的妮称 密码&lt;/p&gt;
+
+&lt;p&gt;注销昵称 /ns drop 你的妮称（得先认证）&lt;/p&gt;
+
+&lt;h2&gt;#&lt;/h2&gt;
+
+&lt;p&gt;chanserv 频道服务&lt;/p&gt;
+
+&lt;p&gt;查看房间信息 /cs info #频道名字&lt;/p&gt;
+
+&lt;p&gt;注册房间 /cs register #频道名字 密码 简介&lt;/p&gt;
+
+&lt;p&gt;认证你的房主身份 /cs identify #频道名字 频道密码&lt;/p&gt;
+
+&lt;p&gt;设置房间的主页 /cs set #频道名字 url 主页地址&lt;/p&gt;
+
+&lt;p&gt;设置房间的邮箱 /cs set #频道名字 email 邮件地址&lt;/p&gt;
+
+&lt;p&gt;设置房间的主题 /cs set #频道名字 topic 主题内容&lt;/p&gt;
+
+&lt;p&gt;保留房间的主题 /cs set #频道名字 keeptopic on/off&lt;/p&gt;
+
+&lt;p&gt;锁定房间的主题 /cs set #频道名字 topiclock on/off&lt;/p&gt;
+
+&lt;p&gt;设置新的房间主人 /cs set #频道名字 founder 新任房主&lt;/p&gt;
+
+&lt;p&gt;设置房间的新密码 /cs set #频道名字 password 频道密码&lt;/p&gt;
+
+&lt;p&gt;设置房间安全控制 /cs set #频道名字 secure on/off&lt;/p&gt;
+
+&lt;p&gt;设置房间管理员控制 /cs set #频道名字 secureops on/off&lt;/p&gt;
+
+&lt;h2&gt;#&lt;/h2&gt;
+
+&lt;p&gt;memoserv 留言服务&lt;/p&gt;
+
+&lt;p&gt;列表所有留言 /ms list&lt;/p&gt;
+
+&lt;p&gt;列表最新留言 /ms list new&lt;/p&gt;
+
+&lt;p&gt;阅读最新留言 /ms read last&lt;/p&gt;
+
+&lt;p&gt;阅读特定留言 /ms read 留言号码&lt;/p&gt;
+
+&lt;p&gt;删除指定的留言 /ms del 留言号码&lt;/p&gt;
+
+&lt;p&gt;删除所有的留言 /ms del all&lt;/p&gt;
+
+&lt;p&gt;给人发送留言 /ms send 对方妮称 留言内容&lt;/p&gt;
+
+&lt;h2&gt;#&lt;/h2&gt;
+
+&lt;p&gt;chanserv 频道服务&lt;/p&gt;
+
+&lt;p&gt;设置频道进入信息 /cs set #频道名字 entrymsg 所设置信息&lt;/p&gt;
+
+&lt;p&gt;用服务器给客人加帽子 /cs op #频道名字 对方名字&lt;/p&gt;
+
+&lt;p&gt;服务器摘掉某人的帽子 /cs deop #频道名字 对方名字&lt;/p&gt;
+
+&lt;p&gt;让服务器为自已解ban /cs unban #频道名字&lt;/p&gt;
+
+&lt;p&gt;增加一人到房踢列表/cs akick #频道名字 add 对方名字&lt;/p&gt;
+
+&lt;p&gt;删除一人到房踢列表/cs akick #频道名字 del 对方名字&lt;/p&gt;
+
+&lt;p&gt;查看房踢列表/cs akick #频道名字 list&lt;/p&gt;
+
+&lt;p&gt;清除房间的所有ban /cs clear #频道名字 bans&lt;/p&gt;
+
+&lt;p&gt;清除房间的模式设置 /cs clear #频道名字 modes&lt;/p&gt;
+
+&lt;p&gt;清除房间的所有帽子 /cs clear #频道名字 ops&lt;/p&gt;
+
+&lt;p&gt;清除房间的所有用户 /cs clear #频道名字users&lt;/p&gt;
+
+&lt;p&gt;注销房间 /cs drop #频道名字&lt;/p&gt;
+
+&lt;h1&gt;#&lt;/h1&gt;
+
+&lt;p&gt;CTCP查询命令&lt;/p&gt;
+
+&lt;p&gt;查对方反映速度 /ctcp 对方名字 ping&lt;/p&gt;
+
+&lt;p&gt;查对方当地时间 /ctcp 对方名字 time&lt;/p&gt;
+
+&lt;p&gt;查对方软件版本 /ctcp 对方名字 version&lt;/p&gt;
+
+&lt;p&gt;查对方的用户信息 /ctcp 对方名字userinfo&lt;/p&gt;
+
+&lt;p&gt;查对方的用户信息 /ctcp 对方名字 clientinfo&lt;/p&gt;
+
+&lt;h2&gt;#&lt;/h2&gt;
+&lt;p&gt;##&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 10 Mar 2016 00:00:00 +0800</pubDate>
+        <link>/2016/03/10/WeeChat-usage/</link>
+        <guid isPermaLink="true">/2016/03/10/WeeChat-usage/</guid>
+        
+        
+      </item>
     
       <item>
         <title>[Qt] 关于Qt编译error: undefined reference to `vtable for xxx错误</title>
@@ -70,76 +348,74 @@
 
 &lt;p&gt;之前写个的一个指纹模块驱动代码结构，可以看出相对于传统的linux驱动，android驱动涉及到android架构中的HAL层、framwork（jni、service、接口层），然后才是app进行硬件服务接口调用。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;hal_jni_biovox2/                                       
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;├── cp.sh
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n4&quot; name=&quot;n4&quot;&gt;4&lt;/a&gt;&lt;/span&gt;├── development
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n5&quot; name=&quot;n5&quot;&gt;5&lt;/a&gt;&lt;/span&gt;│   └── apps
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n6&quot; name=&quot;n6&quot;&gt;6&lt;/a&gt;&lt;/span&gt;│       └── BiovoX2 指纹模块的native测试程序
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n7&quot; name=&quot;n7&quot;&gt;7&lt;/a&gt;&lt;/span&gt;│           ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n8&quot; name=&quot;n8&quot;&gt;8&lt;/a&gt;&lt;/span&gt;│           ├── biovox2.c
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n9&quot; name=&quot;n9&quot;&gt;9&lt;/a&gt;&lt;/span&gt;│           ├── biovox2.h
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n10&quot; name=&quot;n10&quot;&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;│           ├── code.h
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n11&quot; name=&quot;n11&quot;&gt;11&lt;/a&gt;&lt;/span&gt;│           ├── main_entry.c
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n12&quot; name=&quot;n12&quot;&gt;12&lt;/a&gt;&lt;/span&gt;│           ├── Makefile
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n13&quot; name=&quot;n13&quot;&gt;13&lt;/a&gt;&lt;/span&gt;│           ├── tty.c
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n14&quot; name=&quot;n14&quot;&gt;14&lt;/a&gt;&lt;/span&gt;│           ├── tty.h
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n15&quot; name=&quot;n15&quot;&gt;15&lt;/a&gt;&lt;/span&gt;│           └── X2Main.c
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n16&quot; name=&quot;n16&quot;&gt;16&lt;/a&gt;&lt;/span&gt;├── device
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n17&quot; name=&quot;n17&quot;&gt;17&lt;/a&gt;&lt;/span&gt;│   └── softwinner
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n18&quot; name=&quot;n18&quot;&gt;18&lt;/a&gt;&lt;/span&gt;│       └── astar-y3
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n19&quot; name=&quot;n19&quot;&gt;19&lt;/a&gt;&lt;/span&gt;│           └── init.sun8i.rc 删除蓝牙对ttyS1权限的设置部分
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n20&quot; name=&quot;n20&quot;&gt;20&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;├── frameworks
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n21&quot; name=&quot;n21&quot;&gt;21&lt;/a&gt;&lt;/span&gt;│   └── base
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n22&quot; name=&quot;n22&quot;&gt;22&lt;/a&gt;&lt;/span&gt;│       ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n23&quot; name=&quot;n23&quot;&gt;23&lt;/a&gt;&lt;/span&gt;│       ├── core
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n24&quot; name=&quot;n24&quot;&gt;24&lt;/a&gt;&lt;/span&gt;│       │   └── java
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n25&quot; name=&quot;n25&quot;&gt;25&lt;/a&gt;&lt;/span&gt;│       │       └── android
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n26&quot; name=&quot;n26&quot;&gt;26&lt;/a&gt;&lt;/span&gt;│       │           └── os
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n27&quot; name=&quot;n27&quot;&gt;27&lt;/a&gt;&lt;/span&gt;│       │               └── IBiovoxService.aidl 指纹模块接口定义
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n28&quot; name=&quot;n28&quot;&gt;28&lt;/a&gt;&lt;/span&gt;│       └── services
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n29&quot; name=&quot;n29&quot;&gt;29&lt;/a&gt;&lt;/span&gt;│           ├── java
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n30&quot; name=&quot;n30&quot;&gt;30&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;│           │   └── com
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n31&quot; name=&quot;n31&quot;&gt;31&lt;/a&gt;&lt;/span&gt;│           │       └── android
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n32&quot; name=&quot;n32&quot;&gt;32&lt;/a&gt;&lt;/span&gt;│           │           └── server
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n33&quot; name=&quot;n33&quot;&gt;33&lt;/a&gt;&lt;/span&gt;│           │               ├── BiovoxService.java 指纹模块硬件服务实现，面向APP层的主要实现
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n34&quot; name=&quot;n34&quot;&gt;34&lt;/a&gt;&lt;/span&gt;│           │               └── SystemServer.java
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n35&quot; name=&quot;n35&quot;&gt;35&lt;/a&gt;&lt;/span&gt;│           └── jni
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n36&quot; name=&quot;n36&quot;&gt;36&lt;/a&gt;&lt;/span&gt;│               ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n37&quot; name=&quot;n37&quot;&gt;37&lt;/a&gt;&lt;/span&gt;│               ├── com_android_server_BiovoxService.cpp 指纹模块硬件服务对hal层的调用
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n38&quot; name=&quot;n38&quot;&gt;38&lt;/a&gt;&lt;/span&gt;│               └── onload.cpp
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n39&quot; name=&quot;n39&quot;&gt;39&lt;/a&gt;&lt;/span&gt;├── hardware 硬件hal层的实现
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n40&quot; name=&quot;n40&quot;&gt;40&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;│   └── libhardware
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n41&quot; name=&quot;n41&quot;&gt;41&lt;/a&gt;&lt;/span&gt;│       ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n42&quot; name=&quot;n42&quot;&gt;42&lt;/a&gt;&lt;/span&gt;│       ├── include
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n43&quot; name=&quot;n43&quot;&gt;43&lt;/a&gt;&lt;/span&gt;│       │   └── hardware
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n44&quot; name=&quot;n44&quot;&gt;44&lt;/a&gt;&lt;/span&gt;│       │       └── fpm
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n45&quot; name=&quot;n45&quot;&gt;45&lt;/a&gt;&lt;/span&gt;│       │           └── biovox2.h
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n46&quot; name=&quot;n46&quot;&gt;46&lt;/a&gt;&lt;/span&gt;│       └── modules
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n47&quot; name=&quot;n47&quot;&gt;47&lt;/a&gt;&lt;/span&gt;│           └── fpm
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n48&quot; name=&quot;n48&quot;&gt;48&lt;/a&gt;&lt;/span&gt;│               ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n49&quot; name=&quot;n49&quot;&gt;49&lt;/a&gt;&lt;/span&gt;│               └── biovox2.c
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n50&quot; name=&quot;n50&quot;&gt;50&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;├── packages
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n51&quot; name=&quot;n51&quot;&gt;51&lt;/a&gt;&lt;/span&gt;│   └── experimental
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n52&quot; name=&quot;n52&quot;&gt;52&lt;/a&gt;&lt;/span&gt;│       └── FP_TEST
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n53&quot; name=&quot;n53&quot;&gt;53&lt;/a&gt;&lt;/span&gt;│           └── src
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n54&quot; name=&quot;n54&quot;&gt;54&lt;/a&gt;&lt;/span&gt;│               └── com
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n55&quot; name=&quot;n55&quot;&gt;55&lt;/a&gt;&lt;/span&gt;│                   └── example
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n56&quot; name=&quot;n56&quot;&gt;56&lt;/a&gt;&lt;/span&gt;│                       └── fp_test
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n57&quot; name=&quot;n57&quot;&gt;57&lt;/a&gt;&lt;/span&gt;│                           └── MainActivity.java APP层测试程序
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n58&quot; name=&quot;n58&quot;&gt;58&lt;/a&gt;&lt;/span&gt;├── README.md
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n59&quot; name=&quot;n59&quot;&gt;59&lt;/a&gt;&lt;/span&gt;├── system
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n60&quot; name=&quot;n60&quot;&gt;60&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;│   └── core
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n61&quot; name=&quot;n61&quot;&gt;61&lt;/a&gt;&lt;/span&gt;│       └── rootdir
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n62&quot; name=&quot;n62&quot;&gt;62&lt;/a&gt;&lt;/span&gt;│           └── ueventd.rc 开启串口ttyS1对普通用户的读写权限
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n63&quot; name=&quot;n63&quot;&gt;63&lt;/a&gt;&lt;/span&gt;└── testDev
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n64&quot; name=&quot;n64&quot;&gt;64&lt;/a&gt;&lt;/span&gt;    ├── Android.mk
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n65&quot; name=&quot;n65&quot;&gt;65&lt;/a&gt;&lt;/span&gt;    └── testDev.c
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n66&quot; name=&quot;n66&quot;&gt;66&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n67&quot; name=&quot;n67&quot;&gt;67&lt;/a&gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+hal_jni_biovox2/                                       
+├── cp.sh
+├── development
+│   └── apps
+│       └── BiovoX2 指纹模块的native测试程序
+│           ├── Android.mk
+│           ├── biovox2.c
+│           ├── biovox2.h
+│           ├── code.h
+│           ├── main_entry.c
+│           ├── Makefile
+│           ├── tty.c
+│           ├── tty.h
+│           └── X2Main.c
+├── device
+│   └── softwinner
+│       └── astar-y3
+│           └── init.sun8i.rc 删除蓝牙对ttyS1权限的设置部分
+├── frameworks
+│   └── base
+│       ├── Android.mk
+│       ├── core
+│       │   └── java
+│       │       └── android
+│       │           └── os
+│       │               └── IBiovoxService.aidl 指纹模块接口定义
+│       └── services
+│           ├── java
+│           │   └── com
+│           │       └── android
+│           │           └── server
+│           │               ├── BiovoxService.java 指纹模块硬件服务实现，面向APP层的主要实现
+│           │               └── SystemServer.java
+│           └── jni
+│               ├── Android.mk
+│               ├── com_android_server_BiovoxService.cpp 指纹模块硬件服务对hal层的调用
+│               └── onload.cpp
+├── hardware 硬件hal层的实现
+│   └── libhardware
+│       ├── Android.mk
+│       ├── include
+│       │   └── hardware
+│       │       └── fpm
+│       │           └── biovox2.h
+│       └── modules
+│           └── fpm
+│               ├── Android.mk
+│               └── biovox2.c
+├── packages
+│   └── experimental
+│       └── FP_TEST
+│           └── src
+│               └── com
+│                   └── example
+│                       └── fp_test
+│                           └── MainActivity.java APP层测试程序
+├── README.md
+├── system
+│   └── core
+│       └── rootdir
+│           └── ueventd.rc 开启串口ttyS1对普通用户的读写权限
+└── testDev
+    ├── Android.mk
+    └── testDev.c
+
+
+&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;h3&gt;Adnroid书籍&lt;/h3&gt;
@@ -181,7 +457,7 @@
         <category>books</category>
         
         
-        <category>booklist</category>
+        <category>Booklist</category>
         
       </item>
     
@@ -195,7 +471,7 @@
 
 &lt;h3&gt;依赖&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;python 2.7.10
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python 2.7.10
 beautifulsoup4==4.4.1
 lxml==3.4.4（remove）
 requests==2.8.1
@@ -205,18 +481,21 @@ pytesseract
 tesseract-ocr（图像识别）
 wand(imageMagic的绑定)
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3&gt;其他库&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;ImageMagic
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ImageMagic
 media-libs/leptonica
 app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training工具）
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3&gt;OCR训练工具&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;jTessBoxEditor
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jTessBoxEditor
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3&gt;基本使用&lt;/h3&gt;
 
@@ -235,7 +514,7 @@ app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training�
   &lt;li&gt;
     &lt;p&gt;按照设置规则文件抓取目标内容,规则内容如下：&lt;/p&gt;
 
-    &lt;p&gt;&lt;code&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
      # 目标所在的区域的tag和attrs（属性）
      self.zone_tag = &#39;&#39;
      self.zone_attr = {}
@@ -273,7 +552,7 @@ app-text/tesseract-3.04.00-r2::gentoo（需要自行下载源码编译training�
 
 &lt;p&gt;json中的主要数据结构如下所示：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&quot;__classname__&quot;: &quot;Academy&quot;,     表示数据的类型，自动写好的
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;__classname__&quot;: &quot;Academy&quot;,     表示数据的类型，自动写好的
 &quot;__module__&quot;: &quot;models&quot;,         表示类的模块，自动写好的
 &quot;departments&quot;: {                [*] 找到一个学院的所有教师名单的索引页面，并填写进去,这个页面将用来解析employee（在职员工）
                                 格式为名字：网址
@@ -304,18 +583,19 @@ departmentsRule结构暂时不用管，没用到
     &quot;parents&quot;: [],              [*]这个也是重点，目标的父标签，用于缩小解析范围的
     &quot;select&quot;: [],                忽略永不到                              
     &quot;tag_name&quot;: &quot;a&quot;,            [*]目标tag，这个也是重点    
-    &quot;zone_attr&quot;: {&quot;id&quot;:&quot;main&quot;}, [*]目标tag的属性，这个也是重点，如&amp;lt;a class=&quot;link&quot;&amp;gt;中的class属性为link，所以规则为{&quot;class&quot;:&quot;link&quot;}
-    &quot;zone_tag&quot;: &quot;div&quot;           [*]目标区域tag，这个也是重点，（标签，如&amp;lt;table&amp;gt;，&amp;lt;html&amp;gt;，&amp;lt;p&amp;gt;都是标签），zone用于缩小网站目标范围，过滤冗余信息
+    &quot;zone_attr&quot;: {&quot;id&quot;:&quot;main&quot;}, [*]目标tag的属性，这个也是重点，如&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;link&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;中的class属性为link，所以规则为{&quot;class&quot;:&quot;link&quot;}
+    &quot;zone_tag&quot;: &quot;div&quot;           [*]目标区域tag，这个也是重点，（标签，如&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&amp;gt;&lt;/span&gt;，&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;，&lt;span class=&quot;nt&quot;&gt;&amp;lt;p&amp;gt;&lt;/span&gt;都是标签），zone用于缩小网站目标范围，过滤冗余信息
 },
 
 &quot;sname&quot;: &quot;math&quot;,                  学院简称
 &quot;url&quot;: &quot;http://www.math.pku.edu.cn/&quot;,    学院主页，自动解析出来的
 &quot;web_engine&quot;: &quot;urllib2&quot;             一般用urllib2,对于特定的js网站，需要用selen
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;####菜单&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;menu0 = &#39;&#39;&#39;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;menu0 = &#39;&#39;&#39;
 q. 退出
 p. 打印所有大学名单
 1. 抓取211名单到json文件
@@ -325,34 +605,37 @@ p. 打印所有大学名单
 5. 自动猜测并分析出学校的院系导航链接
 6. 抓取院系的名称和主页
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;out目录下如果存在&lt;code&gt;china211.json&lt;/code&gt;则将其大学目录数据导入。如果不存在，可运行&lt;code&gt;python run.py&lt;/code&gt;选择菜单1从hao123抓取。&lt;/li&gt;
-  &lt;li&gt;编辑&lt;code&gt;china985.json&lt;/code&gt;，删除不感兴趣的大学。如仅保留985+理工。&lt;/li&gt;
+  &lt;li&gt;out目录下如果存在&lt;code class=&quot;highlighter-rouge&quot;&gt;china211.json&lt;/code&gt;则将其大学目录数据导入。如果不存在，可运行&lt;code class=&quot;highlighter-rouge&quot;&gt;python run.py&lt;/code&gt;选择菜单1从hao123抓取。&lt;/li&gt;
+  &lt;li&gt;编辑&lt;code class=&quot;highlighter-rouge&quot;&gt;china985.json&lt;/code&gt;，删除不感兴趣的大学。如仅保留985+理工。&lt;/li&gt;
   &lt;li&gt;运行&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;    $ python run.py
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    $ python run.py
     选择6菜单
     选择学校
     选择院系
     开始解析
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;h3&gt;数据结构&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;China211
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;China211
 collges + rule
 academies
 Department
 employees
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;####Parser&lt;/p&gt;
 
 &lt;p&gt;Parser主要有两种，一种是SimpleAParser对于简单的链接+简历url正文的教师队伍介绍页面进行解析。一种是SimpleTableParser对表格式的教师队伍介绍页面进行解析。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;l_parsers = {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;l_parsers = {
     &quot;Parser&quot;: Parser,
     &quot;Hao123_211_Parser&quot;: Hao123_211_Parser,
     &quot;SimpleAParser&quot;: SimpleAParser,
@@ -360,6 +643,7 @@ employees
     &quot;SimpleTableParser&quot;:SimpleTableParser
 }
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;####Models&lt;/p&gt;
 
@@ -376,11 +660,11 @@ employees
 &lt;h3&gt;其他&lt;/h3&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;JSon”陷阱”  &lt;br /&gt;
- 对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现&lt;code&gt;循环解析&lt;/code&gt;的问题。&lt;/li&gt;
-  &lt;li&gt;BeautifulSoup解析器  &lt;br /&gt;
+  &lt;li&gt;JSon”陷阱”&lt;br /&gt;
+ 对于自定义类的json化，需要注意成员必须事先定义好。否则在dump时会出现&lt;code class=&quot;highlighter-rouge&quot;&gt;循环解析&lt;/code&gt;的问题。&lt;/li&gt;
+  &lt;li&gt;BeautifulSoup解析器&lt;br /&gt;
  社区推荐优先使用lxml，主要是速度较快。但是使用时发现有时解析不到目标，改为python自带的”html-parser”。后期将分析原因，或者向社区提交bug&lt;/li&gt;
-  &lt;li&gt;中英文名转换&lt;br /&gt;
+  &lt;li&gt;中英文名转换
  主要是中文转英文名，使用了pypinyin库&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -395,7 +679,7 @@ employees
         <category>Python</category>
         
         
-        <category>python</category>
+        <category>Python</category>
         
       </item>
     
@@ -409,60 +693,69 @@ employees
   &lt;li&gt;sync portage tree(eix-sync is recommended)&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# eix-sync  
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# eix-sync  
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;or&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# emerge --sync
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# emerge --sync
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;upgrade whole system&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# emerge -avuDN --with-bdeps y --keep-going world   
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# emerge -avuDN --with-bdeps y --keep-going world   
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;make configuration file(s) up to date&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# etc-update    
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# etc-update    
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;or&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;# dispatch-conf 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# dispatch-conf 
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;fix static library&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# lafilefixer --justfixit | grep -v skipping
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# lafilefixer --justfixit | grep -v skipping
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;uninstall useless packages&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# emerge -av --depclean 
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# emerge -av --depclean 
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Reverse dynamic library Dependency&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# revdep-rebuild
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# revdep-rebuild
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;ol&gt;
   &lt;li&gt;clean source code of the old packages&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code&gt;# eclean -d distfiles
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# eclean -d distfiles
 &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
         <pubDate>Fri, 25 Dec 2015 16:29:20 +0800</pubDate>
         <link>/2015/12/25/Gentoo-seven-steps-to-upgrade/</link>
@@ -507,19 +800,17 @@ employees
 &lt;h3&gt;sublime_text&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Emmet:前端必备，DSL实现&lt;/li&gt;
-  &lt;li&gt;PlainTasks:配合insert date，每天先想做啥&lt;br /&gt;
+  &lt;li&gt;PlainTasks:配合insert date，每天先想做啥
 &lt;img src=&quot;https://camo.githubusercontent.com/95bbc6d99f00ff199af7daae7d5c65556784f84b/687474703a2f2f636c2e6c792f696d6167652f3171313030513231326f32512f73732e706e67&quot; alt=&quot;图&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;Predawn主题，Seti,Primer,Material&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3&gt;layman&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;% sudo layman -o http://aegypius.github.io/overlay/repositories.xml -f -a aegypius
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;% ls /var/lib/layman 
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;aegypius  haskell  qt gentoo-zh  python
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;sudo layman -o http://aegypius.github.io/overlay/repositories.xml -f -a aegypius
+&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;ls /var/lib/layman 
+aegypius  haskell  qt gentoo-zh  python
+&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
         <pubDate>Wed, 11 Nov 2015 19:11:20 +0800</pubDate>
@@ -565,7 +856,7 @@ employees
         <category>books</category>
         
         
-        <category>booklist</category>
+        <category>Booklist</category>
         
       </item>
     
@@ -583,7 +874,7 @@ employees
         <category>books</category>
         
         
-        <category>booklist</category>
+        <category>Booklist</category>
         
       </item>
     
@@ -597,154 +888,153 @@ employees
 
 &lt;h3&gt;预处理&lt;/h3&gt;
 
-&lt;p&gt;Manacher用一个巧妙的方式，将所有可能的奇数/偶数长度的回文子串都转换成了奇数长度：在每个字符的两边都插入一个特殊的符号。如 &lt;code&gt;xxyy&lt;/code&gt; =&amp;gt; &lt;code&gt;#x#x#y#y#&lt;/code&gt;,&lt;code&gt;yxy&lt;/code&gt; =&amp;gt; &lt;code&gt;#y#x#y#&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Manacher用一个巧妙的方式，将所有可能的奇数/偶数长度的回文子串都转换成了奇数长度：在每个字符的两边都插入一个特殊的符号。如 &lt;code class=&quot;highlighter-rouge&quot;&gt;xxyy&lt;/code&gt; =&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;#x#x#y#y#&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;yxy&lt;/code&gt; =&amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;#y#x#y#&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3&gt;记录数组&lt;/h3&gt;
 
 &lt;p&gt;记录数组P[]用以记录以当前S[i]为中心的回文串向左/右方向上的最大扩展长度。比如S和P的对应关系：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;S # 1 # 2 # 2 # 1 # 2 # 3 # 2 # 1 #
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;S # 1 # 2 # 2 # 1 # 2 # 3 # 2 # 1 #
 P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这里有一个重要的特性：&lt;code&gt;P[i]正好是原字符串S中回文串的总长度&lt;/code&gt;，因此利用这个特性，计算完P[]就可以得知最大的回文串。&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;这里有一个重要的特性：&lt;code class=&quot;highlighter-rouge&quot;&gt;P[i]正好是原字符串S中回文串的总长度&lt;/code&gt;，因此利用这个特性，计算完P[]就可以得知最大的回文串。&lt;/p&gt;
 
 &lt;h3&gt;记录数组计算过程的优化&lt;/h3&gt;
 
-&lt;p&gt;主要思想是：利用回文串的对称性，&lt;code&gt;计算中心点右边子回文串时可以利用左边对称位置已经计算出的值&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;主要思想是：利用回文串的对称性，&lt;code class=&quot;highlighter-rouge&quot;&gt;计算中心点右边子回文串时可以利用左边对称位置已经计算出的值&lt;/code&gt;。&lt;/p&gt;
 
 &lt;p&gt;先增加两个辅助变量id和mx，其中id表示最大回文子串中心的位置，mx则为id+P[id]，也就是最大回文子串的边界。j=2*id-i，即j是i关于id的对称点， 那么会出现一下两种情况：&lt;/p&gt;
 
 &lt;p&gt;(1) 以j为中心的回文串没有超过mx的边界，此时P[i]=P[j]&lt;/p&gt;
 
-&lt;p&gt;(2) 以j为中心的回文串超过mx的边界，此时[i,mx]范围内的串已经比较过了属于P[i]回文串的一部分，可以直接从max开始接着计算P[i]超出mx的那部分回文串。&lt;br /&gt;
+&lt;p&gt;(2) 以j为中心的回文串超过mx的边界，此时[i,mx]范围内的串已经比较过了属于P[i]回文串的一部分，可以直接从max开始接着计算P[i]超出mx的那部分回文串。
 经过上面两步处理，用id、mx配合，可以在每次循环中直接对P[i]的快速赋值，从而在计算以i为中心的回文子串的过程中，不必每次都从1开始比较，减少了比较次数，最终使得求解最长回文子串的长度达到线性O(N)的时间复杂度。&lt;/p&gt;
 
 &lt;h3&gt;实现&lt;/h3&gt;
 
 &lt;p&gt;我的提交代码：&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;iterator&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n4&quot; name=&quot;n4&quot;&gt;4&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#579&quot;&gt;#include&lt;/span&gt; &lt;span style=&quot;color:#B44;font-weight:bold&quot;&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n5&quot; name=&quot;n5&quot;&gt;5&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n6&quot; name=&quot;n6&quot;&gt;6&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;using&lt;/span&gt; &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;namespace&lt;/span&gt; std;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n7&quot; name=&quot;n7&quot;&gt;7&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n8&quot; name=&quot;n8&quot;&gt;8&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;class&lt;/span&gt; &lt;span style=&quot;color:#B06;font-weight:bold&quot;&gt;LongestPalindromeSolution&lt;/span&gt; {
-&lt;span class=&quot;line-numbers&quot;&gt;  &lt;a href=&quot;#n9&quot; name=&quot;n9&quot;&gt;9&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;public&lt;/span&gt;:
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n10&quot; name=&quot;n10&quot;&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; longestPalindrome(&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; sStr){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n11&quot; name=&quot;n11&quot;&gt;11&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; pStr(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;#&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n12&quot; name=&quot;n12&quot;&gt;12&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; res;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n13&quot; name=&quot;n13&quot;&gt;13&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; pLen = convert(sStr,pStr);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n14&quot; name=&quot;n14&quot;&gt;14&lt;/a&gt;&lt;/span&gt;        vector&amp;lt;&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt;&amp;gt; table(pLen);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n15&quot; name=&quot;n15&quot;&gt;15&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n16&quot; name=&quot;n16&quot;&gt;16&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; center = &lt;span style=&quot;color:#00D&quot;&gt;2&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n17&quot; name=&quot;n17&quot;&gt;17&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; scopeL;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n18&quot; name=&quot;n18&quot;&gt;18&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; scopeR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n19&quot; name=&quot;n19&quot;&gt;19&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; offset = &lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n20&quot; name=&quot;n20&quot;&gt;20&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n21&quot; name=&quot;n21&quot;&gt;21&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; tmpL;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n22&quot; name=&quot;n22&quot;&gt;22&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; tmpR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n23&quot; name=&quot;n23&quot;&gt;23&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; tmpRMax;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n24&quot; name=&quot;n24&quot;&gt;24&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; centerMax;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n25&quot; name=&quot;n25&quot;&gt;25&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n26&quot; name=&quot;n26&quot;&gt;26&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; max = &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n27&quot; name=&quot;n27&quot;&gt;27&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; maxPos = &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n28&quot; name=&quot;n28&quot;&gt;28&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n29&quot; name=&quot;n29&quot;&gt;29&lt;/a&gt;&lt;/span&gt;        table[&lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;] = &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n30&quot; name=&quot;n30&quot;&gt;30&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;        table[&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;] = &lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n31&quot; name=&quot;n31&quot;&gt;31&lt;/a&gt;&lt;/span&gt;        maxPos = &lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n32&quot; name=&quot;n32&quot;&gt;32&lt;/a&gt;&lt;/span&gt;        max = &lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n33&quot; name=&quot;n33&quot;&gt;33&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n34&quot; name=&quot;n34&quot;&gt;34&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;while&lt;/span&gt;(center &amp;lt; pLen){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n35&quot; name=&quot;n35&quot;&gt;35&lt;/a&gt;&lt;/span&gt;            scopeL = center -offset;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n36&quot; name=&quot;n36&quot;&gt;36&lt;/a&gt;&lt;/span&gt;            scopeR = center +offset;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n37&quot; name=&quot;n37&quot;&gt;37&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n38&quot; name=&quot;n38&quot;&gt;38&lt;/a&gt;&lt;/span&gt;            &lt;span style=&quot;color:#777&quot;&gt;// pidx&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n39&quot; name=&quot;n39&quot;&gt;39&lt;/a&gt;&lt;/span&gt;            &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;while&lt;/span&gt;(scopeL &amp;gt;= &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt; &amp;amp;&amp;amp; scopeR &amp;lt; pLen){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n40&quot; name=&quot;n40&quot;&gt;40&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;                &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;if&lt;/span&gt;(pStr.at(scopeL) == pStr.at(scopeR)){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n41&quot; name=&quot;n41&quot;&gt;41&lt;/a&gt;&lt;/span&gt;                    scopeL--;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n42&quot; name=&quot;n42&quot;&gt;42&lt;/a&gt;&lt;/span&gt;                    scopeR++;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n43&quot; name=&quot;n43&quot;&gt;43&lt;/a&gt;&lt;/span&gt;                    table[center]++;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n44&quot; name=&quot;n44&quot;&gt;44&lt;/a&gt;&lt;/span&gt;                }&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;else&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n45&quot; name=&quot;n45&quot;&gt;45&lt;/a&gt;&lt;/span&gt;                    &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;break&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n46&quot; name=&quot;n46&quot;&gt;46&lt;/a&gt;&lt;/span&gt;                }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n47&quot; name=&quot;n47&quot;&gt;47&lt;/a&gt;&lt;/span&gt;            }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n48&quot; name=&quot;n48&quot;&gt;48&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n49&quot; name=&quot;n49&quot;&gt;49&lt;/a&gt;&lt;/span&gt;            centerMax = center + table[center];
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n50&quot; name=&quot;n50&quot;&gt;50&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;            &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;if&lt;/span&gt;( table[center] &amp;gt; max ){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n51&quot; name=&quot;n51&quot;&gt;51&lt;/a&gt;&lt;/span&gt;                maxPos = center;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n52&quot; name=&quot;n52&quot;&gt;52&lt;/a&gt;&lt;/span&gt;                max = table[center];
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n53&quot; name=&quot;n53&quot;&gt;53&lt;/a&gt;&lt;/span&gt;            }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n54&quot; name=&quot;n54&quot;&gt;54&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n55&quot; name=&quot;n55&quot;&gt;55&lt;/a&gt;&lt;/span&gt;            &lt;span style=&quot;color:#777&quot;&gt;// pidx+?&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n56&quot; name=&quot;n56&quot;&gt;56&lt;/a&gt;&lt;/span&gt;            &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;for&lt;/span&gt;(tmpR = center+&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;; tmpR &amp;lt; scopeR; ){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n57&quot; name=&quot;n57&quot;&gt;57&lt;/a&gt;&lt;/span&gt;                tmpL = &lt;span style=&quot;color:#00D&quot;&gt;2&lt;/span&gt;*center-tmpR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n58&quot; name=&quot;n58&quot;&gt;58&lt;/a&gt;&lt;/span&gt;                tmpRMax = table[tmpL] + tmpR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n59&quot; name=&quot;n59&quot;&gt;59&lt;/a&gt;&lt;/span&gt;                &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;if&lt;/span&gt;( tmpRMax &amp;lt; centerMax ){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n60&quot; name=&quot;n60&quot;&gt;60&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;                    table[tmpR] = table[tmpL];
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n61&quot; name=&quot;n61&quot;&gt;61&lt;/a&gt;&lt;/span&gt;                    tmpR++;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n62&quot; name=&quot;n62&quot;&gt;62&lt;/a&gt;&lt;/span&gt;                }&lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;else&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n63&quot; name=&quot;n63&quot;&gt;63&lt;/a&gt;&lt;/span&gt;                    table[tmpR] = centerMax - tmpR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n64&quot; name=&quot;n64&quot;&gt;64&lt;/a&gt;&lt;/span&gt;                    offset = table[tmpR]+&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n65&quot; name=&quot;n65&quot;&gt;65&lt;/a&gt;&lt;/span&gt;                    &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;break&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n66&quot; name=&quot;n66&quot;&gt;66&lt;/a&gt;&lt;/span&gt;                }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n67&quot; name=&quot;n67&quot;&gt;67&lt;/a&gt;&lt;/span&gt;            }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n68&quot; name=&quot;n68&quot;&gt;68&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n69&quot; name=&quot;n69&quot;&gt;69&lt;/a&gt;&lt;/span&gt;            &lt;span style=&quot;color:#777&quot;&gt;// reset pIdx&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n70&quot; name=&quot;n70&quot;&gt;70&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;            center = tmpR;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n71&quot; name=&quot;n71&quot;&gt;71&lt;/a&gt;&lt;/span&gt;            printVector(table);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n72&quot; name=&quot;n72&quot;&gt;72&lt;/a&gt;&lt;/span&gt;        }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n73&quot; name=&quot;n73&quot;&gt;73&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n74&quot; name=&quot;n74&quot;&gt;74&lt;/a&gt;&lt;/span&gt;        res = sStr.substr(((maxPos-table[maxPos])&amp;gt;&amp;gt;&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;),table[maxPos]);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n75&quot; name=&quot;n75&quot;&gt;75&lt;/a&gt;&lt;/span&gt;        cout &amp;lt;&amp;lt; maxPos &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;:&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &amp;lt;&amp;lt; table[maxPos] &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;:&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &amp;lt;&amp;lt; res &amp;lt;&amp;lt; endl;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n76&quot; name=&quot;n76&quot;&gt;76&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; res;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n77&quot; name=&quot;n77&quot;&gt;77&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n78&quot; name=&quot;n78&quot;&gt;78&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n79&quot; name=&quot;n79&quot;&gt;79&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; convert(&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; &amp;amp;src, &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt;&amp;amp; dst){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n80&quot; name=&quot;n80&quot;&gt;80&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; index;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n81&quot; name=&quot;n81&quot;&gt;81&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; len = src.size();
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n82&quot; name=&quot;n82&quot;&gt;82&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n83&quot; name=&quot;n83&quot;&gt;83&lt;/a&gt;&lt;/span&gt;        cout &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;src:#-&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n84&quot; name=&quot;n84&quot;&gt;84&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;for&lt;/span&gt;(index = &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;; index &amp;lt; len; index++){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n85&quot; name=&quot;n85&quot;&gt;85&lt;/a&gt;&lt;/span&gt;            dst.push_back(src.at(index));
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n86&quot; name=&quot;n86&quot;&gt;86&lt;/a&gt;&lt;/span&gt;            cout &amp;lt;&amp;lt; src.at(index) &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n87&quot; name=&quot;n87&quot;&gt;87&lt;/a&gt;&lt;/span&gt;            dst.append(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;#&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n88&quot; name=&quot;n88&quot;&gt;88&lt;/a&gt;&lt;/span&gt;            cout &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;#&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;  &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n89&quot; name=&quot;n89&quot;&gt;89&lt;/a&gt;&lt;/span&gt;        }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;strong&gt;&lt;a href=&quot;#n90&quot; name=&quot;n90&quot;&gt;90&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;        cout &amp;lt;&amp;lt; endl;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n91&quot; name=&quot;n91&quot;&gt;91&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; dst.size();
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n92&quot; name=&quot;n92&quot;&gt;92&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n93&quot; name=&quot;n93&quot;&gt;93&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;private&lt;/span&gt;:
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n94&quot; name=&quot;n94&quot;&gt;94&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#088;font-weight:bold&quot;&gt;void&lt;/span&gt; printVector(vector&amp;lt;&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt;&amp;gt; &amp;amp;vec){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n95&quot; name=&quot;n95&quot;&gt;95&lt;/a&gt;&lt;/span&gt;        cout &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;res:&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n96&quot; name=&quot;n96&quot;&gt;96&lt;/a&gt;&lt;/span&gt;        &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;for&lt;/span&gt;(&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;unsigned&lt;/span&gt; &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; i = &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;; i &amp;lt; vec.size()-&lt;span style=&quot;color:#00D&quot;&gt;1&lt;/span&gt;; i++){
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n97&quot; name=&quot;n97&quot;&gt;97&lt;/a&gt;&lt;/span&gt;            cout &amp;lt;&amp;lt; vec.at(i) &amp;lt;&amp;lt; &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt; &lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n98&quot; name=&quot;n98&quot;&gt;98&lt;/a&gt;&lt;/span&gt;        }
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n99&quot; name=&quot;n99&quot;&gt;99&lt;/a&gt;&lt;/span&gt;        cout &amp;lt;&amp;lt; endl;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n100&quot; name=&quot;n100&quot;&gt;100&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;        cout.flush();
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n101&quot; name=&quot;n101&quot;&gt;101&lt;/a&gt;&lt;/span&gt;    }
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n102&quot; name=&quot;n102&quot;&gt;102&lt;/a&gt;&lt;/span&gt;};
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n103&quot; name=&quot;n103&quot;&gt;103&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n104&quot; name=&quot;n104&quot;&gt;104&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;int&lt;/span&gt; main()
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n105&quot; name=&quot;n105&quot;&gt;105&lt;/a&gt;&lt;/span&gt;{
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n106&quot; name=&quot;n106&quot;&gt;106&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; dst(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;#&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n107&quot; name=&quot;n107&quot;&gt;107&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; src(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;1232454232414211&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n108&quot; name=&quot;n108&quot;&gt;108&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; src2(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;12784487sad22s2f&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n109&quot; name=&quot;n109&quot;&gt;109&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; src3(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;a&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n110&quot; name=&quot;n110&quot;&gt;110&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;    &lt;span style=&quot;color:#0a8;font-weight:bold&quot;&gt;string&lt;/span&gt; src4(&lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;b2&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;);
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n111&quot; name=&quot;n111&quot;&gt;111&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n112&quot; name=&quot;n112&quot;&gt;112&lt;/a&gt;&lt;/span&gt;    LongestPalindromeSolution solu;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n113&quot; name=&quot;n113&quot;&gt;113&lt;/a&gt;&lt;/span&gt;    cout &amp;lt;&amp;lt; solu.longestPalindrome(src3) &amp;lt;&amp;lt; endl;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n114&quot; name=&quot;n114&quot;&gt;114&lt;/a&gt;&lt;/span&gt;    cout &amp;lt;&amp;lt; solu.longestPalindrome(src4) &amp;lt;&amp;lt; endl;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n115&quot; name=&quot;n115&quot;&gt;115&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n116&quot; name=&quot;n116&quot;&gt;116&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#777&quot;&gt;//cout &amp;lt;&amp;lt; solu.convert(src,dst) &amp;lt;&amp;lt; &amp;quot;: &amp;quot; &amp;lt;&amp;lt; dst;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n117&quot; name=&quot;n117&quot;&gt;117&lt;/a&gt;&lt;/span&gt;    &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;return&lt;/span&gt; &lt;span style=&quot;color:#00D&quot;&gt;0&lt;/span&gt;;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n118&quot; name=&quot;n118&quot;&gt;118&lt;/a&gt;&lt;/span&gt;}
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n119&quot; name=&quot;n119&quot;&gt;119&lt;/a&gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;string&amp;gt;
+#include &amp;lt;iterator&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+#include &amp;lt;vector&amp;gt;
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LongestPalindromeSolution&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;longestPalindrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pLen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pLen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scopeL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;offset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpRMax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centerMax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pLen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scopeL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;offset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;offset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+            &lt;span class=&quot;c1&quot;&gt;// pidx
+&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scopeL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pLen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scopeL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)){&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;scopeL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;n&quot;&gt;centerMax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;max&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;c1&quot;&gt;// pidx+?
+&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scopeR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;tmpL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;center&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;tmpRMax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpRMax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centerMax&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centerMax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;offset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;c1&quot;&gt;// reset pIdx
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;center&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmpR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;printVector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;substr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;maxPos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;src:#-&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;dst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;dst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printVector&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;res:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;at&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1232454232414211&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;12784487sad22s2f&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;src4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;LongestPalindromeSolution&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;longestPalindrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;longestPalindrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//cout &amp;lt;&amp;lt; solu.convert(src,dst) &amp;lt;&amp;lt; &quot;: &quot; &amp;lt;&amp;lt; dst;
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
 &lt;p&gt;最终测试运行耗时8ms，运行效率超过了72%的答案哈哈。&lt;/p&gt;
@@ -763,73 +1053,6 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
         <category>leetcode</category>
         
         <category>算法</category>
-        
-      </item>
-    
-      <item>
-        <title>[Rails] Ruby &amp; Rails常用技巧集锦</title>
-        <description>&lt;h3&gt;Rails使用环境变量&lt;/h3&gt;
-
-&lt;p&gt;Many applications require configuration of settings such as email account credentials or API keys for external services. You can pass local configuration settings to an application using environment variables.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Gmail Example&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Consider an application that uses Gmail to send email messages. Access to Gmail requires a username and password for access to your Gmail account. In your Rails application, you will need to configure these credentials in the file config/environments/production.rb. A portion of the file might look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;config.action_mailer.smtp_settings = {
-  address: &quot;smtp.gmail.com&quot;,
-  port: 587,
-  domain: &quot;example.com&quot;,
-  authentication: &quot;plain&quot;,
-  enable_starttls_auto: true,
-  user_name: ENV[&quot;GMAIL_USERNAME&quot;],
-  password: ENV[&quot;GMAIL_PASSWORD&quot;]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You could “hardcode” your Gmail username and password into the file but that would expose it to everyone who has access to your git repository. Instead use the Ruby variable &lt;code&gt;ENV[&quot;GMAIL_USERNAME&quot;]&lt;/code&gt; to obtain an environment variable. The variable can be used anywhere in a Rails application. Ruby will replace ENV[“GMAIL_USERNAME”] with an environment variable.&lt;/p&gt;
-
-&lt;p&gt;Let’s consider how to set local environment variables.&lt;/p&gt;
-
-&lt;h3&gt;Ruby提取切片&lt;/h3&gt;
-
-&lt;p&gt;You can get the result you want using collect! or map! to modify the array in-place:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-coderay&quot;&gt;&lt;div class=&quot;CodeRay&quot;&gt;
-  &lt;div class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n1&quot; name=&quot;n1&quot;&gt;1&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;# 1. collect&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n2&quot; name=&quot;n2&quot;&gt;2&lt;/a&gt;&lt;/span&gt;x = &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;%w(&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hello there world&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n3&quot; name=&quot;n3&quot;&gt;3&lt;/a&gt;&lt;/span&gt;x.collect! { |element|
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n4&quot; name=&quot;n4&quot;&gt;4&lt;/a&gt;&lt;/span&gt;  (element == &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hello&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;) ? &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hi&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; : element
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n5&quot; name=&quot;n5&quot;&gt;5&lt;/a&gt;&lt;/span&gt;}
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n6&quot; name=&quot;n6&quot;&gt;6&lt;/a&gt;&lt;/span&gt;puts x
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n7&quot; name=&quot;n7&quot;&gt;7&lt;/a&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n8&quot; name=&quot;n8&quot;&gt;8&lt;/a&gt;&lt;/span&gt;&lt;span style=&quot;color:#777&quot;&gt;# 2. map&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt; &lt;a href=&quot;#n9&quot; name=&quot;n9&quot;&gt;9&lt;/a&gt;&lt;/span&gt;x = &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;%w(&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hello there world&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;strong&gt;&lt;a href=&quot;#n10&quot; name=&quot;n10&quot;&gt;10&lt;/a&gt;&lt;/strong&gt;&lt;/span&gt;x.map! { |element|
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n11&quot; name=&quot;n11&quot;&gt;11&lt;/a&gt;&lt;/span&gt;  &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;if&lt;/span&gt;(element == &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hello&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt;)
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n12&quot; name=&quot;n12&quot;&gt;12&lt;/a&gt;&lt;/span&gt;      &lt;span style=&quot;background-color:hsla(0,100%,50%,0.05)&quot;&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span style=&quot;color:#D20&quot;&gt;hi&lt;/span&gt;&lt;span style=&quot;color:#710&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/span&gt; &lt;span style=&quot;color:#777&quot;&gt;# change &amp;quot;hello&amp;quot; to &amp;quot;hi&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n13&quot; name=&quot;n13&quot;&gt;13&lt;/a&gt;&lt;/span&gt;  &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;else&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n14&quot; name=&quot;n14&quot;&gt;14&lt;/a&gt;&lt;/span&gt;      element
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n15&quot; name=&quot;n15&quot;&gt;15&lt;/a&gt;&lt;/span&gt;  &lt;span style=&quot;color:#080;font-weight:bold&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n16&quot; name=&quot;n16&quot;&gt;16&lt;/a&gt;&lt;/span&gt;}
-&lt;span class=&quot;line-numbers&quot;&gt;&lt;a href=&quot;#n17&quot; name=&quot;n17&quot;&gt;17&lt;/a&gt;&lt;/span&gt;puts x &lt;span style=&quot;color:#777&quot;&gt;# output: [hi there world]&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;At each iteration, the element is replaced into the array by the value returned by the block.&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 27 Aug 2015 18:35:20 +0800</pubDate>
-        <link>/2015/08/27/Rails-Tips/</link>
-        <guid isPermaLink="true">/2015/08/27/Rails-Tips/</guid>
-        
-        <category>Shell</category>
-        
-        <category>Ruby</category>
-        
-        
-        <category>ruby</category>
         
       </item>
     
