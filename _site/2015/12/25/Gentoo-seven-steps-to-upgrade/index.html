@@ -103,45 +103,37 @@
 <div class="highlighter-rouge"><pre class="highlight"><code># eix-sync  
 </code></pre>
 </div>
-
-<p>or</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># emerge --sync
-</code></pre>
-</div>
+<p>or
+<code class="highlighter-rouge">
+# emerge --sync
+</code></p>
 
 <ol>
-  <li>upgrade whole system</li>
-</ol>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># emerge -avuDN --with-bdeps y --keep-going world   
-</code></pre>
-</div>
-
-<ol>
-  <li>make configuration file(s) up to date</li>
-</ol>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># etc-update    
-</code></pre>
-</div>
-
-<p>or</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># dispatch-conf 
-</code></pre>
-</div>
-
-<ol>
-  <li>fix static library</li>
-</ol>
-
-<div class="highlighter-rouge"><pre class="highlight"><code># lafilefixer --justfixit | grep -v skipping
-</code></pre>
-</div>
-
-<ol>
-  <li>uninstall useless packages</li>
+  <li>
+    <p>upgrade whole system
+<code class="highlighter-rouge">
+# emerge -avuDN --with-bdeps y --keep-going world   
+</code></p>
+  </li>
+  <li>
+    <p>make configuration file(s) up to date
+<code class="highlighter-rouge">
+# etc-update    
+</code>
+or
+<code class="highlighter-rouge">
+# dispatch-conf 
+</code></p>
+  </li>
+  <li>
+    <p>fix static library
+<code class="highlighter-rouge">
+# lafilefixer --justfixit | grep -v skipping
+</code></p>
+  </li>
+  <li>
+    <p>uninstall useless packages</p>
+  </li>
 </ol>
 
 <div class="highlighter-rouge"><pre class="highlight"><code># emerge -av --depclean 

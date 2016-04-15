@@ -12,7 +12,7 @@ tags:
 ---
 
 最近用python实现了一个小型爬虫，爬个博客没问题。
-github地址： [https://github.com/yixiaoyang/pyScripts/tree/master/uSpider](https://github.com/yixiaoyang/pyScripts/tree/master/uSpider)
+github地址： [https://github.com/yixiaoyang/pyScripts/tree/master/spider/uSpider](https://github.com/yixiaoyang/pyScripts/tree/master/spider/uSpider)
 
 爬虫主要由三部分构成：
  
