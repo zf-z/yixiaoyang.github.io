@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -137,7 +139,7 @@ Device Tree在ARM社区的推行来源于Linus对长期以来内核代码里ARM�
 
 <p><strong>原platform驱动模型下的实现</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/* In the foo_platform_data.h file:*/</span>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="cm">/* In the foo_platform_data.h file:*/</span>
 <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="p">{</span>
     <span class="n">u32</span> <span class="n">bar</span><span class="p">;</span>
 <span class="p">};</span>
@@ -186,7 +188,7 @@ Device Tree在ARM社区的推行来源于Linus对长期以来内核代码里ARM�
 <p>This method no longer works; in a DT based system what you have to do come up with device driver bindings, which contain the configuration the driver requires.
 You must add a device node in board.dts under the on-chip-peripherals(OCP) device node:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="p">{</span>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">foo</span> <span class="p">{</span>
     <span class="n">compatible</span> <span class="o">=</span> <span class="s">"corp,foo"</span><span class="p">;</span>
     <span class="n">bar</span> <span class="o">=</span> <span class="o">&lt;</span><span class="mi">5</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="p">};</span>
@@ -195,7 +197,7 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 
 <p>No change in the board file (generic anyway) needs to be made, but the device driver must be updated to support the DT method, with something similar to the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span>
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="k">static</span> <span class="k">struct</span> <span class="n">foo_platform_data</span> <span class="o">*</span>
 <span class="nf">foo_parse_dt</span><span class="p">(</span><span class="k">struct</span> <span class="n">platform_device</span> <span class="o">*</span><span class="n">pdev</span><span class="p">)</span>
 <span class="p">{</span>
    <span class="k">struct</span> <span class="n">device_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">pdev</span><span class="o">-&gt;</span><span class="n">dev</span><span class="p">.</span><span class="n">of_node</span><span class="p">;</span>
@@ -248,9 +250,9 @@ You must add a device node in board.dts under the on-chip-peripherals(OCP) devic
 <p>####参考
 1. https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO
 2. https://github.com/beagleboard/kernel/tree/3.8-rt
-3. http://elinux.org/BeagleBone_and_the_3.8_Kernel
+3. http://elinux.org/BeagleBone_and_the_3.8<em>Kernel
 4. http://devicetree.org/mediawiki/index.php?title=Device_Tree_Usage
-5. http://valentfx.com/wiki/index.php?title=LOGI_-_BBB_GPMC_Bus-_HW</p>
+5. http://valentfx.com/wiki/index.php?title=LOGI</em>-_BBB_GPMC_Bus-_HW</p>
 
 
   </article>

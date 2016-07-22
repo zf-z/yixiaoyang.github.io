@@ -79,6 +79,20 @@ shell是Unix系统的一个特色，fuck点和hack点并存：
 
 **A2:** 先确定需要恢复的文件要恢复成哪一个历史版本(commit)，假设那个版本号是： `commit_id`，那么`git checkout [commit_id] – <path_to_file>` 就可以恢复
 
+2. git commit生成patch
+
+可以使用如下两种方式:
+`git format-patch -1 commit` ：生成的patch有统计信息和git的版本信息
+`git diff commit_previous commit > mypatch.diff`：最原始的diff信息，对于这里的commit_previous(commit之前一个commit），可以使用“commit^”来表示，这样比较方便，不易出错。
+
+3.如何将已有git项目迁移到自己的服务器
+
+可以通过`remote set-url`重设服务器地址，然后将origin push到自己的服务器。
+```
+git remote add origin/master git@gaoee.net:GaoeeDev/jsoncpp.git
+git remote set-url origin git@gaoee.net:GaoeeDev/jsoncpp.git
+git push origin master
+```
 
 ### Diff & Patch
 

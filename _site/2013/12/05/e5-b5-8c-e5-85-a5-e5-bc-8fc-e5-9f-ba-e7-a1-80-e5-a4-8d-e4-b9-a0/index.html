@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>嵌入式C基础复习</title>
+  <meta name="description" content="为对付公司内部的工程师能力考核，复习一下c，类似面试题目，你懂得。以下程序均通过简单的单元测试。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2013/12/05/e5-b5-8c-e5-85-a5-e5-bc-8fc-e5-9f-ba-e7-a1-80-e5-a4-8d-e4-b9-a0/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/bak/2015-12-25-Gentoo-seven-steps-to-upgrade/">Gentoo seven steps to upgrade</a>
+          
+        
+          
+          <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/AboutMe/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message/">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">嵌入式C基础复习</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+  <span class="post-meta">2013-12-05 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <p>为对付公司内部的工程师能力考核，复习一下c，类似面试题目，你懂得。以下程序均通过简单的单元测试。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define TEST(func,cnt,test) do{ 
+        printf("-------------Test %d %-16sn",cnt++,func); 
+        test(); 
+    }while(0)
+
+/**
+ * 1.判断是否是2的幂
+ */
+void is2Power_test() {
+    int idx = 0;
+    int arr[16] = {0};
+
+    srand(time());
+    for(idx = 0; idx &lt; sizeof(arr)/sizeof(arr[0]); idx++) {
+        arr[idx] = rand()%64;
+        printf("%-6d %-4sn",arr[idx], (arr[idx]-1)&amp;(arr[idx])?" ":"*" );
+    }
+}
+
+/**
+ * 2.swap 宏
+ */
+/// SWAP(a,a)会出问题,SWAP2(a,a) ok
+#define SWAP(x,y)   do{ 
+        y = x + y;      
+        x = y - x;      
+        y = y - x;      
+    }while(0)
+#define SWAP2(x,y)   do{ 
+        if(x == y) break; 
+        y = x + y;      
+        x = y - x;      
+        y = y - x;      
+    }while(0)
+void swap_test() {
+    int x = 10;
+    int y = 32;
+    printf("orgi x=%d, y=%dn",x,y);
+    SWAP(x,y);
+    printf("swap x=%d, y=%dn",x,y);
+    SWAP(x,y);
+    printf("swap x=%d, y=%dn",x,y);
+}
+
+/**
+ * 3.浮点数比较
+ */
+int floadCmp(float f1, float f2, double precision) {
+    if(f1 &gt; f2+precision) {
+        /* f1&gt;f2 */
+        return 1;
+    } else if(f1 &lt; f2-precision) {
+        /* f1&lt;f2*/
+        return -1;
+    } else {
+        return 0;
+    }
+}
+void floadCmp_test() {
+    printf("%.8f, %.8f, %2dn", 0.123456789,0.123456788, floadCmp(0.123456789,0.123456788, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123455123,0.123455224, floadCmp(0.123455123,0.123455224, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456123,0.123456123, floadCmp(0.123456123,0.123456123, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456123,0.123456123, floadCmp(0.123455123,0.123456123, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.12345,0.12340, floadCmp(0.12345,0.12340, 0.000001));
+    printf("%.8f, %.8f, %2dn", 0.123456,0.123457, floadCmp(0.123456,0.123457, 0.000001));
+}
+
+/**
+ * 4.指针、内存和数组
+ */
+void mem_size_show(char a[32]) {
+    printf("mem-size %dn",sizeof(a));
+}
+
+char* mem_get_str() {
+    /// 指向常量区内存
+    char*p = "hello world";
+    return p;
+}
+
+char* mem_get_str2() {
+    /// 动态分配内存
+    char p[] = "hello world";
+    return p;
+}
+
+char mem_free_without_null() {
+    char* m = malloc(32);
+    strcpy(m, "hello mem");
+    printf("m = %sn",m);
+    free(m);
+    /* m = NULL */
+    /// 野生指针你好
+    /** if(m) {
+        strcpy(m, "hello NULL");
+        printf("m = %sn",m);
+    }*/
+}
+
+void mem_test() {
+    int idx = 0;
+    char a[32] = {8};
+    mem_size_show(a);
+
+    for(idx = 0; idx &lt; 8; idx++) {
+        /** Tips: 内存指向常量区，每次返回的地址和值都相同 */
+        printf("  test mem1 %08x, val %sn",  mem_get_str(),mem_get_str());
+        /** Tips: 内存指向堆栈区，每次返回的地址和内容不可预测，乱码 */
+        printf("  test mem2 %08x, val %sn",  mem_get_str2(),mem_get_str2());
+    }
+
+    mem_free_without_null();
+}
+
+/**
+ * 4.大小端
+ */
+void endien_test() {
+    typedef union _t_union {
+        char ch;
+        int integer;
+    } t_union;
+    t_union test_union;
+    test_union.ch = 1;
+    printf("%s endienn", test_union.integer?"Little":"Big");
+}
+/**
+ * 算法1：输出一个给定整数的所有和的组合如5,输出1,4; 2,3，相加的数不能重复
+ * 思路 ：分治，递归
+ */
+
+/**
+ * 算法2：在10亿个浮点数中选出其中最大的10000个
+ * 思路 ：外部排序
+ */
+
+/**
+ * 算法3：给定两个数组和他们的大小，求交集将其放在一个给定的内存区。
+ * 思路 ：倒排，搜索引擎
+ */
+
+/**
+ * 算法4：快排
+ * 思路 ：切割，递归，分治
+ */
+void qsort_array_print(unsigned int *array, unsigned int size) {
+    unsigned int idx = 0;
+    for(idx = 0; idx &lt; size; idx++) {
+        printf("%d ",array[idx]);
+        if(idx%10 == 9) {
+            printf("n");
+        }
+    }
+    printf("n");
+}
+
+static int qsort_array_split_sort(unsigned int *array, unsigned int start, unsigned int end) {
+    int qmid = start-1;
+    unsigned int qend = start;
+    int x = array[end];
+
+    /// left half &lt; x, right half &gt;= x
+    while(qend &lt; end) {
+        if(array[qend] &lt; x) {
+            SWAP2(array[qend], array[qmid+1]);
+            qmid++;
+        }
+        qend++;
+    }
+
+    SWAP2(array[qmid+1], array[end]);
+    qmid = (qmid == start-1) ? qmid+1 : qmid;
+
+    return qmid;
+}
+
+static void qsort_array_do(unsigned int *array, unsigned int start, unsigned int end) {
+    int split = start;
+    if(end - start &lt;= 1) {
+        return ;
+    }
+    split = qsort_array_split_sort(array, start, end);
+
+    /// 全部相等
+    if(split &lt; 0 || split &gt;= end) {
+        return ;
+    }
+
+    qsort_array_do(array, start, split);
+    qsort_array_do(array, split+1, end);
+}
+
+void qsort_unit_test(int* array, unsigned int size) {
+    static cnt = 0;
+    printf("----------test array %d init----------n",cnt);
+    qsort_array_print(array, size);
+    printf("----------test array %d gogo----------n",cnt);
+    qsort_array_do(array, 0, size-1);
+    qsort_array_print(array, size);
+    printf("----------test array %d over----------n",cnt);
+    cnt++;
+}
+
+void qsort_test() {
+    int array1[] = {0,56,8,12,95,7,2,99,50,45,105,1088};
+    int array2[] = {1,2,3,4,5,6,7,8,9,10};
+    int array3[] = {10,9,8,7,6,5,4,3,2,1};
+    int array4[] = {8,8,8,8,8,8,8,8,8,8};
+    int array5[128];
+    int idx = 0;
+
+    qsort_unit_test(array1,sizeof(array1)/sizeof(array1[0]));
+    qsort_unit_test(array2,sizeof(array2)/sizeof(array2[0]));
+    qsort_unit_test(array3,sizeof(array3)/sizeof(array3[0]));
+    qsort_unit_test(array4,sizeof(array4)/sizeof(array4[0]));
+
+    srand(time());
+    do {
+        array5[idx] = rand()%1024;
+    } while(idx++ &lt; 128);
+    qsort_unit_test(array5,sizeof(array5)/sizeof(array5[0]));
+
+    return 0;
+}
+
+/**
+ * 杂项
+ */
+void more_test() {
+    char c = 128;
+    unsigned short s = 10;
+    /// Tips:char 128即0x100,最高位为负数,所以输出int时是-128
+    printf("char(128)=%d(%%d -128)n",c);
+    printf("~short(10)=%u, %08x, %d(%%u 4294967285)n",~s, ~s, ~s);
+}
+
+void string_arr_test() {
+    int idx = 0;
+    char arr[4][32] = {"ifconfig","eth1","inet","208.254.254.254"};
+    for(idx = 0; idx &lt; 4; idx++) {
+        printf("idx:%d %sn", idx, arr[idx]);
+    }
+}
+/**
+ * Entry
+ */
+int main() {
+    int idx = 0;
+    TEST("is2Power_test",   idx, is2Power_test);
+    TEST("swap_test",       idx, swap_test);
+    TEST("floadCmp_test",   idx, floadCmp_test);
+    TEST("more_test",       idx, more_test);
+    TEST("qsort_test",      idx, qsort_test);
+    TEST("mem_test",        idx, mem_test);
+    TEST("endien_test",     idx, endien_test);
+
+    return 0;
+}
+</code></pre>
+</div>
+
+
+  </article>
+
+</div>
+
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>

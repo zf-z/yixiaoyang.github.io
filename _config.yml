@@ -15,15 +15,23 @@ author:
 markdown: kramdown
 kramdown:
    input: GFM
-   use_coderay: true
    extensions:
       - autolink
       - footnotes
       - smart
    auto_ids: false
+   use syntax_highlighter: coderay
+   enable_coderay: false
+   coderay:
+      coderay_wrap:              div
+      coderay_line_numbers:      inline
+      coderay_line_number_start: 1
+      coderay_tab_width:         4
+      coderay_bold_every:        10
+      coderay_css:               style
 #markdown: redcarpet
-#redcarpet: 
-#       extensions: ["fenced_code_blocks", "tables", "highlight", "with_toc_data", "strikethrough", "with_toc_data", "autolink"]
+#redcarpet:
+#   extensions: ["fenced_code_blocks", "tables", "highlight", "with_toc_data", "strikethrough", "with_toc_data", "autolink"]
 
 
 permalink: /:year/:month/:day/:title/

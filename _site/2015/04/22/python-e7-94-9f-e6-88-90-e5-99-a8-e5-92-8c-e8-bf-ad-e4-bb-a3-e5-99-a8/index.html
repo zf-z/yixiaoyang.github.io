@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -108,7 +110,7 @@
 1. <code class="highlighter-rouge">next()</code> 返回容器的下一个项目， 遍历完成，对象抛出StopIteration异常
 2. <code class="highlighter-rouge">__iter__</code> 返回容器本身</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="s">'''
@@ -142,7 +144,7 @@ Process finished with exit code 0
 
 <p><strong>生成器就是一种迭代器</strong>。 生成器使得需要返回一系列元素的函数所需的代码更加简单、高效。基于<code class="highlighter-rouge">yield</code>指令，可以暂停一个函数并返回中间结果，该函数将保存执行环境并可以在必要时恢复。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">'''
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="s">'''
 D:</span><span class="err">\</span><span class="s">Python27</span><span class="err">\</span><span class="s">python.exe C:/Users/xiaoyang/PyProject/Parser58/iterator.py
 Traceback (most recent call last):
     File "C:/Users/xiaoyang/PyProject/Parser58/iterator.py", line 42, in &lt;module&gt;
@@ -176,7 +178,7 @@ Process finished with exit code 1
 <p>生成器函数在每次暂停执行时，函数体内的所有变量都将被封存(freeze)在生成器中，并将在恢复执行时还原，并且类似于闭包，即使是同一个生成器函数返回的生成器，封存的变量也是互相独立的。
 我们的小例子中并没有用到变量，所以这里另外定义一个生成器来展示这个特点：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">'''
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="s">'''
 output:
 [2] test generator
 [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
@@ -239,7 +241,7 @@ send是除next外另一个恢复生成器的方法。Python 2.5中，yield语句
 
 <p>生成器表达式也称作genexp，使用类似列表推倒的方式减少了序列代码的总量。它和常规生成器一样每次输出一个元素，所以整个序列和推导列表一样不会提前进行计算。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 
 <span class="s">'''
@@ -268,7 +270,7 @@ Process finished with exit code 0
 
 <p>定义</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="c"># islice('ABCDEFG', 2) --&gt; A B</span>
     <span class="c"># islice('ABCDEFG', 2, 4) --&gt; C D</span>
     <span class="c"># islice('ABCDEFG', 2, None) --&gt; C D E F G</span>
@@ -288,7 +290,7 @@ Process finished with exit code 0
 <p>往返式迭代器，迭代器将消费其处理的序列，但不会往回处理。
 Return n independent iterators from a single iterable. Equivalent to:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">tee</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
     <span class="n">deques</span> <span class="o">=</span> <span class="p">[</span><span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
     <span class="k">def</span> <span class="nf">gen</span><span class="p">(</span><span class="n">mydeque</span><span class="p">):</span>
@@ -310,7 +312,7 @@ This itertool may require significant auxiliary storage (depending on how much t
 <p>类似Unix的uniq命令，可以对来自一个迭代器的重复元素进行分组，只要这些元素是相邻的，还可以提供一个函数执行元素的比较。否则将采用标识符进行比较。
 应用：<code class="highlighter-rouge">RLE编码</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 <span class="s">'''
 compress result:
@@ -350,7 +352,7 @@ heeello worldddddddddddddddddddddddddddddddd
 
 <p>定义：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">"python"</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">groupby</span><span class="p">:</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">"python"</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">groupby</span><span class="p">:</span>
     <span class="c"># [k for k, g in groupby('AAAABBBCCDAABBB')] --&gt; A B C D A B</span>
     <span class="c"># [list(g) for k, g in groupby('AAAABBBCCD')] --&gt; AAAA BBB CC D</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -380,7 +382,7 @@ heeello worldddddddddddddddddddddddddddddddd
 <p>参考文档：<a href="https://docs.python.org/3/library/asyncio-task.html">Tasks and coroutines</a>
 协同程序是可以挂起、恢复，并且有多个进入点的函数。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>
 <span class="c">#!/usr/bin/env python</span>
 <span class="c"># -*- coding: utf-8 -*-</span>
 <span class="s">'''
@@ -404,13 +406,13 @@ heeello worldddddddddddddddddddddddddddddddd
         <span class="k">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
         <span class="k">if</span><span class="p">(</span><span class="n">loop</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">:</span>
             <span class="k">break</span>
-        <span class="k">yield</span> <span class="kn">from</span> <span class="nn">asyncio.sleep</span><span class="err">(1)
+        <span class="k">yield</span> <span class="k">from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-</span><span class="nn">loop</span> <span class="err">=</span> <span class="nn">asyncio.get_event_loop</span><span class="err">()
-</span><span class="nn">loop.run_until_complete</span><span class="err">(</span><span class="nn">display_date</span><span class="err">(</span><span class="nn">loop</span><span class="err">))
-</span><span class="nn">loop.close</span><span class="err">()
-</span>    <span class="err">
-</span></code></pre>
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">display_date</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+</code></pre>
 </div>
 
 <h3>Tips</h3>

@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -98,7 +100,7 @@
 Ubuntu 12.04 LTS Intel® Core™ i3-3220 CPU @ 3.30GHz × 4
 $ uname -a
 Linux xiaoyang-desktop 3.2.0-57-generic #87-Ubuntu SMP Tue Nov 12 21:35:10 UTC 2013 x86_64 x86_64 x86_64 
-GNU/Linux
+GNU/Linux&lt;/code&gt;
 </pre>
 
 <h3>Buildroot for Beaglebone</h3>
@@ -122,7 +124,7 @@ system and eases the cross-compilation process.</p>
 <h4>Config and Build</h4>
 <p>Use the beaglebone_defconfig</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>make beaglebone_defconfig
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>make beaglebone_defconfig
 <span class="gp">$ </span>makemenuconfig
 </code></pre>
 </div>
@@ -193,7 +195,7 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 <h3>Make the bootable MicroSD Card for Beaglebone</h3>
 <p>First Check your disk and find SD card, <strong>/dev/sdb</strong> for example:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo emerge dosfstools
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sudo emerge dosfstools
 <span class="gp">$ </span>sudo fdisk -l
 <span class="gp">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdb
 </code></pre>
@@ -201,7 +203,7 @@ make O=am335x CROSS_COMPILE=arm-linux-gnueabihf- ARCH=arm am335x_evm
 
 <p>Then unmount the disk, and flash /dev/sdb</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span><span class="nb">export </span><span class="nv">DISK</span><span class="o">=</span>/dev/sdc
 <span class="gp">$ </span>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span><span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="nv">bs</span><span class="o">=</span>1M <span class="nv">count</span><span class="o">=</span>16
 <span class="gp">$ </span>sudo sfdisk --in-order --Linux --unit M <span class="k">${</span><span class="nv">DISK</span><span class="k">}</span> <span class="sh">&lt;&lt;-__EOF__
 1,48,0xE,*
@@ -240,7 +242,7 @@ __EOF__
 <h3>USB-Serial Driver for Beaglebone on ubuntu12.04LTS</h3>
 <p>为了使用beaglebone上的usb串口，需要简单的写一个驱动挂载规则，下面的文件是从angstrome中拷贝过来的，sudo执行后usb连接beaglebone开发板即可看到/dev/ttyUSB0串口。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="sh">&lt;&lt;EOF
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>cat &gt; /etc/udev/rules.d/73-beaglebone.rules <span class="sh">&lt;&lt;EOF
 ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_interface", \
         ATTRS{idVendor}=="0403", ATTRS{idProduct}=="a6d0", \
         DRIVER=="", RUN+="/sbin/modprobe -b ftdi_sio"

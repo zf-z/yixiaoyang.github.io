@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -114,7 +116,7 @@
 
 <p>AM335X LCD PLL的时钟源的选取不是唯一的，如上图所示，<code class="highlighter-rouge">LCD_CLK</code>并不一定要使用<code class="highlighter-rouge">Display PLL</code> 的CLKOUT，还可以使用<code class="highlighter-rouge">CORE_CLKOUTM5</code>或者<code class="highlighter-rouge">PER_CLKOUTM2</code>（固定192MHZ）作为时钟。此版内核使用的是系统时钟（CLKOUT）分频。当然，linux内核对时钟和Framebuffer的设置有了很方便的配置框架，很多硬件寄存器细节不需要自己编写了。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">setup_pin_mux</span><span class="p">(</span><span class="n">lcdc_pin_mux</span><span class="p">);</span> 
+<div class="language-c highlighter-rouge"><pre class="highlight"><code><span class="n">setup_pin_mux</span><span class="p">(</span><span class="n">lcdc_pin_mux</span><span class="p">);</span> 
 
 <span class="k">if</span> <span class="p">(</span><span class="n">conf_disp_pll</span><span class="p">(</span><span class="mi">500000000</span><span class="p">))</span> <span class="p">{</span>
   <span class="n">pr_info</span><span class="p">(</span><span class="s">"Failed configure display PLL, not attempting to"</span>

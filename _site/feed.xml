@@ -5,9 +5,282 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 15 Apr 2016 10:42:56 +0800</pubDate>
-    <lastBuildDate>Fri, 15 Apr 2016 10:42:56 +0800</lastBuildDate>
-    <generator>Jekyll v3.1.2</generator>
+    <pubDate>Fri, 22 Jul 2016 17:54:26 +0000</pubDate>
+    <lastBuildDate>Fri, 22 Jul 2016 17:54:26 +0000</lastBuildDate>
+    <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>普通最小二乘法的原理理解</title>
+        <description>&lt;h2&gt;普通最小二乘法的原理理解&lt;/h2&gt;
+
+&lt;h3&gt;目标&lt;/h3&gt;
+
+&lt;p&gt;线性最小二乘拟合(linear least square fit)常用于数据拟合，以寻找数据之间的关系方程。&lt;/p&gt;
+
+&lt;p&gt;我们遇到的实际问题是在校准ADC仪器时，读取到两个输入变量：&lt;br /&gt;
+- ADC测量值序列x：即ADC的原始读值。&lt;br /&gt;
+- 万用表测量值序列y:在认为万用表是准确的情况下用来校准ADC数据，分析出ADC测量之和真实值之间的关系方程，这样就可以用ADC值计算出真实的测量值。&lt;/p&gt;
+
+&lt;p&gt;硬件上实现理论上x,y之间是简单的线性方程模型：y=ax+b，校准过程即求算能够近似预测y值的斜率a和截距b的过程。&lt;/p&gt;
+
+&lt;h3&gt;最小二乘法原理&lt;/h3&gt;
+
+&lt;p&gt;对于数据(xi, yi)，定义 &lt;code class=&quot;highlighter-rouge&quot;&gt;残差&lt;/code&gt;为:
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex? \varepsilon_i=(a x_{i} +b) - y_{i}&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;残差的出现是数据测量误差引起，也可能是外部干扰引起，如果错误地估计了(a,b)则实际计算出来的残差将比较大，所以残差越小，似然函数方程越能真实地反映真实测量值。通用方法是使用最小化残差的平方和（即&lt;img src=&quot;http://latex.codecogs.com/svg.latex?\min_{a,b}  \sum  \varepsilon_i^{2}&quot; /&gt;）来估计方程的准确性，其原因有：
+1. 平方不在乎正负，符合我们的目标（使似然函数偏差尽可能小）
+2. 平方给了残差一个加权方法，残差大的权重越大，但是这也使拟合方程更容易受你和方程影响。
+3. 在残差服从均值0，方差 &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\sigma^2&quot; /&gt; 的正态分布，且残差与x相互独立的假设下，最小二乘法估计结果与极大似然估计量（maximum likelihood estimator，使得似然函数最大化的估计）相同。
+  &amp;gt; 确定拟合的标准应该被重视，并小心选择，较大误差的测量值应被赋予较小的权。并建立如下规则：被选择的参数，应该使算出的函数曲线与观测值之差的平方和最小。&lt;br /&gt;
+4. 最小二乘法计算相对简单&lt;/p&gt;
+
+&lt;h3&gt;最小二乘法计算过程&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;计算序列x和y的均值&lt;img src=&quot;http://latex.codecogs.com/svg.latex?\overline x,\overline y&quot; /&gt;，x的方差Var(x)，x和y的协方差Cov(x,y)（covariance，衡量两个变量变化方向是否一致的统计量）。&lt;/li&gt;
+  &lt;li&gt;估计斜率，这是关键的一步，
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex?a= \frac{Cov(x,y)}{Var(x)} =  \frac { \sum_{i=1}^{n} (\overline x-x_i)(\overline y-y_i)} { \sum_{i=1}^n (x_i-\overline x)^2}&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;估计截距
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex?b= \overline y - a \overline x&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;最小二乘法和证明&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;设拟合去曲线为&lt;img src=&quot;http://latex.codecogs.com/svg.latex?y=ax+b&quot; /&gt; ，残差 &lt;img src=&quot;http://latex.codecogs.com/svg.latex?d_i=(a x_{i} +b) - y_{i}&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;当 &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\sum_{i=1}^{n} d_i^2&quot; /&gt; 最小时，拟合度最高&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;令 &lt;img src=&quot;http://latex.codecogs.com/svg.latex?D=\sum_{i=1}^{n} d_i^2=\sum_{i=1}^{n}(y_i-ax_i-b)^2&quot; /&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;就函数D对a求偏导有
+  &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_a} = \sum_{i=1}^{n} 2ax_i^2-2{x_i}{y_i}+2x_i{b}&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;就函数D对b求偏导有
+  &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_b} = \sum_{i=1}^{n} 2b - 2y_i + 2a{x_i}&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;令 &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_a} = \frac{\partial_D}{\partial_b} = 0, n\overline{x}= \sum_{i=1}^n x_i,  n\overline{y}= sum_{i=1}^n y_i&quot; /&gt;, 对满足偏导为0的参数对(a,b)，其描述的意义是y=ax+b此时完全拟合x,y序列。&lt;/p&gt;
+
+&lt;p&gt;则对于a的偏导为0：
+    &lt;img src=&quot;http://latex.codecogs.com/svg.latex?\sum_{i=1}^{n} ax_i^2-{x_i}{y_i}+x_i{b} = 0&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;进一步推导得到&lt;code class=&quot;highlighter-rouge&quot;&gt;方程1&lt;/code&gt;：
+    &lt;img src=&quot;http://latex.codecogs.com/svg.latex?a\sum_{i=1}^{n} x_i^2-\sum_{i=1}^{n}{x_i}{y_i}+nb \overline{x} = 0&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;则对于b的偏导为0，得到&lt;code class=&quot;highlighter-rouge&quot;&gt;方程2&lt;/code&gt;，即截距求算公式：
+  &lt;img src=&quot;http://latex.codecogs.com/svg.latex?b-\overline{y}+a\overline{x}=0&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;将&lt;code class=&quot;highlighter-rouge&quot;&gt;方程2&lt;/code&gt;代入&lt;code class=&quot;highlighter-rouge&quot;&gt;方程1&lt;/code&gt;得到:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://latex.codecogs.com/svg.latex?a=\frac{ \sum_{i=1}^n{x_i}{y_i} - n \overline{x} \overline{y} }{ \sum_{i=1}^n x_i^2 - n\overline x^2 }&quot; /&gt;
+  &lt;img src=&quot;http://latex.codecogs.com/svg.latex?=\frac{ \sum_{i=1}^n x_i(y_i- \overline{y})} { \sum_{i=1}^n {x_i(x_i-\overline x)} }&quot; /&gt;
+  &lt;img src=&quot;http://latex.codecogs.com/svg.latex?=\frac { \sum_{i=1}^{n} (x_i-\overline x)(y_i-\overline y)} { \sum_{i=1}^n (x-\overline x)^2}&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;证明完成&lt;/p&gt;
+
+&lt;h3&gt;最小二乘法和矩阵&lt;/h3&gt;
+&lt;p&gt;典型的一次线性方程y = ax + b，写成矩阵式为：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://latex.codecogs.com/svg.latex? min_{a,b} = \| \begin{pmatrix}   x_1 &amp;amp; 1\\   x_2 &amp;amp; 1\\   \vdots  &amp;amp; 1 \\   x_n &amp;amp; 1  \end{pmatrix} \begin{pmatrix}   a\\   b  \end{pmatrix} - \begin{pmatrix}   y_1 \\   y_2 \\   \vdots \\   y_n  \end{pmatrix} \|{_2} = min_a \|Xa-Y\|{_2} &quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;即y离差平方和最小时，似然方程的拟合度越高。&lt;/p&gt;
+
+&lt;h3&gt;回到实际应用问题&lt;/h3&gt;
+
+&lt;h4&gt;原始数据&lt;/h4&gt;
+&lt;p&gt;对DC部分测量电路的ADC作直流电流测量校准时，采集到ADC测量电流值X和万用表（串口远程获取）测量值序列Y，对其30次一组的取样作平均，得到如下一组数据：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;% python regulation_mean.py
+lenx leny:210 210
+ADC测量值X(mA) 万用表测量值Y(mA)
+0.0           76.7190062633
+500.0         536.877983833
+1000.0        986.017599667
+1500.0        1436.35997433
+2000.0        1889.30300333
+2500.0        2344.180729
+3000.0        2800.14835633
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;#### 最小二乘法计算&lt;/p&gt;
+
+&lt;p&gt;按照最小二乘法的算法：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;% python main0.py
+lenADC lenMM:7 7
+avg:1500.000000 1438.515236
+a=0.90629850  b=79.06749209
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;即拟合方程为 &lt;code class=&quot;highlighter-rouge&quot;&gt;y = 0.9062985 * x + 79.06749209&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;python代码：&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# -*- coding: utf-8 *-*&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 手动最小二乘法对校准系数进行拟合，得到校准方程&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;np&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DATA_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./regulate2.txt&quot;&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;data_import&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;genfromtxt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;datafile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DATA_FILE&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data_import&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datafile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lenADC lenMM:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;average&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;avgMm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;average&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;avg:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgMm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;covXY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;varX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# 计算协方差&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;covXY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covXY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgMm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# 计算X方差&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;varX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;varX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;# 计算y=ax+b&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covXY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;varX&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avgMm&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;avgAdc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.8&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f  b=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%0.8&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4&gt;numpy拟合计算&lt;/h4&gt;
+
+&lt;p&gt;使用numpy拟合的结果如下：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;% python main1.py
+lenADC lenMM:7 7
+[  0.9062985   79.06749209]
+adc测量值         方程值          万用表值        残差          残差偏差千分比
+0.00000000       79.06749209     76.71900626     2.34848582      0.00000000
+500.00000000     532.21674009    536.87798383    -4.66124374     -9.32248748
+1000.00000000    985.36598810    986.01759967    -0.65161157     -0.65161157
+1500.00000000    1438.51523611   1436.35997433   2.15526178      1.43684119
+2000.00000000    1891.66448411   1889.30300333   2.36148078      1.18074039
+2500.00000000    2344.81373212   2344.18072900   0.63300312      0.25320125
+3000.00000000    2797.96298013   2800.14835633   -2.18537620     -0.72845873
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;即拟合方程为 &lt;code class=&quot;highlighter-rouge&quot;&gt;y = 0.9062985 * x + 79.06749209&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;python代码：&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# -*- coding: utf-8 *-*&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 对校准系数进行拟合，得到校准方程&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;plot&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DATA_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./regulate2.txt&quot;&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;data_import&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;genfromtxt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delimiter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;datafile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DATA_FILE&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data_import&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datafile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lenADC lenMM:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;d&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;adc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mm&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;autoscale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scatter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;autoscale&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;degs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deg&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;degs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;polyfit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fnd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;poly1d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;linspace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fnd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-12&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-12&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-12&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-12&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-12&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;adc测量值&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;方程值&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;万用表值&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;残差&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;残差偏差千分比&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;calc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;diffPercent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;diffPercent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%-.08&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.08&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.08&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.08&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s&quot;&gt; &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%.08&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;f&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;adcVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;calc&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mmVals&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;diffPercent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2&gt;相关定义&lt;/h2&gt;
+
+&lt;h3&gt;协方差&lt;/h3&gt;
+&lt;p&gt;在概率论和统计学中，协方差(covariance)可以用来衡量相关变量变化趋势是否相同。而方差是协方差的一种特殊情况，即当两个变量是相同的情况。假设我们有x和y序列，他们与其均值离差分别为：&lt;br /&gt;
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex?dx_i=x_i-\overline{x}&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex?dy_i=y_i-\overline{y}&quot; /&gt;&lt;br /&gt;
+如果x，y变化方向一致，则他们与均值的离差应该有相同的正负号，如果讲二者的离差相乘，则当二者符号相同时，乘积为正数，所以这些乘积之和可以用来衡量两个序列变化是否一一致。因此，协方差的计算公式为：
+&lt;img src=&quot;http://latex.codecogs.com/svg.latex?Cov(x,y)= \frac{1}{n} \sum_{i=1}^n dx_i dy_i &quot; /&gt;&lt;/p&gt;
+
+&lt;h3&gt;偏导&lt;/h3&gt;
+&lt;p&gt;在一元函数中，我们已经知道导数就是函数的变化率。对于二元函数我们同样要研究它的“变化率”。然而，由于自变量多了一个，情况就要复杂的多。在xOy平面内，当动点由P(x0,y0)沿不同方向变化时，函数f(x,y)的变化快慢一般说来是不同的，因此就需要研究f(x,y)在(x0,y0)点处沿不同方向的变化率（来自xx百科）&lt;/p&gt;
+
+&lt;p&gt;几何意义：曲面上的每一点都有无穷多条切线，描述这种函数的导数相当困难。偏导数就是选择其中一条切线，并求出它的斜率。通常，最感兴趣的是垂直于y轴（平行于xOz平面）的切线，以及垂直于x轴（平行于yOz平面）的切线。一种求出这些切线的好办法是把其他变量视为常数。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 22 Jul 2016 17:00:00 +0000</pubDate>
+        <link>/2016/07/22/Ordinary_least_squares/</link>
+        <guid isPermaLink="true">/2016/07/22/Ordinary_least_squares/</guid>
+        
+        
+        <category>数据分析</category>
+        
+        <category>机器学习</category>
+        
+      </item>
+    
+      <item>
+        <title>2016年06月书单</title>
+        <description>&lt;h3&gt;机器学习系统设计&lt;/h3&gt;
+&lt;p&gt;英文名&lt;code class=&quot;highlighter-rouge&quot;&gt;Building Machine Learning System with Python&lt;/code&gt;，偏向实践的书，里面的例子都比较好上手好懂&lt;/p&gt;
+
+&lt;h3&gt;机器学习&lt;/h3&gt;
+&lt;p&gt;理论稍多，翻译差评，内容尚可，涉及机器学习的知识方方面面分类都比较清晰。&lt;/p&gt;
+</description>
+        <pubDate>Fri, 10 Jun 2016 12:27:00 +0000</pubDate>
+        <link>/2016/06/10/books/</link>
+        <guid isPermaLink="true">/2016/06/10/books/</guid>
+        
+        <category>books</category>
+        
+        
+        <category>Booklist</category>
+        
+      </item>
     
       <item>
         <title>[Qt] 关于Qt编译error: undefined reference to `vtable for xxx错误</title>
@@ -18,9 +291,9 @@
 &lt;p&gt;In case you are using Qt Creator and when you compiled your project for the first time, you did not put “Q_OBJECT” in your header file, then the moc cpp file for your (qthread) cpp file was not generated. In this case, simply running “Clean All” and “Rebuild All” after putting “Q_OBJECT” in your header file will not work. You need to go to your build folder to manually delete the Qt generated “Makefile” and run “Rebuild All” or “Build All” again, your error message will be gone.&lt;/p&gt;
 
 </description>
-        <pubDate>Sun, 06 Mar 2016 02:03:25 +0800</pubDate>
-        <link>/2016/03/06/Qt-Undefine-VTable-error/</link>
-        <guid isPermaLink="true">/2016/03/06/Qt-Undefine-VTable-error/</guid>
+        <pubDate>Sat, 05 Mar 2016 18:03:25 +0000</pubDate>
+        <link>/2016/03/05/Qt-Undefine-VTable-error/</link>
+        <guid isPermaLink="true">/2016/03/05/Qt-Undefine-VTable-error/</guid>
         
         <category>c++</category>
         
@@ -70,7 +343,7 @@
 
 &lt;p&gt;之前写个的一个指纹模块驱动代码结构，可以看出相对于传统的linux驱动，android驱动涉及到android架构中的HAL层、framwork（jni、service、接口层），然后才是app进行硬件服务接口调用。&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 hal_jni_biovox2/                                       
 ├── cp.sh
 ├── development
@@ -147,7 +420,7 @@ hal_jni_biovox2/
   &lt;li&gt;《Android内核揭秘》&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Tue, 02 Feb 2016 19:21:25 +0800</pubDate>
+        <pubDate>Tue, 02 Feb 2016 11:21:25 +0000</pubDate>
         <link>/2016/02/02/Embedded-Android/</link>
         <guid isPermaLink="true">/2016/02/02/Embedded-Android/</guid>
         
@@ -172,9 +445,9 @@ hal_jni_biovox2/
 
 &lt;p&gt;高斯滤波：高斯滤波是一种线性平滑滤波，适用于消除高斯噪声，广泛应用于图像处理的减噪过程。通俗的讲，高斯滤波就是对整幅图像进行加权平均的过程，每一个像素点的值，都由其本身和邻域内的其他像素值经过加权平均后得到。高斯滤波的具体操作是：用一个模板（或称卷积、掩模）扫描图像中的每一个像素，用模板确定的邻域内像素的加权平均灰度值去替代模板中心像素点的值。在图像处理中，高斯滤波一般有两种实现方式，一是用离散化窗口滑窗卷积，另一种通过傅里叶变换。最常见的就是第一种滑窗实现，只有当离散化的窗口非常大，用滑窗计算量非常大（即使用可分离滤波器的实现）的情况下，可能会考虑基于傅里叶变化的实现方法。&lt;/p&gt;
 </description>
-        <pubDate>Mon, 18 Jan 2016 01:27:00 +0800</pubDate>
-        <link>/2016/01/18/books/</link>
-        <guid isPermaLink="true">/2016/01/18/books/</guid>
+        <pubDate>Sun, 17 Jan 2016 17:27:00 +0000</pubDate>
+        <link>/2016/01/17/books/</link>
+        <guid isPermaLink="true">/2016/01/17/books/</guid>
         
         <category>books</category>
         
@@ -394,7 +667,7 @@ employees
 
 &lt;p&gt;github地址：https://github.com/yixiaoyang/EduParser/&lt;/p&gt;
 </description>
-        <pubDate>Wed, 06 Jan 2016 16:29:20 +0800</pubDate>
+        <pubDate>Wed, 06 Jan 2016 08:29:20 +0000</pubDate>
         <link>/2016/01/06/eduparser/</link>
         <guid isPermaLink="true">/2016/01/06/eduparser/</guid>
         
@@ -442,13 +715,13 @@ employees
 
 &lt;h3&gt;layman&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;sudo layman -o http://aegypius.github.io/overlay/repositories.xml -f -a aegypius
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;sudo layman -o http://aegypius.github.io/overlay/repositories.xml -f -a aegypius
 &lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;ls /var/lib/layman 
 aegypius  haskell  qt gentoo-zh  python
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Wed, 11 Nov 2015 19:11:20 +0800</pubDate>
+        <pubDate>Wed, 11 Nov 2015 11:11:20 +0000</pubDate>
         <link>/2015/11/11/linux-shell-tools/</link>
         <guid isPermaLink="true">/2015/11/11/linux-shell-tools/</guid>
         
@@ -484,7 +757,7 @@ aegypius  haskell  qt gentoo-zh  python
 
 &lt;p&gt;一本从方方面面介绍Android的书籍，面向嵌入式工程师，提供从底层驱动、中间层HAL、服务层和组件层到APP层的深度纵向解析，可以作为从Linux原生转Android开发的读必会入门书。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 21 Oct 2015 20:10:05 +0800</pubDate>
+        <pubDate>Wed, 21 Oct 2015 12:10:05 +0000</pubDate>
         <link>/2015/10/21/books/</link>
         <guid isPermaLink="true">/2015/10/21/books/</guid>
         
@@ -502,7 +775,7 @@ aegypius  haskell  qt gentoo-zh  python
 &lt;p&gt;http://guides.rubyonrails.org/security.html&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 28 Sep 2015 20:10:05 +0800</pubDate>
+        <pubDate>Mon, 28 Sep 2015 12:10:05 +0000</pubDate>
         <link>/2015/09/28/books/</link>
         <guid isPermaLink="true">/2015/09/28/books/</guid>
         
@@ -550,7 +823,7 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
 
 &lt;p&gt;我的提交代码：&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;string&amp;gt;
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;string&amp;gt;
 #include &amp;lt;iterator&amp;gt;
 #include &amp;lt;iostream&amp;gt;
 #include &amp;lt;vector&amp;gt;
@@ -674,9 +947,9 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
 
 &lt;p&gt;最终测试运行耗时8ms，运行效率超过了72%的答案哈哈。&lt;/p&gt;
 </description>
-        <pubDate>Wed, 16 Sep 2015 00:40:05 +0800</pubDate>
-        <link>/2015/09/16/Leetcode-Longest-Palindromic-Substring/</link>
-        <guid isPermaLink="true">/2015/09/16/Leetcode-Longest-Palindromic-Substring/</guid>
+        <pubDate>Tue, 15 Sep 2015 16:40:05 +0000</pubDate>
+        <link>/2015/09/15/Leetcode-Longest-Palindromic-Substring/</link>
+        <guid isPermaLink="true">/2015/09/15/Leetcode-Longest-Palindromic-Substring/</guid>
         
         <category>leetcode</category>
         
@@ -688,284 +961,6 @@ P 0 1 0 1 4 1 0 3 0 1 0 5 0 1 0 1 0
         <category>leetcode</category>
         
         <category>算法</category>
-        
-      </item>
-    
-      <item>
-        <title>[Rails] Ruby &amp; Rails常用技巧集锦</title>
-        <description>&lt;h3&gt;Rails使用环境变量&lt;/h3&gt;
-
-&lt;p&gt;Many applications require configuration of settings such as email account credentials or API keys for external services. You can pass local configuration settings to an application using environment variables.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Gmail Example&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Consider an application that uses Gmail to send email messages. Access to Gmail requires a username and password for access to your Gmail account. In your Rails application, you will need to configure these credentials in the file config/environments/production.rb. A portion of the file might look like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;config.action_mailer.smtp_settings = {
-  address: &quot;smtp.gmail.com&quot;,
-  port: 587,
-  domain: &quot;example.com&quot;,
-  authentication: &quot;plain&quot;,
-  enable_starttls_auto: true,
-  user_name: ENV[&quot;GMAIL_USERNAME&quot;],
-  password: ENV[&quot;GMAIL_PASSWORD&quot;]
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You could “hardcode” your Gmail username and password into the file but that would expose it to everyone who has access to your git repository. Instead use the Ruby variable &lt;code class=&quot;highlighter-rouge&quot;&gt;ENV[&quot;GMAIL_USERNAME&quot;]&lt;/code&gt; to obtain an environment variable. The variable can be used anywhere in a Rails application. Ruby will replace ENV[“GMAIL_USERNAME”] with an environment variable.&lt;/p&gt;
-
-&lt;p&gt;Let’s consider how to set local environment variables.&lt;/p&gt;
-
-&lt;h3&gt;Ruby提取切片&lt;/h3&gt;
-
-&lt;p&gt;You can get the result you want using collect! or map! to modify the array in-place:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 1. collect&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%w(hello there world)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;collect!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hi&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;# 2. map&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;sx&quot;&gt;%w(hello there world)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;element&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;s2&quot;&gt;&quot;hi&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# change &quot;hello&quot; to &quot;hi&quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;element&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# output: [hi there world]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;At each iteration, the element is replaced into the array by the value returned by the block.&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 27 Aug 2015 18:35:20 +0800</pubDate>
-        <link>/2015/08/27/Rails-Tips/</link>
-        <guid isPermaLink="true">/2015/08/27/Rails-Tips/</guid>
-        
-        <category>Shell</category>
-        
-        <category>Ruby</category>
-        
-        
-        <category>Ruby</category>
-        
-      </item>
-    
-      <item>
-        <title>[CPP] Boost库概要</title>
-        <description>&lt;p&gt;Boost和STL库是C++的血肉，C++的语言特性本身则是筋骨。现在在用的Qt库本身大而全，用起来方便，最重要的是跨平台，嵌入式用户交互方面的不二选择。&lt;/p&gt;
-
-&lt;p&gt;目前使用Boost库的需求不是很充分，因为Qt在大部分应用上都可以胜任。不过Boost以效率和稳定颇有声誉，作为C++标准化新特性的重要参考，可略作了解。&lt;/p&gt;
-
-&lt;h3&gt;文本处理&lt;/h3&gt;
-
-&lt;h4&gt;Boost.Regex&lt;/h4&gt;
-
-&lt;p&gt;解决大量匹配问题的正则表达式库。不必羡慕perl、awk和sed。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Spirit &amp;amp; Boost.Tokenizer&lt;/h4&gt;
-
-&lt;p&gt;Spirit是一个语法生成框架，可以使用其构建命令分析器以及简单的语言处理器。想想Bison和flex就明白了。&lt;/p&gt;
-
-&lt;h4&gt;Boost.String_algo&lt;/h4&gt;
-
-&lt;p&gt;可以视为String类的扩展算法工具集。提供大小写转换、空格清除、分割、查找替换等扩展算法工具。&lt;/p&gt;
-
-&lt;p&gt;###容器和算法&lt;/p&gt;
-
-&lt;p&gt;一些比较经典常用的数据结构和算法的实现。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Array&lt;/h4&gt;
-
-&lt;p&gt;有了Vector这玩意儿然并卵。除了基本的数组功能，提供类型安全而不牺牲性能，=_=，窃以为C++很多安全性的封装如智能指针，让用它的愚蠢程序员更加愚蠢，让用它的聪明程序员变得愚蠢。&lt;/p&gt;
-
-&lt;h4&gt;Boost.MultiArray&lt;/h4&gt;
-
-&lt;p&gt;多维容器。做矩阵计算的一定会喜欢。Vector二维以上数组声明都觉得麻烦。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Graph&lt;/h4&gt;
-
-&lt;p&gt;泛型图算法工具集，包含邻接链表、邻接矩阵和边列表。提供Dijsktra最短路径算法，K最小生成树算法、拓扑逻辑排序等经典算法。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Multi-index&lt;/h4&gt;
-
-&lt;p&gt;为底层容器提供多个索引，一个底层的容器可以有不同的排序方法和不同的访问语义。当std::set 和 std::map 不够用时,就可以用Boost.Multi-index,通常是在需要为查找元素而维护多个索引时。
-不太了解，做稍微复杂的数据索引时应该会用到。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Range&lt;/h4&gt;
-
-&lt;p&gt;用过Python/Ruby的Rang后秒懂。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Tunple&lt;/h4&gt;
-
-&lt;p&gt;STL的pair不支持n-tunples，一般用自定义struct或者class实现，这个类模板支持直接声明和使用,如函数返回类型或参数,并提供一个泛型的方法来访问tuple的元素。&lt;/p&gt;
-
-&lt;h4&gt;Boost.Variant&lt;/h4&gt;
-
-&lt;p&gt;泛型类型的操作和转换。Qt中有类似的Qvariant。&lt;/p&gt;
-
-&lt;p&gt;###函数对象&lt;/p&gt;
-
-&lt;h4&gt;Boost.bind&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;bind简介&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这个是重头戏，bind、函数对象、signal/slot等特性经常会用。
-我觉得bind最重要的作用是：&lt;code class=&quot;highlighter-rouge&quot;&gt;改变参数的顺序&lt;/code&gt;，这使得我们可以少创建一些类似功能参数不同或者参数冗余的函数对象，减少代码量，使行为局部化。虽然标准库已经提供了一些可用的工具,如 bind1st 和 bind2nd, 但是这不够用，bind由此产生。&lt;/p&gt;
-
-&lt;p&gt;Bind是对标准库的绑定器 bind1st和bind2nd的泛化,返回值是一个函数对象。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;bind范例&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;iostream&amp;gt;
-#include &amp;lt;string&amp;gt;
-#include &amp;lt;vector&amp;gt;
-#include &amp;lt;algorithm&amp;gt;
-&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &quot;boost/bind.hpp&quot;
-&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;break_it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_broken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; is &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;working nominally&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;terribly broken&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bind_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;status 1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;status 2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;status 3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;push_back&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;status 4&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;break_it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;break_it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#if 0
-    // 这个循环正确地完成了任务,但它是冗长、低效的(由于要多次调用statuses.end()),并且不象使用标准库算
-    // 法for_each那样清楚地表明意图。为了用for_each 来替换这个循环,我们需要用一个适配器来对vector元素
-    // 调用成员函数report。这时,由于元素是以值的方式保存的,我们需要的是适配器mem_fun_ref
-    for (std::vector&amp;lt;status&amp;gt;::iterator it=statuses.begin();
-        it!=statuses.end();++it) {
-        it-&amp;gt;report();
-    }
-#else&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// for_each(str.begin(), str.end(), (mem_fun(&amp;amp;funtest::doSth),this));
-&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 把str中的每个元素作为参数送到第三个参数（是个函数的指针）所指向的函数。
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;for_each&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;statuses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;boost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#endif
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;bind_test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上面&lt;code class=&quot;highlighter-rouge&quot;&gt;std::for_each( statuses.begin(),statuses.end(),boost::bind(&amp;amp;status::report,_1));&lt;/code&gt;中的那一个占位符让人很迷惑。
-实际上，类成员函数的绑定不同于匿名函数的绑定，成员函数必须有一个父对象或者指针，才能经过this进行调用，而匿名函数可以直接进行()操作,
-因此bind需要“牺牲”一位占位符要求用户提供类的实例、指针或者引用，用过对象作为第一个参数来调用成员函数。
-即&lt;code class=&quot;highlighter-rouge&quot;&gt;bind(&amp;amp;x::func,x,_1,_2...)&lt;/code&gt;最多只能绑定8位参数。&lt;/p&gt;
-
-&lt;p&gt;假设我们有一个类&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ClassA&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;以下三种绑定都是成立的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ClassA obj, &amp;amp;obj_ref=obj;
-ClassA *obj_ptr = &amp;amp;obj
-
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj, _1, 20)(10) &amp;lt;&amp;lt; endl;
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj_ref, _1, _2)(10,20) &amp;lt;&amp;lt; endl;
-cout &amp;lt;&amp;lt; bind(&amp;amp;obj::f, obj_ptr, _1, _2)(10,20) &amp;lt;&amp;lt; endl;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;bind的内部实现&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;bind的实现主要依靠：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对()运算符的重载&lt;/li&gt;
-  &lt;li&gt;空间内置占位符变量&lt;/li&gt;
-  &lt;li&gt;函数对象的调用&lt;/li&gt;
-  &lt;li&gt;泛型支持&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;看了实现解析并没有说的那么&lt;code class=&quot;highlighter-rouge&quot;&gt;黑魔法&lt;/code&gt;。要说黑魔法，lamba才算是。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;其他&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;boost::bind() 返回的函数对象会保存要绑定的实参. 而且总是拷贝一份以值的方式保存..&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4&gt;Boost.signals2&lt;/h4&gt;
-
-&lt;p&gt;signals2基于signals实现的一个线程安全信号/插槽模型。主要功能类似Qt的信号/插槽模型，对于事件处理系统相当有用。&lt;/p&gt;
-
-&lt;h3&gt;并发处理&lt;/h3&gt;
-
-&lt;h4&gt;thread&lt;/h4&gt;
-
-&lt;p&gt;支持最广泛的windows和posix线程，所以跨平台能力比较好，包含创建销毁等待、线程（组）管理、同步等基本功能，多线程封装的库虽然能够简化编程过程，但是写好并发程序其实是另外一回事。就像一个拿好刀的厨师不一定能做出一手好菜一样。&lt;/p&gt;
-
-&lt;h4&gt;asio&lt;/h4&gt;
-
-&lt;p&gt;asio主要关注网络通信。使用大量的类封装了socket api，提供了一些cpp接口的网络编程接口，支持tcp/icmp/udp等常用协议。总而言之，使用asio可以大量简化、可靠的socket同步/异步编程类，比用C从最小服务器/客户端程序写起要好很多，我们不需要一遍遍造毫无创意的轮子。&lt;/p&gt;
-
-&lt;h3&gt;其他&lt;/h3&gt;
-
-&lt;p&gt;有个支持python的扩展库–写过python的人应该直到python可以用cpp扩展，两者的区别就一个是在cpp程序里调用python程序，一个是使用cpp实现/重写自定义python组件并调用。&lt;/p&gt;
-
-&lt;h3&gt;关于boost和Cpp&lt;/h3&gt;
-
-&lt;p&gt;Boost库给总是给我一种古怪的感觉。cpp是一门糟糕的设计语言，但是在很多系统层应用场合，无法使用更加高级的解释性语言的情况下，cpp比c更有生产力而不输效率。&lt;/p&gt;
-
-&lt;p&gt;参考书籍:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Boost documents&lt;/li&gt;
-  &lt;li&gt;Boost程序库完全开发指南&lt;/li&gt;
-  &lt;li&gt;Beyond the C++ Standard Library&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Mon, 03 Aug 2015 03:30:25 +0800</pubDate>
-        <link>/2015/08/03/boost-learning/</link>
-        <guid isPermaLink="true">/2015/08/03/boost-learning/</guid>
-        
-        <category>c++</category>
-        
-        <category>boost</category>
-        
-        
-        <category>cpp</category>
         
       </item>
     

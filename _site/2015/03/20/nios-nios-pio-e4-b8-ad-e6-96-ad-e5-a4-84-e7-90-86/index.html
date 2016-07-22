@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -129,7 +131,7 @@
   </li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kt">void</span> <span class="nf">init_pio</span><span class="p">()</span>
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code>    <span class="kt">void</span> <span class="nf">init_pio</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="cm">/* Enable all interrupts */</span>
         <span class="n">IOWR_ALTERA_AVALON_PIO_IRQ_MASK</span><span class="p">(</span><span class="n">PARALLEL_INPUT_IRQ_16_BASE</span><span class="p">,</span>
@@ -202,7 +204,7 @@
 
 <p>将pio irq接到pio output上，控制pio output的高低即可模拟外部中断信号的输入。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+<div class="language-cpp highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
     <span class="p">...</span>
         <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
             <span class="n">test_trigger_pio</span><span class="p">(</span><span class="n">PIO_IRQ_PLOT_EN</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>

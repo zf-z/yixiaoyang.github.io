@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -50,6 +50,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -150,7 +152,7 @@
 
 <p>###文本间隔</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># 在每一行后面增加一空行</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># 在每一行后面增加一空行</span>
  sed G
 
  <span class="c"># 将原来的所有空行删除并在每一行后面增加一空行。</span>
@@ -177,7 +179,7 @@
 
 <p>###编号</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># 为文件中的每一行进行编号（简单的左对齐方式）。这里使用了“制表符”</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># 为文件中的每一行进行编号（简单的左对齐方式）。这里使用了“制表符”</span>
  <span class="c"># （tab，见本文末尾关于'\t'的用法的描述）而不是空格来对齐边缘。</span>
  sed <span class="o">=</span> filename | sed <span class="s1">'N;s/\n/\t/'</span>
 
@@ -194,7 +196,7 @@
 
 <p>###文本转换和替代</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># Unix环境：转换DOS的新行符（CR/LF）为Unix格式。</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># Unix环境：转换DOS的新行符（CR/LF）为Unix格式。</span>
  sed <span class="s1">'s/.$//'</span>                     <span class="c"># 假设所有行以CR/LF结束</span>
  sed <span class="s1">'s/^M$//'</span>                    <span class="c"># 在bash/tcsh中，将按Ctrl-M改为按Ctrl-V</span>
  sed <span class="s1">'s/\x0D$//'</span>                  <span class="c"># ssed、gsed 3.02.80，及更高版本</span>
@@ -291,7 +293,7 @@
 
 <p>###选择性地显示特定行</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># 显示文件中的前10行 （模拟“head”的行为）</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># 显示文件中的前10行 （模拟“head”的行为）</span>
  sed 10q
 
  <span class="c"># 显示文件中的第一行 （模拟“head -1”命令）</span>
@@ -382,7 +384,7 @@
 
 <p>###选择性地删除特定行</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># 显示通篇文档，除了两个正则表达式之间的内容</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># 显示通篇文档，除了两个正则表达式之间的内容</span>
  sed <span class="s1">'/Iowa/,/Montana/d'</span>
 
  <span class="c"># 删除文件中相邻的重复行（模拟“uniq”）</span>
@@ -443,7 +445,7 @@
 
 <p>###特殊应用</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c"># 移除手册页（man page）中的nroff标记。在Unix System V或bash shell下使</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> <span class="c"># 移除手册页（man page）中的nroff标记。在Unix System V或bash shell下使</span>
  <span class="c"># 用'echo'命令时可能需要加上 -e 选项。</span>
  sed <span class="s2">"s/.</span><span class="sb">`</span><span class="nb">echo</span> <span class="se">\\\b</span><span class="sb">`</span><span class="s2">//g"</span>    <span class="c"># 外层的双括号是必须的（Unix环境）</span>
  sed <span class="s1">'s/.^H//g'</span>             <span class="c"># 在bash或tcsh中, 按 Ctrl-V 再按 Ctrl-H</span>
@@ -502,7 +504,7 @@
 个文件名作为参数时，这些文件取代标准输入设备成为sed的输入。sed的输出将被
 送到标准输出（显示器）。因此：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> cat filename | sed <span class="s1">'10q'</span>         <span class="c"># 使用管道输入</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code> cat filename | sed <span class="s1">'10q'</span>         <span class="c"># 使用管道输入</span>
  sed <span class="s1">'10q'</span> filename               <span class="c"># 同样效果，但不使用管道输入</span>
  sed <span class="s1">'10q'</span> filename &gt; newfile     <span class="c"># 将输出转移（重定向）到磁盘上</span>
 </code></pre>
@@ -542,13 +544,13 @@ sedmod以及GNU sed v3.02.80。</p>
 的语法，以使大多数版本的sed的用户都能使用这些脚本。不过GNU版本的sed允许使
 用更简洁的语法。想像一下当读者看到一个很长的命令时的心情：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   sed -e <span class="s1">'/AAA/b'</span> -e <span class="s1">'/BBB/b'</span> -e <span class="s1">'/CCC/b'</span> -e d
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>   sed -e <span class="s1">'/AAA/b'</span> -e <span class="s1">'/BBB/b'</span> -e <span class="s1">'/CCC/b'</span> -e d
 </code></pre>
 </div>
 
 <p>好消息是GNU sed能让命令更紧凑：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   sed <span class="s1">'/AAA/b;/BBB/b;/CCC/b;d'</span>      <span class="c"># 甚至可以写成</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>   sed <span class="s1">'/AAA/b;/BBB/b;/CCC/b;d'</span>      <span class="c"># 甚至可以写成</span>
    sed <span class="s1">'/AAA\|BBB\|CCC/b;d'</span>
 </code></pre>
 </div>
@@ -561,7 +563,7 @@ sedmod以及GNU sed v3.02.80。</p>
 命令执行速度时，可以考虑在替换命令（“s/…/…/”）前面加上地址表达式来
 提高速度。举例来说：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   sed <span class="s1">'s/foo/bar/g'</span> filename         <span class="c"># 标准替换命令</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>   sed <span class="s1">'s/foo/bar/g'</span> filename         <span class="c"># 标准替换命令</span>
    sed <span class="s1">'/foo/ s/foo/bar/g'</span> filename   <span class="c"># 速度更快</span>
    sed <span class="s1">'/foo/ s//bar/g'</span> filename      <span class="c"># 简写形式</span>
 </code></pre>
