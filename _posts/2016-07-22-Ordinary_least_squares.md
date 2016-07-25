@@ -53,7 +53,7 @@ categories:
   就函数D对b求偏导有
   <img src="http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_b} = \sum_{i=1}^{n} 2b - 2y_i + 2a{x_i}">
 
-  令 <img src="http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_a} = \frac{\partial_D}{\partial_b} = 0, n\overline{x}= \sum_{i=1}^n x_i,  n\overline{y}= sum_{i=1}^n y_i">, 对满足偏导为0的参数对(a,b)，其描述的意义是y=ax+b此时完全拟合x,y序列。
+  令 <img src="http://latex.codecogs.com/svg.latex?\frac{\partial_D}{\partial_a} = \frac{\partial_D}{\partial_b} = 0, n\overline{x}= \sum_{i=1}^n x_i,  n\overline{y}= \sum_{i=1}^n y_i">, 对满足偏导为0的参数对(a,b)，其描述的意义是y=ax+b此时完全拟合x,y序列。
 
   则对于a的偏导为0：
     <img src="http://latex.codecogs.com/svg.latex?\sum_{i=1}^{n} ax_i^2-{x_i}{y_i}+x_i{b} = 0">
