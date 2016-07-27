@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>K均值聚类算法理解</title>
+  <meta name="description" content="K-Means算法简介K-Means聚类的目的是：把n个点（可以是样本的一次观察或一个实例）划分到k个聚类中，使得每个点都属于离他最近的均值（此即聚类中心，centroids）对应的聚类，以之作为聚类的标准。这个问题将归结为一个把数据空间划分为Voronoi cells的问题。K-均值是一种通过反复迭代直至收敛到...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2016/07/27/k-means-iris/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/bak/2015-12-25-Gentoo-seven-steps-to-upgrade/">Gentoo seven steps to upgrade</a>
+          
+        
+          
+          <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/AboutMe/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message/">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">K均值聚类算法理解</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">ML</span>
+	
+	  <span class="tags_span">聚类</span>
+	
+  
+  <span class="post-meta">2016-07-27 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <h3>K-Means算法简介</h3>
+<p>K-Means聚类的目的是：把n个点（可以是样本的一次观察或一个实例）划分到k个聚类中，使得每个点都属于离他最近的均值（此即<code class="highlighter-rouge">聚类中心</code>，centroids）对应的聚类，以之作为聚类的标准。这个问题将归结为一个把数据空间划分为Voronoi cells的问题。K-均值是一种通过反复迭代直至收敛到确定值的迭迭代贪婪算法.</p>
+
+<p>K-Means计算是<code class="highlighter-rouge">NP-困难</code>的，不过可借助启发式策略快速收敛出一个局部最优解。</p>
+
+<h3>算法过程</h3>
+<p>已知观察集(x1,x2,…,xn),每个观察集都是d维矢量，k-平均聚类要把这n个观测划分到k个集合中(k≤n),<code class="highlighter-rouge">使得组内平方和（WCSS within-cluster sum of squares）最小</code>，即它的目标是找到使得下式满足的聚类<code class="highlighter-rouge">Si</code>：</p>
+
+<p><img src="http://latex.codecogs.com/svg.latex?{arg\ min} f({S_i})= \sum_{i=1}^{k} \sum_{j=1}^{n}\|x_j-C_i\|^2" /></p>
+
+<p>其中Ci为类Si类中所有点的均值，即当前类的<code class="highlighter-rouge">聚类中心</code>。<code class="highlighter-rouge">arg min</code>,表示使目标函数f(Si)取最小值时的变量值。</p>
+
+<ol>
+  <li>首先为聚类任意选出k个初始化的的<code class="highlighter-rouge">聚类中心</code>，每个观察对象被分类到与<code class="highlighter-rouge">聚类中心</code>最近的聚类中</li>
+  <li>接着使用当前聚类中的观察对象的<code class="highlighter-rouge">均值</code>，重新计算<code class="highlighter-rouge">聚类中心</code>.</li>
+  <li>用新计算出的<code class="highlighter-rouge">聚类中心</code>重新对观察对象重复第1步，将每个观察对象被分类到与新的<code class="highlighter-rouge">聚类中心</code>最近的聚类中</li>
+  <li>重复1、2步骤直至聚类<code class="highlighter-rouge">聚类中心</code>不再变化，或者小于给定的阈值.</li>
+</ol>
+
+<p>用下面的gif图更好理解：</p>
+
+<p><img src="http://cdn4.snapgram.co/images/2016/07/26/kmeans_thumb2.gif" alt="kmeans_thumb2.gif" /></p>
+
+<h3>K-Means算法进行Iris数据聚类</h3>
+
+<p>Iris（鸢尾花）数据集以鸢尾花的特征作为数据来源，数据集包含150个数据集，分为3类，每类50个数据，每个数据包含4个属性，是在数据挖掘、数据分类中非常常用的测试集、训练集。现选取3个分类数据中的前25个数据为训练集，后25个数据作为测试集，进行k均值聚类计算，完整代码如下，其中<code class="highlighter-rouge">kmeans_train</code>函数即k均值算法的主体部分（迭代，寻找聚类中心直到不再变化的过程）。</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
+<span class="c"># -*- coding: utf-8 *-*</span>
+
+<span class="s">'''
+ Attribute Information:
+   0. sepal length in cm
+   1. sepal width in cm
+   2. petal length in cm
+   3. petal width in cm
+   4. class:
+      -- 0: Iris Setosa
+      -- 1: Iris Versicolour
+      -- 2: Iris Virginica
+'''</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plot</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">spatial</span>
+
+<span class="c"># 全局变量</span>
+<span class="n">g_train_set</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">g_test_set</span>  <span class="o">=</span> <span class="bp">None</span>
+<span class="n">g_centroids</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="n">DATA_FILE</span><span class="o">=</span><span class="s">"./iris.data"</span>
+    <span class="n">CLASSES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"Iris-setosa"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="s">"Iris-versicolor"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="s">"Iris-virginica"</span><span class="p">:</span><span class="mi">2</span>
+    <span class="p">}</span>
+    <span class="n">LABEL_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s">"SepalLen"</span><span class="p">,</span><span class="s">"SepalWidth"</span><span class="p">,</span><span class="s">"PetalLen"</span><span class="p">,</span><span class="s">"PetalWidth"</span><span class="p">,</span><span class="s">"Classes"</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">data_import</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">delimiter</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span><span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">)</span>
+
+<span class="c"># euclidean distance of two 1-D vectors</span>
+<span class="k">def</span> <span class="nf">vec_distance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">euclidean</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_vec_distance</span><span class="p">():</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
+    <span class="c"># = sqrt(0+1+4+0)=sqrt(6)=2.2360679775</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">vec_distance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">kmeans_test</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_test_set</span>
+    <span class="k">global</span> <span class="n">g_centroids</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">75</span><span class="p">))</span>
+    <span class="n">success</span><span class="p">,</span><span class="n">mistake</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">target_classes</span><span class="p">,</span> <span class="n">cur_classes</span> <span class="o">=</span> <span class="n">g_test_set</span><span class="p">[:,</span><span class="mi">4</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_test_set</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">cls</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">):</span>
+            <span class="n">distances</span><span class="p">[</span><span class="n">cls</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">vec_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+        <span class="c"># 每个点属于最近的聚类中心</span>
+        <span class="n">min_distance</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">distances</span><span class="p">[:,</span><span class="n">idx</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">cls</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">):</span>
+            <span class="n">cur_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span> <span class="k">if</span> <span class="n">min_distance</span> <span class="o">==</span> <span class="n">distances</span><span class="p">[</span><span class="n">cls</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="k">else</span> <span class="n">cur_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cur_classes</span><span class="p">):</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">cur_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="n">target_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span>
+            <span class="n">success</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="n">success</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mistake</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="n">mistake</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">print</span> <span class="n">success</span><span class="p">,</span><span class="n">mistake</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">kmeans_train</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_centroids</span>
+
+    <span class="c"># 欧式距离向量，大小3x25</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">75</span><span class="p">))</span>
+    <span class="c"># 初始聚类中心</span>
+    <span class="c">#g_centroids = np.array([g_train_set[1:2,0:4],g_train_set[50:51,0:4],g_train_set[59:60,0:4]])</span>
+    <span class="n">g_centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">g_train_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">g_train_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">26</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">g_train_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">51</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]])</span>
+    <span class="n">old_centroids</span> <span class="o">=</span> <span class="n">g_centroids</span>
+    <span class="c"># 目标分类向量，当前分类向量</span>
+    <span class="n">target_classes</span><span class="p">,</span> <span class="n">cur_classes</span> <span class="o">=</span> <span class="n">g_train_set</span><span class="p">[:,</span><span class="mi">4</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">75</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">"first g_centroids"</span><span class="p">,</span> <span class="n">g_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="c"># 迭代，直到聚类中心点不再变化</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="c"># 聚类中所有点的步长和的向量</span>
+        <span class="n">step_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+        <span class="c"># 当前聚类中所有点的计数</span>
+        <span class="n">step_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="c"># 计算距离向量，聚类中心到每个点的距离</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_train_set</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">cls</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">):</span>
+                <span class="n">distances</span><span class="p">[</span><span class="n">cls</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span><span class="o">=</span><span class="n">vec_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
+
+            <span class="c"># 每个点属于最近的聚类中心</span>
+            <span class="n">min_distance</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">distances</span><span class="p">[:,</span><span class="n">idx</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">cls</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">):</span>
+                <span class="n">cur_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span> <span class="k">if</span> <span class="n">min_distance</span> <span class="o">==</span> <span class="n">distances</span><span class="p">[</span><span class="n">cls</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="k">else</span> <span class="n">cur_classes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="c"># 重新聚类, 寻找新的聚类中心点：当前聚类中所有点的均值, x可能的取值是（0,1,2）代表所在行的聚类</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">cls</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cur_classes</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+            <span class="c">#print idx, x, g_train_set[idx,0:4], step_sum[x]</span>
+            <span class="n">step_sum</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">step_sum</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">g_train_set</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">step_count</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">step_count</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">cls</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">):</span>
+            <span class="n">g_centroids</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="n">step_sum</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span><span class="o">/</span><span class="n">step_count</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span>
+        <span class="k">print</span> <span class="n">g_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">old_centroids</span><span class="p">,</span><span class="n">g_centroids</span><span class="p">):</span>
+            <span class="c"># 聚类中心不再变化，收敛完成</span>
+            <span class="n">kmeans_plot3d</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">old_centroids</span> <span class="o">=</span> <span class="n">g_centroids</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">kmeans_init</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_test_set</span>
+
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DATA_FILE</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data_import</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span><span class="s">','</span><span class="p">)</span>
+
+    <span class="c"># 读取并合并训练集数组</span>
+    <span class="n">g_train_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="n">g_train_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">g_train_set</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span>  <span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">)))))</span>
+    <span class="n">g_train_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">g_train_set</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">100</span><span class="p">:</span><span class="mi">125</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">)))))</span>
+
+    <span class="c"># 读取并合并测试集数组</span>
+    <span class="n">g_test_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">0</span><span class="p">)))</span>
+    <span class="n">g_test_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">g_test_set</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">75</span><span class="p">:</span><span class="mi">100</span>  <span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">)))))</span>
+    <span class="n">g_test_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">g_test_set</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">125</span><span class="p">:</span><span class="mi">150</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">)))))</span>
+
+<span class="k">def</span> <span class="nf">kmeans_plot</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_test_set</span>
+    <span class="k">global</span> <span class="n">g_centroids</span>
+
+    <span class="c"># 以0,1,3特征绘制3D图</span>
+    <span class="n">my_set</span> <span class="o">=</span> <span class="n">g_train_set</span><span class="p">;</span>
+
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"m"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"m"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+
+    <span class="n">my_set</span> <span class="o">=</span> <span class="n">g_test_set</span><span class="p">;</span>
+
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"m"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"x"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"m"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+
+    <span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s">"/"</span><span class="o">+</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+    <span class="n">plot</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">tight</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">kmeans_plot3d</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_test_set</span>
+    <span class="k">global</span> <span class="n">g_centroids</span>
+
+    <span class="c"># 以0,1,3特征绘制3D图</span>
+    <span class="n">my_set</span> <span class="o">=</span> <span class="n">g_train_set</span><span class="p">;</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">'3d'</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span><span class="mi">25</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"r"</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">"r"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">25</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"c"</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"b"</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s">"b"</span><span class="p">)</span>
+    <span class="c"># 聚类中心</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">2</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"^"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="mi">2</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">][:,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"^"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"b"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">2</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">2</span><span class="p">][:,</span><span class="mi">2</span><span class="p">],</span><span class="n">g_centroids</span><span class="p">[</span><span class="mi">2</span><span class="p">][:,</span><span class="mi">3</span><span class="p">],</span><span class="n">marker</span><span class="o">=</span><span class="s">"^"</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">"r"</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">autoscale</span><span class="p">(</span><span class="n">tight</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="c"># test_vec_distance()</span>
+    <span class="c"># exit()</span>
+    <span class="c"># 数据导入</span>
+    <span class="n">kmeans_init</span><span class="p">()</span>
+    <span class="n">kmeans_plot</span><span class="p">()</span>
+    <span class="c"># 训练数据，k-means迭代</span>
+    <span class="n">kmeans_train</span><span class="p">()</span>
+    <span class="c"># 检验测试集</span>
+    <span class="n">kmeans_test</span><span class="p">()</span>
+
+</code></pre>
+</div>
+
+<p>将所有数据分2组在2D上plot出来如下：</p>
+
+<p><img src="http://cdn3.snapgram.co/imgs/2016/07/27/iris-3d3.png" alt="iris-3d3.png" /></p>
+
+<p>根据训练的结果，以其中三个属性为坐标的训练数据和聚类中心的3D图如下所示</p>
+
+<p><img src="http://cdn1.snapgram.co/imgs/2016/07/27/iris-3d2.png" alt="iris-3d2.png" /></p>
+
+<p>最后对检验集进行分类的结果是<code class="highlighter-rouge">[ 25.  24.  18.] [ 0.  1.  7.]</code>，即在三个类别中，分类正确的次数（准确率）分别为25（100%）,24（96%）,18（72%）</p>
+
+<h4>欧式距离（Euclidean distance）</h4>
+<p>在数学中，欧几里得距离或欧几里得度量是欧几里得空间中两点间“普通”（即直线）距离。使用这个距离，欧氏空间成为度量空间。相关联的范数称为欧几里得范数。较早的文献称之为毕达哥拉斯度量。在欧几里得空间中，点x =(x1,…,xn)和 y =(y1,…,yn)之间的欧氏距离为：</p>
+
+<p><img src="http://latex.codecogs.com/svg.latex?dis(x,y)=\sqrt{\sum_{i=1}^n {(x_i-y_i)^2}}" /></p>
+
+<h3>参考</h3>
+<p>iris数据集：http://archive.ics.uci.edu/ml/datasets/Iris<br />
+k均值聚类讲解：http://home.deib.polimi.it/matteucc/Clustering/tutorial_html/kmeans.html<br />
+k均值聚类讲解：http://people.revoledu.com/kardi/tutorial/kMean/NumericalExample.htm<br />
+k均值聚类讲解：http://blog.jobbole.com/16048/</p>
+
+  </article>
+
+</div>
+
+<div>
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+var disqus_shortname = 'leon-blog';
+
+/* * * DON'T EDIT BELOW THIS LINE * * */
+(function() {
+var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+</div>
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+          
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+    </div>
+  </div>
+</footer>
+ </body> 
+</html>
