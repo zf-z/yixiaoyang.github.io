@@ -3,7 +3,7 @@ author: leon
 comments: true
 date: 2015-07-20 12:37:52+00:00
 layout: post
-title: '[Python] Raspberry Pi检测PM2.5并同步到Yeelink' 
+title: '[Python] Raspberry Pi检测PM2.5并同步到Yeelink'
 categories:
 - Python
 - 树莓派
@@ -34,60 +34,58 @@ tags:
 
     读出的数据已经被转成数字信号了，可以直接拿来换算。代码如下：
 
-    ```python
-    #! /usr/bin/env python  
-    # -*- coding: utf-8 -*-  
+```python
+#! /usr/bin/env python  
+# -*- coding: utf-8 -*-  
 
-    #
-    # email sent app
-    # by leon@2015-07-09
-    #
-    # curl -d "{\"value\":50}" -H "U-ApiKey: my_key" 'my_url'
-    #
-    import time
-    import json
-    import requests
+#
+# email sent app
+# by leon@2015-07-09
+#
+# curl -d "{\"value\":50}" -H "U-ApiKey: my_key" 'my_url'
+#
+import time
+import json
+import requests
 
-    # example: http://api.yeelink.net/v1.1/device/115088/sensor/144111/datapoints
-    class YeelinkHelper:
-        url = 'http://api.yeelink.net/v1.1'
-        key = ''
-        hdr = ''
-        dev = ''
-        sensors = []
+# example: http://api.yeelink.net/v1.1/device/115088/sensor/144111/datapoints
+class YeelinkHelper:
+    url = 'http://api.yeelink.net/v1.1'
+    key = ''
+    hdr = ''
+    dev = ''
+    sensors = []
 
-        def __init__(self,key,dev,sensors):
-            self.key = key
-            self.dev = dev
-            self.sensors = sensors
-            self.hdr = {'U-ApiKey':key,'content-type': 'application/json'}
-        def up(self,vals):
-            idx = 0
-            utime=time.strftime("%Y-%m-%dT%H:%M:%S")
-            for sen in self.sensors:
-                if idx < len(vals):
-                    post_url=r'%s/device/%s/sensor/%s/datapoints' % (self.url, self.dev, sen)
-                    data={"timestamp":utime , "value": vals[idx]}
-                    res=requests.post(post_url,headers=self.hdr,data=json.dumps(data))
-                    idx += 1
-                    print("utime:%s, url:%s, status_code:%d" %(utime,post_url,res.status_code))
-                    print(self.hdr)
-                    print(json.dumps(data))
+    def __init__(self,key,dev,sensors):
+        self.key = key
+        self.dev = dev
+        self.sensors = sensors
+        self.hdr = {'U-ApiKey':key,'content-type': 'application/json'}
+    def up(self,vals):
+        idx = 0
+        utime=time.strftime("%Y-%m-%dT%H:%M:%S")
+        for sen in self.sensors:
+            if idx < len(vals):
+                post_url=r'%s/device/%s/sensor/%s/datapoints' % (self.url, self.dev, sen)
+                data={"timestamp":utime , "value": vals[idx]}
+                res=requests.post(post_url,headers=self.hdr,data=json.dumps(data))
+                idx += 1
+                print("utime:%s, url:%s, status_code:%d" %(utime,post_url,res.status_code))
+                print(self.hdr)
+                print(json.dumps(data))
+```
 
-    ```
+6.注册Yeelink账号并编写python数据上传脚本
+yeelink的IOT（物联网）服务可添加简单的传感器数值，由平台保存数据并进行可视化。其上传格式可参见开发者API手册。上传部分代码如下：
 
-6. 注册Yeelink账号并编写python数据上传脚本
-
-    yeelink的IOT（物联网）服务可添加简单的传感器数值，由平台保存数据并进行可视化。其上传格式可参见开发者API手册。上传部分代码如下：
-
-    ```python
+```python
     #! /usr/bin/env python
     # -*- coding: utf-8 -*-  
 
     #
     # pms module detect
     # by leon@2015-07-09
-    # 
+    #
     #
 
     # -*- coding: utf-8 -*-  
@@ -110,7 +108,7 @@ tags:
     CHK_IDX     = 8
     END_IDX     = 9     #0xab
 
-    # yeelink 
+    # yeelink
     YEELINK_API_KAY = 'my_key'
     YEELINK_DEV = '115167'
     # pm2.5, pm10, cpu_temp
@@ -123,7 +121,7 @@ tags:
             cpu_temp = cpu_temp_file.read()
             cpu_temp_file.close()
             return float(cpu_temp)/1000
-        
+
     class PmsMod:
         def __init__(self,p,ydev):
             self.port = p
@@ -131,15 +129,15 @@ tags:
             self.maxLen = DATALEN*2
             self.datas = [0]*self.maxLen
             self.ydev = ydev
-        
+
         def getPm25(self,pos):
             offset = pos*DATALEN + PM25L_IDX
             return float(self.datas[offset]+256*self.datas[offset+1])/10;
-        
+
         def getPm10(self,pos):
             offset = pos*DATALEN + PM10L_IDX
             return float(self.datas[offset]+256*self.datas[offset+1])/10;        
-        
+
         def collect(self):
             # read firs start byte
             byte=ord(self.port.read())
@@ -147,13 +145,13 @@ tags:
                 byte=ord(self.port.read())
                 print(byte)
             self.idx = 0
-            
-            count = 0 
+
+            count = 0
             while True:
                 byte = self.port.read()
                 self.datas[self.idx] = ord(byte)
                 self.idx += 1
-                
+
                 if self.idx == self.maxLen:
                     count+=1
                     # every 5*2=10s
@@ -167,15 +165,11 @@ tags:
                         print("pm25=%.1fug/m3, pm10=%.1fug/m3 tmp=%.1f'C" %(pm25,pm10,cpu_temp))
                         count = 0
                     self.idx = 0
-        
+
     if __name__ == "__main__":
         ydev1 = YeelinkHelper(YEELINK_API_KAY,YEELINK_DEV,YEELINK_SENSORS)
         port = serial.Serial("/dev/ttyAMA0",baudrate=9600,bytesize=8,parity='N',stopbits=1,xonxoff=0,timeout=3.0)
         mod = PmsMod(port,ydev1)
         mod.collect()
         port.close()
-
-    ```
-
-
-
+```
