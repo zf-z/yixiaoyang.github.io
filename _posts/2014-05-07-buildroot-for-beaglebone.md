@@ -5,7 +5,7 @@ date: 2014-05-07 11:37:00+00:00
 layout: post
 title: '[Beaglebone] U-boot and Buildroot for Beaglebone' 
 categories:
-- BeagleBone
+- Beaglebone
 ---
 
 ### U-Boot for BeagleBone
