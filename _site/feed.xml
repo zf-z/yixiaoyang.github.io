@@ -5,9 +5,37 @@
     <description>Embedded System, Linux, Python &amp; Ruby</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Sep 2016 15:55:28 +0000</pubDate>
-    <lastBuildDate>Mon, 19 Sep 2016 15:55:28 +0000</lastBuildDate>
+    <pubDate>Fri, 04 Nov 2016 19:42:54 +0800</pubDate>
+    <lastBuildDate>Fri, 04 Nov 2016 19:42:54 +0800</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>为GoldenDict添加生词本功能</title>
+        <description>&lt;p&gt;Windows上用欧陆词典，Linux上用Goldendict，奈何Goldendict没有生词本，所以下载源码加了个小模块进去。&lt;/p&gt;
+
+&lt;p&gt;新增功能：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;生词 添/删/分组/星标&lt;/li&gt;
+  &lt;li&gt;生词导出，到处的文本可导入到欧陆词典。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;git： &lt;a href=&quot;https://github.com/yixiaoyang/goldendict&quot;&gt;https://github.com/yixiaoyang/goldendict&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Fri, 04 Nov 2016 08:16:00 +0800</pubDate>
+        <link>/2016/11/04/goldendict/</link>
+        <guid isPermaLink="true">/2016/11/04/goldendict/</guid>
+        
+        <category>工具</category>
+        
+        <category>cpp</category>
+        
+        
+        <category>cpp</category>
+        
+        <category>工具</category>
+        
+      </item>
     
       <item>
         <title>人工神经网络初探 - 多层感知器和BP算法</title>
@@ -123,9 +151,9 @@
   &lt;li&gt;《神经网络与机器学习》（加拿大）Simon Haykin&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Mon, 22 Aug 2016 18:38:00 +0000</pubDate>
-        <link>/2016/08/22/ANN-BP/</link>
-        <guid isPermaLink="true">/2016/08/22/ANN-BP/</guid>
+        <pubDate>Tue, 23 Aug 2016 02:38:00 +0800</pubDate>
+        <link>/2016/08/23/ANN-BP/</link>
+        <guid isPermaLink="true">/2016/08/23/ANN-BP/</guid>
         
         <category>ML</category>
         
@@ -518,9 +546,9 @@ Logistic函数输出范围为(0,1)，单调递增，可微分。其中a可以调
   &lt;li&gt;《神经网络与机器学习》（加拿大）Simon Haykin&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Thu, 28 Jul 2016 17:34:00 +0000</pubDate>
-        <link>/2016/07/28/ANN/</link>
-        <guid isPermaLink="true">/2016/07/28/ANN/</guid>
+        <pubDate>Fri, 29 Jul 2016 01:34:00 +0800</pubDate>
+        <link>/2016/07/29/ANN/</link>
+        <guid isPermaLink="true">/2016/07/29/ANN/</guid>
         
         <category>ML</category>
         
@@ -794,9 +822,9 @@ k均值聚类讲解：http://home.deib.polimi.it/matteucc/Clustering/tutorial_ht
 k均值聚类讲解：http://people.revoledu.com/kardi/tutorial/kMean/NumericalExample.htm&lt;br /&gt;
 k均值聚类讲解：http://blog.jobbole.com/16048/&lt;/p&gt;
 </description>
-        <pubDate>Wed, 27 Jul 2016 18:25:00 +0000</pubDate>
-        <link>/2016/07/27/k-means-iris/</link>
-        <guid isPermaLink="true">/2016/07/27/k-means-iris/</guid>
+        <pubDate>Thu, 28 Jul 2016 02:25:00 +0800</pubDate>
+        <link>/2016/07/28/k-means-iris/</link>
+        <guid isPermaLink="true">/2016/07/28/k-means-iris/</guid>
         
         <category>ML</category>
         
@@ -1052,9 +1080,9 @@ adc测量值         方程值          万用表值        残差          残�
 
 &lt;p&gt;几何意义：曲面上的每一点都有无穷多条切线，描述这种函数的导数相当困难。偏导数就是选择其中一条切线，并求出它的斜率。通常，最感兴趣的是垂直于y轴（平行于xOz平面）的切线，以及垂直于x轴（平行于yOz平面）的切线。一种求出这些切线的好办法是把其他变量视为常数。&lt;/p&gt;
 </description>
-        <pubDate>Fri, 22 Jul 2016 17:00:00 +0000</pubDate>
-        <link>/2016/07/22/Ordinary_least_squares/</link>
-        <guid isPermaLink="true">/2016/07/22/Ordinary_least_squares/</guid>
+        <pubDate>Sat, 23 Jul 2016 01:00:00 +0800</pubDate>
+        <link>/2016/07/23/Ordinary_least_squares/</link>
+        <guid isPermaLink="true">/2016/07/23/Ordinary_least_squares/</guid>
         
         <category>ML</category>
         
@@ -1075,7 +1103,7 @@ adc测量值         方程值          万用表值        残差          残�
 &lt;h3&gt;机器学习&lt;/h3&gt;
 &lt;p&gt;理论稍多，翻译差评，内容尚可，涉及机器学习的知识方方面面分类都比较清晰。&lt;/p&gt;
 </description>
-        <pubDate>Fri, 10 Jun 2016 12:27:00 +0000</pubDate>
+        <pubDate>Fri, 10 Jun 2016 20:27:00 +0800</pubDate>
         <link>/2016/06/10/books/</link>
         <guid isPermaLink="true">/2016/06/10/books/</guid>
         
@@ -1095,9 +1123,9 @@ adc测量值         方程值          万用表值        残差          残�
 &lt;p&gt;In case you are using Qt Creator and when you compiled your project for the first time, you did not put “Q_OBJECT” in your header file, then the moc cpp file for your (qthread) cpp file was not generated. In this case, simply running “Clean All” and “Rebuild All” after putting “Q_OBJECT” in your header file will not work. You need to go to your build folder to manually delete the Qt generated “Makefile” and run “Rebuild All” or “Build All” again, your error message will be gone.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 05 Mar 2016 18:03:25 +0000</pubDate>
-        <link>/2016/03/05/Qt-Undefine-VTable-error/</link>
-        <guid isPermaLink="true">/2016/03/05/Qt-Undefine-VTable-error/</guid>
+        <pubDate>Sun, 06 Mar 2016 02:03:25 +0800</pubDate>
+        <link>/2016/03/06/Qt-Undefine-VTable-error/</link>
+        <guid isPermaLink="true">/2016/03/06/Qt-Undefine-VTable-error/</guid>
         
         <category>c++</category>
         
@@ -1224,7 +1252,7 @@ hal_jni_biovox2/
   &lt;li&gt;《Android内核揭秘》&lt;/li&gt;
 &lt;/ol&gt;
 </description>
-        <pubDate>Tue, 02 Feb 2016 11:21:25 +0000</pubDate>
+        <pubDate>Tue, 02 Feb 2016 19:21:25 +0800</pubDate>
         <link>/2016/02/02/Embedded-Android/</link>
         <guid isPermaLink="true">/2016/02/02/Embedded-Android/</guid>
         
@@ -1249,9 +1277,9 @@ hal_jni_biovox2/
 
 &lt;p&gt;高斯滤波：高斯滤波是一种线性平滑滤波，适用于消除高斯噪声，广泛应用于图像处理的减噪过程。通俗的讲，高斯滤波就是对整幅图像进行加权平均的过程，每一个像素点的值，都由其本身和邻域内的其他像素值经过加权平均后得到。高斯滤波的具体操作是：用一个模板（或称卷积、掩模）扫描图像中的每一个像素，用模板确定的邻域内像素的加权平均灰度值去替代模板中心像素点的值。在图像处理中，高斯滤波一般有两种实现方式，一是用离散化窗口滑窗卷积，另一种通过傅里叶变换。最常见的就是第一种滑窗实现，只有当离散化的窗口非常大，用滑窗计算量非常大（即使用可分离滤波器的实现）的情况下，可能会考虑基于傅里叶变化的实现方法。&lt;/p&gt;
 </description>
-        <pubDate>Sun, 17 Jan 2016 17:27:00 +0000</pubDate>
-        <link>/2016/01/17/books/</link>
-        <guid isPermaLink="true">/2016/01/17/books/</guid>
+        <pubDate>Mon, 18 Jan 2016 01:27:00 +0800</pubDate>
+        <link>/2016/01/18/books/</link>
+        <guid isPermaLink="true">/2016/01/18/books/</guid>
         
         <category>books</category>
         
@@ -1471,7 +1499,7 @@ employees
 
 &lt;p&gt;github地址：https://github.com/yixiaoyang/EduParser/&lt;/p&gt;
 </description>
-        <pubDate>Wed, 06 Jan 2016 08:29:20 +0000</pubDate>
+        <pubDate>Wed, 06 Jan 2016 16:29:20 +0800</pubDate>
         <link>/2016/01/06/eduparser/</link>
         <guid isPermaLink="true">/2016/01/06/eduparser/</guid>
         
@@ -1479,62 +1507,6 @@ employees
         
         
         <category>Python</category>
-        
-      </item>
-    
-      <item>
-        <title>[工具] Linux上的常用‘冷门’工具</title>
-        <description>&lt;h3&gt;Shell类&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;zsh, oh_my_zsh&lt;/li&gt;
-  &lt;li&gt;htop, atop &amp;amp; glances: 更好的top工具&lt;/li&gt;
-  &lt;li&gt;screen, dtach, tmux, byobu： Keep your terminal sessions alive.&lt;/li&gt;
-  &lt;li&gt;curl：大名鼎鼎curl&lt;/li&gt;
-  &lt;li&gt;ack, ag (silver searcher), pt：更好的代码查找工具，grep&lt;/li&gt;
-  &lt;li&gt;calcurse &amp;amp; remind + wyrd：比较实用，终端日历+todo&lt;/li&gt;
-  &lt;li&gt;qalc：The best calculator. Ever. (For scripts too.)&lt;/li&gt;
-  &lt;li&gt;终端：Tilda &amp;amp; Yakuake（F12的那个酸爽） &amp;amp; Terminator&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;类Shell&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;vim：nonono，我在说exVim，http://exvim.github.io/&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;Gentoo&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;eix:比emerge简洁&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;sublime_text&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;Emmet:前端必备，DSL实现&lt;/li&gt;
-  &lt;li&gt;PlainTasks:配合insert date，每天先想做啥
-&lt;img src=&quot;https://camo.githubusercontent.com/95bbc6d99f00ff199af7daae7d5c65556784f84b/687474703a2f2f636c2e6c792f696d6167652f3171313030513231326f32512f73732e706e67&quot; alt=&quot;图&quot; /&gt;&lt;/li&gt;
-  &lt;li&gt;Predawn主题，Seti,Primer,Material&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;layman&lt;/h3&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;sudo layman -o http://aegypius.github.io/overlay/repositories.xml -f -a aegypius
-&lt;span class=&quot;gp&quot;&gt;% &lt;/span&gt;ls /var/lib/layman 
-aegypius  haskell  qt gentoo-zh  python
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Wed, 11 Nov 2015 11:11:20 +0000</pubDate>
-        <link>/2015/11/11/linux-shell-tools/</link>
-        <guid isPermaLink="true">/2015/11/11/linux-shell-tools/</guid>
-        
-        <category>Shell</category>
-        
-        <category>工具</category>
-        
-        
-        <category>工具</category>
         
       </item>
     

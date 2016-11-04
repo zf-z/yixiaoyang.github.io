@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>简历系统 on Rails﻿﻿</title>
-  <meta name="description" content="此简历系统源自深圳Biz团队的招聘题目，参考文章零零碎碎的Rails细节。实现时主要使用了ajax，排序，状态机等技术。没有加cache和文件上传功能，邮件通知功能一直没配置正确无法发出邮件，很奇怪。">
+  <title>[Python] Goldendict</title>
+  <meta name="description" content="最近用python实现了一个小型爬虫，爬个博客没问题。github地址： https://github.com/yixiaoyang/pyScripts/tree/master/spider/uSpider">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2013/12/05/e7-ae-80-e5-8e-86-e7-b3-bb-e7-bb-9f-rails/">
+  <link rel="canonical" href="/2016/11/04/goldendict-wordbook/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -97,70 +97,83 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">简历系统 on Rails﻿﻿</h1>
+    <h1 class="post-title">[Python] Goldendict</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">Biz</span>
+	  <span class="tags_span">python</span>
 	
-	  <span class="tags_span">Rails</span>
+	  <span class="tags_span">爬虫</span>
 	
   
-  <span class="post-meta">2013-12-05 • leon</span>
+  <span class="post-meta">2016-11-04 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <p>此简历系统源自<a href="https://www.jiandan.biz/">深圳Biz团队</a>的招聘题目，参考文章<a href="http://hityixiaoyang.com/2013/12/02/%e9%9b%b6%e9%9b%b6%e7%a2%8e%e7%a2%8e%e7%9a%84rails%e7%bb%86%e8%8a%82/">零零碎碎的Rails细节</a>。实现时主要使用了ajax，排序，状态机等技术。没有加cache和文件上传功能，邮件通知功能一直没配置正确无法发出邮件，很奇怪。</p>
+    <p>最近用python实现了一个小型爬虫，爬个博客没问题。
+github地址： <a href="https://github.com/yixiaoyang/pyScripts/tree/master/spider/uSpider">https://github.com/yixiaoyang/pyScripts/tree/master/spider/uSpider</a></p>
 
-<p>git：<a href="https://github.com/yixiaoyang/ruby/tree/master/rails/rails_project/BizInviteSys">https://github.com/yixiaoyang/ruby/tree/master/rails/rails_project/BizInviteSys</a></p>
+<p>爬虫主要由三部分构成：</p>
 
-<p>主页：</p>
+<h3>分析器（parser）</h3>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/052.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/052.png" alt="主页" /></a></p>
+<p>作为url生产者角色和doc的消费者角色，通过正则表达式解析下载文件中的链接产生url。由于解析速度较快，建议单线程。</p>
 
-<p>找回密码：</p>
+<h3>下载器（downloader）</h3>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/053.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/053.png" alt="找回密码" /></a></p>
+<p>作为url消费者角色和doc的生产者角色。从网络下载文件时间不可预知，速度较慢，建议使用多进程</p>
 
-<p>个人首页：</p>
+<h3>控制台（console）</h3>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/054.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/054.png" alt="个人首页" /></a></p>
+<p>报告当前的抓取情况，并维护url资源和doc资源。</p>
 
-<p>个人简历预览：</p>
+<ol>
+  <li>
+    <p>url资源</p>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/055.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/055.png" alt="个人简历预览" /></a></p>
+    <p>url资源由parser解析已经下载的文件内容后提取站点链接产生。如果url对应的文件已经存在，则表示此url已经下载过了，不再将其加入urls集合。</p>
+  </li>
+  <li>
+    <p>document资源</p>
 
-<p>技能选择：</p>
+    <p>downloader获取一条url后开始下载资源，下载完毕即在本地生成对应文件，每个站点文件为一个doc资源，parser将对每个未解析的doc文件资源进行链接提取。资源的同步使用两把资源锁。每个线程获取一条资源后需要将woker引用计数＋1表示仍有线程在对资源进行工作，当线程使用完资源后worker引用计数-1。当所有资源为空且资源计数为0（没有工作线程在引用资源）时，说明整个站点的解析和下载工作完成，此时线程可以此检测done状态退出，主进程随后join退出。</p>
+  </li>
+</ol>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/056.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/056.png" alt="技能选项" /></a></p>
+<h3>其他</h3>
 
-<p>教育经历：</p>
+<ol>
+  <li>
+    <p>资源缓冲大小</p>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/057.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/057.png" alt="教育经历" /></a></p>
+    <p>暂未设置资源缓冲大小，必要时需要加以限制防止在抓取大型站点时内存耗尽运行速率下降。</p>
+  </li>
+  <li>
+    <p>相关站点抓取</p>
 
-<p>个人资料：</p>
+    <p>现有的程序仅广度优先遍历抓取一个站点内容，对其他站点的资源并没有抓取。后期对其他站点需要抓取一个深度的资源（直接引用资源）。</p>
+  </li>
+  <li>
+    <p>robots协议</p>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/058.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/058.png" alt="个人资料等" /></a></p>
-
-<p>简历投递：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/059.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/059.png" alt="简历投递" /></a></p>
-
-<p>管理员-所有简历，可按照指定列排序：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/060.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/060.png" alt="管理员-所有简历" /></a></p>
-
-<p>管理员-评论打分：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/061.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/061.png" alt="管理员-评论" /></a></p>
-
-<p>管理员-状态更改：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/062.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/062.png" alt="管理员-状态更改" /></a></p>
+    <p>暂未考虑robots协议相关内容，是一只并不十分友好的spider。</p>
+  </li>
+  <li>
+    <p>大名鼎鼎scrapy</p>
+  </li>
+  <li>
+    <p>大型网站爬取过程中的问题</p>
+    <ul>
+      <li>去重问题，如果内存上的set不够用？</li>
+      <li>集群化，如何进行分布式爬取</li>
+      <li>爬取深度和权重，如何对资源的过滤</li>
+    </ul>
+  </li>
+</ol>
 
   </article>
 
@@ -168,7 +181,7 @@
 
 <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
 <!-- 多说评论框 start -->
-<div id="ds-thread" class="ds-thread" data-url="/2013/12/05/e7-ae-80-e5-8e-86-e7-b3-bb-e7-bb-9f-rails/" data-title="简历系统 on Rails﻿﻿" data-thread-key="简历系统 on Rails﻿﻿"></div>
+<div id="ds-thread" class="ds-thread" data-url="/2016/11/04/goldendict-wordbook/" data-title="[Python] Goldendict" data-thread-key="[Python] Goldendict"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

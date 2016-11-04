@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>简历系统 on Rails﻿﻿</title>
-  <meta name="description" content="此简历系统源自深圳Biz团队的招聘题目，参考文章零零碎碎的Rails细节。实现时主要使用了ajax，排序，状态机等技术。没有加cache和文件上传功能，邮件通知功能一直没配置正确无法发出邮件，很奇怪。">
+  <title>为GoldenDict添加生词本功能</title>
+  <meta name="description" content="Windows上用欧陆词典，Linux上用Goldendict，奈何Goldendict没有生词本，所以下载源码加了个小模块进去。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2013/12/05/e7-ae-80-e5-8e-86-e7-b3-bb-e7-bb-9f-rails/">
+  <link rel="canonical" href="/2016/11/04/goldendict/">
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
@@ -97,70 +97,33 @@
         <div class="post main_post">
 
   <header class="post-header">
-    <h1 class="post-title">简历系统 on Rails﻿﻿</h1>
+    <h1 class="post-title">为GoldenDict添加生词本功能</h1>
   </header>
 
 
   <div class="tags_div">
   
 	
-	  <span class="tags_span">Biz</span>
+	  <span class="tags_span">工具</span>
 	
-	  <span class="tags_span">Rails</span>
+	  <span class="tags_span">cpp</span>
 	
   
-  <span class="post-meta">2013-12-05 • leon</span>
+  <span class="post-meta">2016-11-04 • leon</span>
  </div>
 
 
   <article class="post-content">
-    <p>此简历系统源自<a href="https://www.jiandan.biz/">深圳Biz团队</a>的招聘题目，参考文章<a href="http://hityixiaoyang.com/2013/12/02/%e9%9b%b6%e9%9b%b6%e7%a2%8e%e7%a2%8e%e7%9a%84rails%e7%bb%86%e8%8a%82/">零零碎碎的Rails细节</a>。实现时主要使用了ajax，排序，状态机等技术。没有加cache和文件上传功能，邮件通知功能一直没配置正确无法发出邮件，很奇怪。</p>
+    <p>Windows上用欧陆词典，Linux上用Goldendict，奈何Goldendict没有生词本，所以下载源码加了个小模块进去。</p>
 
-<p>git：<a href="https://github.com/yixiaoyang/ruby/tree/master/rails/rails_project/BizInviteSys">https://github.com/yixiaoyang/ruby/tree/master/rails/rails_project/BizInviteSys</a></p>
+<p>新增功能：</p>
 
-<p>主页：</p>
+<ol>
+  <li>生词 添/删/分组/星标</li>
+  <li>生词导出，到处的文本可导入到欧陆词典。</li>
+</ol>
 
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/052.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/052.png" alt="主页" /></a></p>
-
-<p>找回密码：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/053.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/053.png" alt="找回密码" /></a></p>
-
-<p>个人首页：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/054.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/054.png" alt="个人首页" /></a></p>
-
-<p>个人简历预览：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/055.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/055.png" alt="个人简历预览" /></a></p>
-
-<p>技能选择：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/056.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/056.png" alt="技能选项" /></a></p>
-
-<p>教育经历：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/057.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/057.png" alt="教育经历" /></a></p>
-
-<p>个人资料：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/058.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/058.png" alt="个人资料等" /></a></p>
-
-<p>简历投递：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/059.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/059.png" alt="简历投递" /></a></p>
-
-<p>管理员-所有简历，可按照指定列排序：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/060.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/060.png" alt="管理员-所有简历" /></a></p>
-
-<p>管理员-评论打分：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/061.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/061.png" alt="管理员-评论" /></a></p>
-
-<p>管理员-状态更改：</p>
-
-<p><a href="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/062.png"><img src="http://blog.apluslogicinc.com/wp-content/uploads/2013/12/062.png" alt="管理员-状态更改" /></a></p>
+<p>git： <a href="https://github.com/yixiaoyang/goldendict">https://github.com/yixiaoyang/goldendict</a></p>
 
   </article>
 
@@ -168,7 +131,7 @@
 
 <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
 <!-- 多说评论框 start -->
-<div id="ds-thread" class="ds-thread" data-url="/2013/12/05/e7-ae-80-e5-8e-86-e7-b3-bb-e7-bb-9f-rails/" data-title="简历系统 on Rails﻿﻿" data-thread-key="简历系统 on Rails﻿﻿"></div>
+<div id="ds-thread" class="ds-thread" data-url="/2016/11/04/goldendict/" data-title="为GoldenDict添加生词本功能" data-thread-key="为GoldenDict添加生词本功能"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

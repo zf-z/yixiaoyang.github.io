@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>人工神经网络初探 - 多层感知器和BP算法</title>
+  <meta name="description" content="多层感知器单个感知器只能一刀两半，多个感知器则可以多次分割，直到分割给出想要的分类方式。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2016/08/23/ANN-BP/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- MathJax Section -->
+  <script type="text/javascript"
+		  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script>
+	  MathJax.Hub.Config({
+   	  tex2jax: {
+   	     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+   	  }
+   	  });
+   	  MathJax.Hub.Queue(function() {
+   	  var all = MathJax.Hub.getAllJax(), i;
+   	  for(i=0; i < all.length; i += 1) {
+   	     all[i].SourceElement().parentNode.className += ' has-jax';
+   	  }
+   	  });
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/bak/2015-12-25-Gentoo-seven-steps-to-upgrade/">Gentoo seven steps to upgrade</a>
+          
+        
+          
+          <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/AboutMe/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message/">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">人工神经网络初探 - 多层感知器和BP算法</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">ML</span>
+	
+	  <span class="tags_span">神经网络</span>
+	
+  
+  <span class="post-meta">2016-08-23 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <h2>多层感知器</h2>
+<p>单个感知器只能一刀两半，多个感知器则可以多次分割，直到分割给出想要的分类方式。</p>
+
+<p><img src="http://cdn3.snapgram.co/imgs/2016/08/22/preceptron-layers-usage2.gif" alt="preceptron-layers-usage2.gif" /></p>
+
+<h3>网络拓扑</h3>
+
+<p><img src="http://cdn1.snapgram.co/imgs/2016/08/22/ann-three-layer.gif" alt="ann-three-layer.gif" /></p>
+
+<h2>反向传导算法(BP算法)</h2>
+
+<p>BP算法是一种与最优化方法（如梯度下降法）结合使用的，用来训练人工神经网络的常见方法。<code class="highlighter-rouge">该方法计算对网络中所有权重计算损失函数的梯度。这个梯度会反馈给最优化方法，用来更新权值以最小化损失函数</code>。</p>
+
+<h3>BP算法过程</h3>
+
+<p>用一张动态图表示前向（FP）和后向（BP算法，Backpropagation）传播的全过程:</p>
+
+<p><img src="http://cdn3.snapgram.co/imgs/2016/08/10/bp-ann.gif" alt="bp-ann.gif" /></p>
+
+<p>BP算法主要由两个阶段:激励传播、和权重更新。</p>
+
+<p><strong>第1阶段：激励传播</strong></p>
+
+<p>每次迭代中的传播环节包含两步：
+  - 前向传播阶段: 将训练输入送入网络以获得激励响应；
+  - 反向传播阶段: 将激励响应同训练输入对应的目标输出求差，从而获得隐层和输出层的响应误差。</p>
+
+<p><strong>第2阶段：权重更新</strong></p>
+
+<p>对于每个突触上的权重，按照以下步骤进行更新：
+- 将输入激励和响应误差相乘，从而获得权重的梯度；
+- 将这个梯度乘上一个比例(学习速度)并取反后加到权重上。
+- 这个比例（百分比）将会影响到训练过程的速度和效果，因此称为“训练因子”。梯度的方向指明了误差扩大的方向，因此在更新权重的时候需要对其取反，从而减小权重引起的误差。</p>
+
+<p>第1和第2阶段可以反复循环迭代，直到网络的对输入的响应达到满意的预定的目标范围为止。</p>
+
+<blockquote>
+  <p>算法过程数学描述如下：
+1. 进行前馈传导计算，利用前向传导公式，得到<code class="highlighter-rouge">L1,L2,...</code>直到输出层 <code class="highlighter-rouge">L(n-1) </code>的激活值。
+2. 对输出层<code class="highlighter-rouge">L(nl)</code>，计算残差，进行偏导求算：</p>
+
+  <p><img src="http://latex.codecogs.com/svg.latex?\delta^{(n_l)} = - (y - a^{(n_l)}) \bullet f'(z^{(n_l)}) " />
+3. 对于<code class="highlighter-rouge">l=nl-1, nl-2, nl-3,... 2</code>的各层，计算：</p>
+
+  <p><img src="http://latex.codecogs.com/svg.latex?\delta^{(l)} = \left((W^{(l)})^T \delta^{(l+1)}\right) \bullet f'(z^{(l)})" />
+4. 计算最终需要的偏导数值：</p>
+
+  <p><img src="http://latex.codecogs.com/svg.latex?\nabla_{W^{(l)}} J(W,b;x,y) &amp;= \delta^{(l+1)} (a^{(l)})^T, \\ \nabla_{b^{(l)}} J(W,b;x,y) &amp;= \delta^{(l+1)}." /></p>
+
+  <p>其中，<img src="http://latex.codecogs.com/svg.latex?\bullet" /> 表示向量乘积运算符</p>
+</blockquote>
+
+<h3>类比理解BP算法</h3>
+
+<p>梯度下降法背后的直观感受可以用假设情境进行说明。一个被卡在山上的人正在试图下山（即试图找到极小值）。大雾使得能见度非常低。因此，下山的道路是看不见的，所以他必须利用局部信息来找到极小值。他可以使用梯度下降法，该方法涉及到察看在他当前位置山的陡峭程度，然后沿着负陡度（即下坡）最大的方向前进。如果他要找到山顶（即极大值）的话，他需要沿着正陡度（即上坡）最大的方向前进。使用此方法，他会最终找到下山的路。不过，要假设山的陡度不能通过简单地观察得到，而需要复杂的工具测量，而这个工具此人恰好有。需要相当长的一段时间用仪器测量山的陡峭度，因此如果他想在日落之前下山，就需要最小化仪器的使用率。问题就在于怎样选取他测量山的陡峭度的频率才不致偏离路线。</p>
+
+<p>在这个类比中，此人代表反相传播算法，而下山路径表示能使误差最小化的权重集合。山的陡度表示误差曲面在该点的斜率。他要前行的方向对应于误差曲面在该点的梯度。用来测量陡峭度的工具是微分（误差曲面的斜率可以通过对平方误差函数在该点求导数计算出来）。他在两次测量之间前行的距离（与测量频率成正比）是算法的学习速率。参见限制一节中对此类型“爬山”算法的限制的讨论。</p>
+
+<h3>BP算法的激活函数</h3>
+<p>BP网络都是多层感知机（通常都会有一个输入层、一个隐藏层及一个输出层）。为了使隐藏层能够适合所有有用的函数，多层网络必须具有用于多个层的非线性激活函数：仅用线性激活函数的多层网络会与相当于单层线性网络。常用的非线性激活函数有逻辑函数、柔性最大函数（英语：softmax activation function）和高斯函数。</p>
+
+<h3>BP算法证明</h3>
+
+<p><img src="http://cdn2.snapgram.co/imgs/2016/08/22/bp-step1.jpg" alt="bp-step1.jpg" /></p>
+
+<p><img src="http://cdn1.snapgram.co/imgs/2016/08/22/bp-step2.jpg" alt="bp-step2.jpg" /></p>
+
+<p><img src="http://cdn4.snapgram.co/images/2016/08/22/bp-step3.jpg" alt="bp-step3.jpg" /></p>
+
+<h2>参考</h2>
+
+<h3>中英文对照</h3>
+<ul>
+  <li>反向传播算法 Backpropagation Algorithm</li>
+  <li>（批量）梯度下降法 (batch) gradient descent</li>
+  <li>（整体）代价函数 (overall) cost function</li>
+  <li>方差 squared-error</li>
+  <li>均方差 average sum-of-squares error</li>
+  <li>规则化项 regularization term</li>
+  <li>权重衰减 weight decay</li>
+  <li>偏置项 bias terms</li>
+  <li>贝叶斯规则化方法 Bayesian regularization method</li>
+  <li>高斯先验概率 Gaussian prior</li>
+  <li>极大后验估计 MAP</li>
+  <li>极大似然估计 maximum likelihood estimation</li>
+  <li>激活函数 activation function</li>
+  <li>双曲正切函数 tanh function</li>
+  <li>非凸函数 non-convex function</li>
+  <li>隐藏层单元 hidden (layer) units</li>
+  <li>对称失效 symmetry breaking</li>
+  <li>学习速率 learning rate</li>
+  <li>前向传导 forward pass</li>
+  <li>假设值 hypothesis</li>
+  <li>残差 error term</li>
+  <li>加权平均值 weighted average</li>
+  <li>前馈传导 feedforward pass</li>
+  <li>阿达马乘积 Hadamard product</li>
+  <li>前向传播 forward propagation</li>
+</ul>
+
+<h3>参考文档</h3>
+<ul>
+  <li><a href="http://python.jobbole.com/81278/">http://python.jobbole.com/81278/</a></li>
+  <li><a href="https://zh.wikipedia.org/zh-hans/%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C">https://zh.wikipedia.org/zh-hans/%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C</a></li>
+  <li><a href="http://deeplearning.stanford.edu/wiki/index.php/Neural_Networks">http://deeplearning.stanford.edu/wiki/index.php/Neural_Networks</a></li>
+  <li><a href="http://ufldl.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95">http://ufldl.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95</a></li>
+  <li>
+    <p><a href="http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html">http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html</a></p>
+  </li>
+  <li>《神经网络与机器学习》（加拿大）Simon Haykin</li>
+</ul>
+
+  </article>
+
+</div>
+
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<!-- 多说评论框 start -->
+<div id="ds-thread" class="ds-thread" data-url="/2016/08/23/ANN-BP/" data-title="人工神经网络初探 - 多层感知器和BP算法" data-thread-key="人工神经网络初探 - 多层感知器和BP算法"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yixiaoyang"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共JS代码 end -->
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+	  <div><span> <!--<a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a>--></span></div>
+    </div>
+  </div>
+</footer>
+
+ </body>
+</html>

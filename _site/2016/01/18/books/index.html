@@ -14,7 +14,7 @@
   <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="/css/custom.css">
-  <link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
   <!-- 返回顶部 -->
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -23,6 +23,22 @@
   <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
   <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script>
+  <!-- MathJax Section -->
+  <script type="text/javascript"
+		  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script>
+	  MathJax.Hub.Config({
+   	  tex2jax: {
+   	     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+   	  }
+   	  });
+   	  MathJax.Hub.Queue(function() {
+   	  var all = MathJax.Hub.getAllJax(), i;
+   	  for(i=0; i < all.length; i += 1) {
+   	     all[i].SourceElement().parentNode.className += ' has-jax';
+   	  }
+   	  });
+  </script>
 </head>
 
 
@@ -50,6 +66,8 @@
         
           
           <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
           
         
           
@@ -108,21 +126,24 @@
 
 </div>
 
-<div>
 <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
-<div id="disqus_thread"></div>
+<!-- 多说评论框 start -->
+<div id="ds-thread" class="ds-thread" data-url="/2016/01/18/books/" data-title="2016年01月书单" data-thread-key="2016年01月书单"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES * * */
-var disqus_shortname = 'leon-blog';
+var duoshuoQuery = {short_name:"yixiaoyang"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共JS代码 end -->
 
-/* * * DON'T EDIT BELOW THIS LINE * * */
-(function() {
-var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-</div>
       </div>
     </div>
 
@@ -148,7 +169,7 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
             </span>
             Github
           </a>
-          
+
           
           <span class="point"> · </span>
           <span><a href="/feed.xml">RSS</a></span>
@@ -157,9 +178,10 @@ dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
           <span class="point"> · </span>
           <span class="point"> . </span>
       </div>
-      <div><span> <a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a></span></div>
+	  <div><span> <!--<a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a>--></span></div>
     </div>
   </div>
 </footer>
- </body> 
+
+ </body>
 </html>

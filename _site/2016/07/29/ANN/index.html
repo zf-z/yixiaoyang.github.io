@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>人工神经网络初探 - 感知器</title>
+  <meta name="description" content="人工神经网络(Artificial Neural Net，缩写ANN)，现代神经网络是一种非线性统计性数据建模工具，常用来对输入和输出间复杂的关系进行建模，或用来探索数据的模式。不要被唬住了，ANN做的事其实只有一刀切（单层神经网络），一刀切不清楚的就多切几刀（多层神经网络）。">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2016/07/29/ANN/">
+  <link rel="alternate" type="application/rss+xml" title="Leon's Blog" href="/feed.xml" />
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/custom.css">
+  <!--<link rel="stylesheet" type="text/css" href="/css/_syntax-highlighting.css">-->
+  <!-- 返回顶部 -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/highlight.js/8.6/styles/magula.min.css">
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- MathJax Section -->
+  <script type="text/javascript"
+		  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script>
+	  MathJax.Hub.Config({
+   	  tex2jax: {
+   	     skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+   	  }
+   	  });
+   	  MathJax.Hub.Queue(function() {
+   	  var all = MathJax.Hub.getAllJax(), i;
+   	  for(i=0; i < all.length; i += 1) {
+   	     all[i].SourceElement().parentNode.className += ' has-jax';
+   	  }
+   	  });
+  </script>
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Leon's Blog</a>
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/bak/2015-12-25-Gentoo-seven-steps-to-upgrade/">Gentoo seven steps to upgrade</a>
+          
+        
+          
+          <a class="page-link" href="/bak/2016-03-10-WeeChat-usage.md.bak">[工具] WeeChat/IRC 存活指南</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/AboutMe/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/message/">留言板</a>
+          
+        
+      </div>
+   </nav>
+ </div>
+
+  <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post main_post">
+
+  <header class="post-header">
+    <h1 class="post-title">人工神经网络初探 - 感知器</h1>
+  </header>
+
+
+  <div class="tags_div">
+  
+	
+	  <span class="tags_span">ML</span>
+	
+	  <span class="tags_span">聚类</span>
+	
+	  <span class="tags_span">神经网络</span>
+	
+  
+  <span class="post-meta">2016-07-29 • leon</span>
+ </div>
+
+
+  <article class="post-content">
+    <p>人工神经网络(Artificial Neural Net，缩写ANN)，现代神经网络是一种非线性统计性数据建模工具，常用来对输入和输出间复杂的关系进行建模，或用来探索数据的模式。不要被唬住了，ANN做的事其实只有<code class="highlighter-rouge">一刀切（单层神经网络）</code>，一刀切不清楚的就<code class="highlighter-rouge">多切几刀（多层神经网络）</code>。</p>
+
+<h2>计算模型</h2>
+<ul>
+  <li>人工神经网络由大量的节点（或称“神经元”，或“单元”）和之间相互联接构成。每个节点代表一种特定的输出函数，称为<code class="highlighter-rouge">激活函数</code>（activation function）。</li>
+  <li>每两个节点间的连接都代表一个对于通过该连接信号的加权值，称之为<code class="highlighter-rouge">权重（weight）</code>，这相当于人工神经网络的记忆。</li>
+  <li>网络的输出则依网络的连接方式，权重值和激活函数的不同而不同。</li>
+  <li>网络自身通常都是对自然界某种算法或者函数的逼近，也可能是对一种逻辑策略的表达。</li>
+</ul>
+
+<p>人工神经网络通常是通过一个<strong>基于数学统计学类型</strong>的学习方法（Learning Method）得以优化，所以人工神经网络也是数学统计学方法的一种实际应用，通过统计学的标准数学方法我们能够得到大量的可以用函数来表达的局部结构空间，另一方面在人工智能学的人工感知领域，我们通过数学统计学的应用可以来做人工感知方面的决定问题(也就是说通过统计学的方法，人工神经网络能够类似人一样具有简单的决定能力和简单的判断能力)，这种方法比起正式的逻辑学推理演算更具有优势。</p>
+
+<h2>适用的问题</h2>
+
+<p>反向传播是ANN最常用的算法。他适合以下特征的问题：</p>
+
+<ul>
+  <li>实例以“属性-值”对表示</li>
+  <li>训练数据可能包含错误</li>
+  <li>可以容忍较长的训练时间</li>
+  <li>可能需要快速求出目标值</li>
+  <li>人类能否理解学到的目标函数是不重要的</li>
+</ul>
+
+<h2>感知器(神经元)</h2>
+<p>将感知器算法置于机器学习的更广泛背景中：<strong>感知器属于监督学习算法类别，更具体地说是单层二值分类器</strong>。</p>
+
+<p>神经元（perceptron）示意图：</p>
+
+<p><img src="http://cdn4.snapgram.co/images/2016/07/28/neuron-modal.png" alt="neuron-modal.png" /></p>
+
+<ul>
+  <li>x1~xn为输入向量的各个分量</li>
+  <li>w1~wn为神经元各个突触的权值</li>
+  <li>b为偏置</li>
+  <li>f(x)为传递函数，通常为非线性函数（加法器）。一般有traingd(),tansig(),hardlim()</li>
+  <li>激活函数，用于限制神经输出振幅，使输出信号压制到一定的区域内。</li>
+  <li>y为神经元输出,{-1,+1}</li>
+</ul>
+
+<p>数学表示：<img src="http://latex.codecogs.com/svg.latex?y=f(x)=sign(w*x+b)" /></p>
+
+<h2>常用激活函数（跃迁函数）</h2>
+<p>激活函数是一种将数据归一化为标准型或者对称型的方法。</p>
+
+<h3>阈值函数(Heaviside函数)</h3>
+<p>数学表示：<img src="http://latex.codecogs.com/svg.latex?sign(x) =\begin{cases}+1,&amp;x &gt;= 0\\-1,&amp;x &lt; 0\end{cases} " /></p>
+
+<h4>Logistic函数</h4>
+<p>数学表示：<img src="http://latex.codecogs.com/svg.latex?f(x)=\frac{1}{1+ae^{-x}}" />
+Logistic函数输出范围为(0,1)，单调递增，可微分。其中a可以调节倾斜程度。</p>
+
+<h2>工作过程</h2>
+
+<p>Rosenblatt最初的感知器规则相当简单,可总结为下面两步：</p>
+
+<ol>
+  <li>初始化：将权值初始化为0或小随机数。</li>
+  <li>训练：对每一个训练样本：
+    <ul>
+      <li>计算输出值</li>
+      <li>更新权值。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>权值的更新一般有两种算法，我们称之为<code class="highlighter-rouge">感知器法则</code>和<code class="highlighter-rouge">delta法则</code>。</p>
+
+<h3>感知器收敛：感知器法则</h3>
+
+<p>可以表示为：数学表示：<img src="http://latex.codecogs.com/svg.latex?w_i=w_i+\Delta{w_i}" /></p>
+
+<p>在每个增量中，权值的更新值可由如下学习规则得到：<img src="http://latex.codecogs.com/svg.latex?\Delta{w_i}= \eta(t_i-o_i)x_i" />
+其中ti为目标分类标签，oi为预测标签（感知器输出），η为学习速率（0.0～1.0之间的常数）。简单来说，如果当前输出大于目标输出，则Δw的值为负数，下次计算的值将更偏向目标；反之Δw为正数，下次的输出同样将偏向目标值；η用于控制逼近的速度。</p>
+
+<p>需要注意的是，只有当两个类线性可分才能保证感知器收敛。如果这两个类线性不可分，为避免死循环，我们可以设置一个训练集的最大训练次数，或者是设置一个可接受误分类个数的阈值。</p>
+
+<h3>感知器收敛：delta法则和梯度下降算法</h3>
+
+<p>当训练样本非线性可分时，根据delta法则可以收敛到一个目标的最佳近似值，delta的关键思想是使用<code class="highlighter-rouge">梯度下降(gradient descent)</code>来搜索可能的权向量的假设空间，以找到最佳你和训练样本的权值向量。这个法则为<code class="highlighter-rouge">反向传播算法</code>提供了基础。</p>
+
+<h4>梯度下降算法证明</h4>
+<ol>
+  <li>
+    <p>对于delta法则，假设有n个输入向量<code class="highlighter-rouge"><span class="p">{</span><span class="err">d1,d2,d3,..,dn</span><span class="p">}</span></code>先定义<code class="highlighter-rouge">训练误差</code>：
+  <img src="http://latex.codecogs.com/svg.latex?E(w)=\frac{1}{2} \sum_{i=1}^n (t_{di} - o_{di})^2" />
+  这里的1/2是为了抵消求导出来的系数，该表达式会乘以一个任意的学习速率，因此在这里乘上一个常系数是没有关系的。</p>
+  </li>
+  <li>
+    <p>定义<code class="highlighter-rouge">输出</code>： <img src="http://latex.codecogs.com/svg.latex?o_{di}}=w_i * x_i" />，其中t,o分别为目标输出和实际输出，训练目标即使E(w)尽可能小，因此可以使用求导方法计算调整的方向，E(w)的导数就是对于w的<code class="highlighter-rouge">梯度(gradient)</code>。</p>
+  </li>
+  <li>
+    <p>类似感知器法则，权值的增量Δw现在可以用梯度来确定，将1、2中代入，得到梯度下降算法公式：
+  <img src="http://latex.codecogs.com/svg.latex?\Delta w_i=\eta \frac {\partial E(w)}{\partial w_i} = \sum_{i=1}^n(t_{di}-o_{di})(-x_{di})" />。其中x_di表示输入向量di中的输入向量x。这样，最陡峭的下降其偏导数越大，权值逼近速度越大。</p>
+  </li>
+</ol>
+
+<h4>梯度下降算法描述</h4>
+
+<p>gradient-descent (training_examples, η)， x=&gt;输入向量， η=&gt;学习速率，t=&gt;目标输出， o=&gt;当前输出</p>
+
+<ol>
+  <li>
+    <p>初始化wi为某个小的随机值</p>
+  </li>
+  <li>
+    <p>初始化Δwi = 0</p>
+  </li>
+  <li>
+    <p>对训练集中的每个输入x：<br />
+3.1 计算<code class="highlighter-rouge">o = wi*x</code><br />
+3.2 计算<code class="highlighter-rouge">Δwi = Δwi+η(t-o)*xi</code></p>
+  </li>
+  <li>
+    <p>更新权值 <code class="highlighter-rouge">wi = wi + Δwi</code></p>
+  </li>
+  <li>
+    <p>收敛完成退出，否则跳转到<strong>步骤2</strong>继续梯度下降</p>
+  </li>
+</ol>
+
+<h4>一种几何描述方法</h4>
+
+<p>右侧的图片示例了这一过程，这里假设F定义在平面上，并且函数图像是一个碗形。蓝色的曲线是等高线（水平集），即函数F为常数的集合构成的曲线。红色的箭头指向该点梯度的反方向。（一点处的梯度方向与通过该点的等高线垂直）。沿着梯度下降方向，将最终到达碗底，即函数F值最小的点。</p>
+
+<p><img src="http://cdn4.snapgram.co/images/2016/08/10/Gradient_descent.png" alt="Gradient_descent.png" /></p>
+
+<h2>使用ANN（感知器法则）对鸢尾花数据分类</h2>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/python</span>
+<span class="c"># -*- coding: utf-8 *-*</span>
+
+<span class="s">'''
+ Attribute Information:
+   0. sepal length in cm
+   1. sepal width in cm
+   2. petal length in cm
+   3. petal width in cm
+   4. class:
+      -- 0: Iris Setosa
+      -- 1: Iris Versicolour
+      -- 2: Iris Virginica
+'''</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plot</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">spatial</span>
+<span class="kn">from</span> <span class="nn">matplotlib.animation</span> <span class="kn">import</span> <span class="n">FuncAnimation</span>
+
+<span class="c"># 全局变量</span>
+<span class="n">g_train_set</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">g_train_target</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">g_test_set</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="n">g_chars</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">g_data_step</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="c">#g_chars = [1,3]</span>
+<span class="c">#g_data_step = [50, 100, 100, 150]</span>
+<span class="n">g_ppn</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="c"># 一个数据背景，一个数据分割</span>
+<span class="n">plot_fig</span><span class="p">,</span> <span class="n">plot_ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plot_line</span><span class="p">,</span> <span class="o">=</span> <span class="n">plot_ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'r-'</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s">"/devel/git/github/SmallData/LearnMLWithPython/ch02/iris/uic-iris-data/iris.data"</span>
+    <span class="n">CLASSES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"Iris-setosa"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">"Iris-versicolor"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">"Iris-virginica"</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="p">}</span>
+    <span class="n">LABEL_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s">"SepalLen"</span><span class="p">,</span> <span class="s">"SepalWidth"</span><span class="p">,</span> <span class="s">"PetalLen"</span><span class="p">,</span> <span class="s">"PetalWidth"</span><span class="p">,</span> <span class="s">"Classes"</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Perceptron</span><span class="p">:</span>
+    <span class="s">'''
+    基本感知器
+
+    Attributes
+    -----------
+    '''</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">train_limit</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_limit</span> <span class="o">=</span> <span class="n">train_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w0</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c"># 迭代训练函数</span>
+    <span class="c"># x:输入向量</span>
+    <span class="c"># y:目标向量</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_count</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="c"># 每个列数即一个属性，每个属性作为一层，分配一个权值，最后加上一个bias偏置的权值</span>
+            <span class="c"># bias可以看作一组（[1,1,..,1],b）的输入，数学上等价</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_count</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_limit</span><span class="p">:</span>
+            <span class="n">errs</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)):</span>
+                <span class="n">xi</span><span class="p">,</span> <span class="n">ti</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c"># 计算步进向量</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">ti</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+                <span class="n">update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">diff</span>
+                <span class="c"># 更新权重向量和偏置</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">+=</span> <span class="n">update</span> <span class="o">*</span> <span class="n">xi</span>
+                <span class="c"># bias可以看作一组（[1,1,..,1],b）的输入，数学上等价，所以也需要加上步进</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">+=</span> <span class="n">update</span>
+                <span class="n">errs</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">update</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="c">#print diff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">errs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_count</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="n">errs</span><span class="p">)</span>
+
+    <span class="c"># 输入计算函数，返回所有信号输出组成的向量</span>
+    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c"># 向量点积计算输入向量xi的输出</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias</span>
+
+    <span class="c"># 激活函数，简单的阈值函数即可进行分类</span>
+    <span class="k">def</span> <span class="nf">active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="nb">input</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">statics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># 统计迭代过程错误次数（理想情况下错误为0即达到收敛目的）</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">'o'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"c"</span><span class="p">)</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">w0</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s">"^"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Iterations'</span><span class="p">)</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'W0/Missclassifications'</span><span class="p">)</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">data_import</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">ann_test</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ppn</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">xi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span> <span class="o">+</span> <span class="n">ppn</span><span class="o">.</span><span class="n">bias</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">ann_init</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_ppn</span>
+
+    <span class="n">datafile</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DATA_FILE</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data_import</span><span class="p">(</span><span class="n">datafile</span><span class="p">,</span> <span class="s">','</span><span class="p">)</span>
+
+    <span class="c"># 读取并合并训练集数组</span>
+    <span class="n">g_train_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">g_data_step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span><span class="n">g_data_step</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>  <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)))</span>
+    <span class="n">g_train_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">g_train_set</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="n">g_data_step</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span><span class="n">g_data_step</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">)))))</span>
+    <span class="c"># g_train_set = np.hstack((data[50:100,  0:4], np.full((50, 1), -1.0)))</span>
+    <span class="c"># g_train_set = np.vstack((g_train_set, np.hstack((data[100:150, 0:4], np.full((50, 1), 1.0)))))</span>
+
+    <span class="c"># 准备数据</span>
+    <span class="n">g_ppn</span> <span class="o">=</span> <span class="n">Perceptron</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">train_limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">ann_plot_data</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">plot_fig</span>
+    <span class="k">global</span> <span class="n">plot_ax</span>
+    <span class="k">global</span> <span class="n">g_chars</span>
+
+    <span class="n">my_set</span> <span class="o">=</span> <span class="n">g_train_set</span>
+    <span class="n">plot_ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span>  <span class="p">:</span><span class="mi">50</span> <span class="p">,</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">0</span>  <span class="p">:</span><span class="mi">50</span> <span class="p">,</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">marker</span><span class="o">=</span><span class="s">"^"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"k"</span><span class="p">)</span>
+    <span class="n">plot_ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span> <span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">my_set</span><span class="p">[</span><span class="mi">50</span> <span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="n">marker</span><span class="o">=</span><span class="s">"o"</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">"m"</span><span class="p">)</span>
+    <span class="n">plot_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">plot_ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="k">def</span> <span class="nf">plot_update</span><span class="p">(</span><span class="n">fit</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">plot_line</span>
+    <span class="k">global</span> <span class="n">g_train_set</span>
+    <span class="k">global</span> <span class="n">g_ppn</span>
+    <span class="k">global</span> <span class="n">g_chars</span>
+
+    <span class="c"># 训练数据</span>
+    <span class="n">g_ppn</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">g_train_set</span><span class="p">[:,</span> <span class="n">g_chars</span><span class="p">],</span> <span class="n">g_train_set</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
+
+    <span class="c"># 更新分割线</span>
+    <span class="n">fit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">],(</span><span class="o">-</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">fnd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+    <span class="n">fx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">plot_line</span><span class="o">.</span><span class="n">set_xdata</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span>
+    <span class="n">plot_line</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">fnd</span><span class="p">(</span><span class="n">fx</span><span class="p">))</span>
+
+    <span class="nb">str</span> <span class="o">=</span> <span class="s">", y=</span><span class="si">%0.2</span><span class="s">f*x0+</span><span class="si">%0.2</span><span class="s">f*x1+</span><span class="si">%0.2</span><span class="s">f=0, train </span><span class="si">%</span><span class="s">d"</span><span class="o">%</span><span class="p">(</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">bias</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">g_ppn</span><span class="o">.</span><span class="n">train_count</span><span class="p">)</span>
+    <span class="n">plot_ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">LABEL_NAMES</span><span class="p">[</span><span class="n">g_chars</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">+</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="c"># 导入训练集合</span>
+    <span class="n">ann_init</span><span class="p">()</span>
+    <span class="n">ann_plot_data</span><span class="p">()</span>
+
+    <span class="c"># FuncAnimation 会在每一帧都调用“update” 函数,  在这里设置一个10帧的动画，每帧之间间隔500毫秒</span>
+    <span class="n">anim</span> <span class="o">=</span> <span class="n">FuncAnimation</span><span class="p">(</span><span class="n">plot_fig</span><span class="p">,</span> <span class="n">plot_update</span><span class="p">,</span> <span class="n">frames</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">interval</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'save'</span><span class="p">:</span>
+        <span class="n">anim</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">'line.gif'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">writer</span><span class="o">=</span><span class="s">'imagemagick'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># 会一直循环播放动画</span>
+        <span class="n">plot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</code></pre>
+</div>
+
+<p>运行结果如下：</p>
+
+<p><img src="http://cdn2.snapgram.co/imgs/2016/08/19/ann-trainningg.gif" alt="ann-trainningg.gif" /></p>
+
+<h4>收敛问题</h4>
+
+<p>尽管在较低的学习率情形下，因为一个或多个样本在每一次迭代总是无法被分类造成学习规则不停更新权值，最终，感知器还是无法找到一个好的决策边界。</p>
+
+<p>在这种条件下，感知器算法的另一个缺陷是，一旦所有样本均被正确分类，它就会停止更新权值，这看起来有些矛盾。直觉告诉我们，具有大间隔的决策面（如下图中虚线所示）比感知器的决策面具有更好的分类误差。但是诸如“Support Vector Machines”之类的大间隔分类器不在本次讨论范围。</p>
+
+<p>尽管感知器完美地分辨出两种鸢尾花类，但收敛是感知器的最大问题之一。 Frank Rosenblatt在数学上证明了当两个类可由线性超平面分离时，感知器学习规则收敛，但当类无法由线性分类器完美分离时，问题就出现了。为了说明这个问题，我们将使用鸢尾花数据中另外两个不同的类和特性。选取类为<code class="highlighter-rouge">Iris-versicolor</code>，<code class="highlighter-rouge">Iris-virginica</code>，特征为：<code class="highlighter-rouge">sepal width</code>，<code class="highlighter-rouge">petal width</code>。</p>
+
+<p>将原始数据绘制在2D坐标如下：</p>
+
+<p><img src="http://cdn1.snapgram.co/imgs/2016/07/29/iris-ann4.png" alt="iris-ann4.png" /></p>
+
+<p>收敛统计：</p>
+
+<p><img src="http://cdn2.snapgram.co/imgs/2016/07/29/iris-ann5.png" alt="iris-ann5.png" /></p>
+
+<p>对于这种不能一刀切的数据，ANN将反复迭代。</p>
+
+<h2>参考</h2>
+
+<h3>中英文对照</h3>
+<ul>
+  <li>反向传播算法 Backpropagation Algorithm</li>
+  <li>（批量）梯度下降法 (batch) gradient descent</li>
+  <li>（整体）代价函数 (overall) cost function</li>
+  <li>方差 squared-error</li>
+  <li>均方差 average sum-of-squares error</li>
+  <li>规则化项 regularization term</li>
+  <li>权重衰减 weight decay</li>
+  <li>偏置项 bias terms</li>
+  <li>贝叶斯规则化方法 Bayesian regularization method</li>
+  <li>高斯先验概率 Gaussian prior</li>
+  <li>极大后验估计 MAP</li>
+  <li>极大似然估计 maximum likelihood estimation</li>
+  <li>激活函数 activation function</li>
+  <li>双曲正切函数 tanh function</li>
+  <li>非凸函数 non-convex function</li>
+  <li>隐藏层单元 hidden (layer) units</li>
+  <li>对称失效 symmetry breaking</li>
+  <li>学习速率 learning rate</li>
+  <li>前向传导 forward pass</li>
+  <li>假设值 hypothesis</li>
+  <li>残差 error term</li>
+  <li>加权平均值 weighted average</li>
+  <li>前馈传导 feedforward pass</li>
+  <li>阿达马乘积 Hadamard product</li>
+  <li>前向传播 forward propagation</li>
+</ul>
+
+<h3>参考文档</h3>
+<ul>
+  <li><a href="http://python.jobbole.com/81278/">http://python.jobbole.com/81278/</a></li>
+  <li><a href="https://zh.wikipedia.org/zh-hans/%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C">https://zh.wikipedia.org/zh-hans/%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C</a></li>
+  <li><a href="http://deeplearning.stanford.edu/wiki/index.php/Neural_Networks">http://deeplearning.stanford.edu/wiki/index.php/Neural_Networks</a></li>
+  <li><a href="http://ufldl.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95">http://ufldl.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95</a></li>
+  <li>
+    <p><a href="http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html">http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html</a></p>
+  </li>
+  <li>《神经网络与机器学习》（加拿大）Simon Haykin</li>
+</ul>
+
+  </article>
+
+</div>
+
+<HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#987cb9 SIZE=3>
+<!-- 多说评论框 start -->
+<div id="ds-thread" class="ds-thread" data-url="/2016/07/29/ANN/" data-title="人工神经网络初探 - 感知器" data-thread-key="人工神经网络初探 - 感知器"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yixiaoyang"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共JS代码 end -->
+
+      </div>
+    </div>
+
+    <div id="top" data-toggle="tooltip" data-placement="left" title="Top">
+      <a href="javascript:;">
+        <div class="arrow"></div>
+        <div class="stick"></div>
+      </a>
+    </div>
+    
+    <footer class="">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <a href="mailto:leon_e@163.com"><span class="glyphicon glyphicon-envelope"></span> leon_e@163.com</a>
+        <span class="point"> · </span>
+        
+          <a href="https://github.com/yixiaoyang">
+            <span class="icon">
+              <svg viewBox="0 0 16 16">
+                <path fill="#aaa" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            Github
+          </a>
+
+          
+          <span class="point"> · </span>
+          <span><a href="/feed.xml">RSS</a></span>
+          <span class="point"> · </span>
+          <span>Embedded System, Linux, Python & Ruby</span>
+          <span class="point"> · </span>
+          <span class="point"> . </span>
+      </div>
+	  <div><span> <!--<a href="https://www.upyun.com/"><img src="http://upfiles.b0.upaiyun.com/logo/90x45.png" alt="UPYUN"></a>--></span></div>
+    </div>
+  </div>
+</footer>
+
+ </body>
+</html>
